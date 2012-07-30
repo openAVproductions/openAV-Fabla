@@ -95,7 +95,7 @@ def build(bld):
     # Build plugin UI library
     obj = bld(features     = 'cxx cxxshlib',
               env          = penv,
-              source       = 'fabla_ui.c',
+              source       = 'canvas.cxx fabla_ui.cxx',
               name         = 'fabla_ui',
               target       = '%s/fabla_gui' % bundle,
               install_path = '${LV2DIR}/%s' % bundle,
