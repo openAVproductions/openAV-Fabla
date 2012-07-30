@@ -13,15 +13,32 @@ using namespace std;
 
 void Canvas::drawWaveform(Cairo::RefPtr<Cairo::Context> cr)
 {
+  cr->save();
+  
   int border = 10;
   int x = 33 + border;
-  int y = 74 + border;
+  int y = 74 + 21 + border;
   
+  int xSize = 255 - 2 * border;
+  int ySize = 138 - 2 * border;
   
+  // highpass, lowpass graph backgrounds
+  cr->rectangle( x, y, xSize, ySize );
+  setColour( cr, COLOUR_GREY_4 );
+  cr->fill();
+  
+  cr->rectangle( x, y, xSize, ySize );
+  setColour( cr, COLOUR_GREY_1 );
+  cr->set_line_width(1.1);
+  cr->stroke();
+  
+  cr->restore();
 }
 
 void Canvas::drawPads(Cairo::RefPtr<Cairo::Context> cr)
 {
+  cr->save();
+  
   int border = 10;
   int x =  36;
   int y = 217;
@@ -74,10 +91,13 @@ void Canvas::drawPads(Cairo::RefPtr<Cairo::Context> cr)
       drawY += 62;
   }
   
+  cr->restore();
 }
 
 void Canvas::drawMaster(Cairo::RefPtr<Cairo::Context> cr)
 {
+  cr->save();
+  
   int border = 10;
   int x = 766 + border - 270;
   int y = 330 + border;
@@ -268,6 +288,9 @@ void Canvas::drawMaster(Cairo::RefPtr<Cairo::Context> cr)
     cr->set_line_width(1.5);
     cr->stroke();
     cr->set_line_width(1.1);
+  
+  
+  cr->restore();
 }
 
 
@@ -276,6 +299,8 @@ void Canvas::drawMaster(Cairo::RefPtr<Cairo::Context> cr)
 
 void Canvas::drawRemove(Cairo::RefPtr<Cairo::Context> cr)
 {
+  cr->save();
+  
   int border = 10;
   int x = 583 + border - 270;
   int y = 330 + border;
@@ -409,4 +434,298 @@ void Canvas::drawRemove(Cairo::RefPtr<Cairo::Context> cr)
   setColour( cr, COLOUR_GREY_1 );
   cr->set_line_width(1.1);
   cr->stroke();
+  
+  cr->restore();
+}
+
+void Canvas::drawEffect(Cairo::RefPtr<Cairo::Context> cr)
+{
+  cr->save();
+  
+  int border = 10;
+  
+  int x = 583 + border - 270 + 184;
+  int y = 330 + border- 235;
+  
+  int xSize = 158 - 2 * border;
+  int ySize = 195 - 2 * border;
+  
+  // highpass, lowpass graph backgrounds
+  cr->rectangle( x, y, xSize, (ySize/2.f) - 5 );
+  cr->rectangle( x, y + ySize/2.f + 5, xSize, (ySize/2.f) - 5 );
+  setColour( cr, COLOUR_GREY_4 );
+  cr->fill();
+  
+  // HIGHPASS
+  {
+      int x = 593 -270;
+      int y = 340;
+      
+      int xSize = 138;
+      int ySize = 175 / 2 - 5;
+      
+      bool active = true;
+      float highpass = 0.0;
+      float cutoff = 0.2 + ((1-highpass)*0.7f);
+      
+      // draw "frequency guides"
+      std::valarray< double > dashes(2);
+      dashes[0] = 2.0;
+      dashes[1] = 2.0;
+      cr->set_dash (dashes, 0.0);
+      cr->set_line_width(1.0);
+      cr->set_source_rgb (0.4,0.4,0.4);
+      for ( int i = 0; i < 4; i++ )
+      {
+        cr->move_to( x + ((xSize / 4.f)*i), y );
+        cr->line_to( x + ((xSize / 4.f)*i), y + ySize );
+      }
+      for ( int i = 0; i < 4; i++ )
+      {
+        cr->move_to( x       , y + ((ySize / 4.f)*i) );
+        cr->line_to( x +xSize, y + ((ySize / 4.f)*i) );
+      }
+      cr->stroke();
+      cr->unset_dash();
+      
+      /*
+      // move to bottom right, draw line to middle right
+      cr->move_to( x + xSize, y + ySize );
+      cr->line_to( x + xSize, y + (ySize*0.47));
+      
+      // Curve
+      cr->curve_to( x + xSize - (xSize*cutoff)    , y+(ySize*0.5)    ,   // control point 1
+                    x + xSize - (xSize*cutoff)    , y+(ySize * 0.0)     ,   // control point 2
+                    x + xSize - (xSize*cutoff) -10, y+    ySize     );  // end of curve 1
+      
+      if ( active )
+        setColour(cr, COLOUR_BLUE_1, 0.2 );
+      else
+        setColour(cr, COLOUR_GREY_1, 0.2 );
+      cr->close_path();
+      cr->fill_preserve();
+      
+      // stroke cutoff line
+      cr->set_line_width(1.5);
+      if ( active )
+        setColour(cr, COLOUR_BLUE_1 );
+      else
+        setColour(cr, COLOUR_GREY_1 );
+      cr->stroke();
+      */
+  }
+  
+  // LOWPASS
+  {
+      int x = 593 -270;
+      int y = 340 + 175 / 2 + 5;
+      
+      int xSize = 138;
+      int ySize = 175 / 2 - 5;
+      
+      bool active = true;
+      float lowpass = 1.0;
+      float cutoff = 0.2 + (lowpass*0.7f);
+      
+      // draw "frequency guides"
+      std::valarray< double > dashes(2);
+      dashes[0] = 2.0;
+      dashes[1] = 2.0;
+      cr->set_dash (dashes, 0.0);
+      cr->set_line_width(1.0);
+      cr->set_source_rgb (0.4,0.4,0.4);
+      for ( int i = 0; i < 4; i++ )
+      {
+        cr->move_to( x + ((xSize / 4.f)*i), y );
+        cr->line_to( x + ((xSize / 4.f)*i), y + ySize );
+      }
+      for ( int i = 0; i < 4; i++ )
+      {
+        cr->move_to( x       , y + ((ySize / 4.f)*i) );
+        cr->line_to( x +xSize, y + ((ySize / 4.f)*i) );
+      }
+      cr->stroke();
+      cr->unset_dash();
+      
+      /*
+      // move to bottom left, draw line to middle left
+      cr->move_to( x , y + ySize );
+      cr->line_to( x , y + (ySize*0.47));
+      
+      // Curve
+      cr->curve_to( x + xSize * cutoff    , y+(ySize*0.5)  ,   // control point 1
+                    x + xSize * cutoff    , y+(ySize * 0.0),   // control point 2
+                    x + xSize * cutoff +10, y+ ySize       );  // end of curve 1
+      
+      if ( active )
+        setColour(cr, COLOUR_BLUE_1, 0.2 );
+      else
+        setColour(cr, COLOUR_GREY_1, 0.2 );
+      cr->close_path();
+      cr->fill_preserve();
+      
+      // stroke cutoff line
+      cr->set_line_width(1.5);
+      if ( active )
+        setColour(cr, COLOUR_BLUE_1 );
+      else
+        setColour(cr, COLOUR_GREY_1 );
+      cr->stroke();
+      */
+  }
+  
+  // highpass, lowpass outline
+  cr->rectangle( x, y, xSize, (ySize/2.f) - 5 );
+  cr->rectangle( x, y + ySize/2.f + 5, xSize, (ySize/2.f) - 5 );
+  setColour( cr, COLOUR_GREY_1 );
+  cr->set_line_width(1.1);
+  cr->stroke();
+  
+  cr->restore();
+}
+
+void Canvas::drawSource(Cairo::RefPtr<Cairo::Context> cr)
+{
+  cr->save();
+  
+  int border = 10;
+  
+  int x = 583 + border - 270;
+  int y = 330 + border - 235;
+  
+  int xSize = 158 - 2 * border;
+  int ySize = 195 - 2 * border;
+  
+  // highpass, lowpass graph backgrounds
+  cr->rectangle( x, y, xSize, (ySize/2.f) - 5 );
+  cr->rectangle( x, y + ySize/2.f + 5, xSize, (ySize/2.f) - 5 );
+  setColour( cr, COLOUR_GREY_4 );
+  cr->fill();
+  
+  // HIGHPASS
+  {
+      int x = 593 -270;
+      int y = 340;
+      
+      int xSize = 138;
+      int ySize = 175 / 2 - 5;
+      
+      bool active = true;
+      float highpass = 0.0;
+      float cutoff = 0.2 + ((1-highpass)*0.7f);
+      
+      // draw "frequency guides"
+      std::valarray< double > dashes(2);
+      dashes[0] = 2.0;
+      dashes[1] = 2.0;
+      cr->set_dash (dashes, 0.0);
+      cr->set_line_width(1.0);
+      cr->set_source_rgb (0.4,0.4,0.4);
+      for ( int i = 0; i < 4; i++ )
+      {
+        cr->move_to( x + ((xSize / 4.f)*i), y );
+        cr->line_to( x + ((xSize / 4.f)*i), y + ySize );
+      }
+      for ( int i = 0; i < 4; i++ )
+      {
+        cr->move_to( x       , y + ((ySize / 4.f)*i) );
+        cr->line_to( x +xSize, y + ((ySize / 4.f)*i) );
+      }
+      cr->stroke();
+      cr->unset_dash();
+      
+      /*
+      // move to bottom right, draw line to middle right
+      cr->move_to( x + xSize, y + ySize );
+      cr->line_to( x + xSize, y + (ySize*0.47));
+      
+      // Curve
+      cr->curve_to( x + xSize - (xSize*cutoff)    , y+(ySize*0.5)    ,   // control point 1
+                    x + xSize - (xSize*cutoff)    , y+(ySize * 0.0)     ,   // control point 2
+                    x + xSize - (xSize*cutoff) -10, y+    ySize     );  // end of curve 1
+      
+      if ( active )
+        setColour(cr, COLOUR_BLUE_1, 0.2 );
+      else
+        setColour(cr, COLOUR_GREY_1, 0.2 );
+      cr->close_path();
+      cr->fill_preserve();
+      
+      // stroke cutoff line
+      cr->set_line_width(1.5);
+      if ( active )
+        setColour(cr, COLOUR_BLUE_1 );
+      else
+        setColour(cr, COLOUR_GREY_1 );
+      cr->stroke();
+      */
+  }
+  
+  // LOWPASS
+  {
+      int x = 593 -270;
+      int y = 340 + 175 / 2 + 5;
+      
+      int xSize = 138;
+      int ySize = 175 / 2 - 5;
+      
+      bool active = true;
+      float lowpass = 1.0;
+      float cutoff = 0.2 + (lowpass*0.7f);
+      
+      // draw "frequency guides"
+      std::valarray< double > dashes(2);
+      dashes[0] = 2.0;
+      dashes[1] = 2.0;
+      cr->set_dash (dashes, 0.0);
+      cr->set_line_width(1.0);
+      cr->set_source_rgb (0.4,0.4,0.4);
+      for ( int i = 0; i < 4; i++ )
+      {
+        cr->move_to( x + ((xSize / 4.f)*i), y );
+        cr->line_to( x + ((xSize / 4.f)*i), y + ySize );
+      }
+      for ( int i = 0; i < 4; i++ )
+      {
+        cr->move_to( x       , y + ((ySize / 4.f)*i) );
+        cr->line_to( x +xSize, y + ((ySize / 4.f)*i) );
+      }
+      cr->stroke();
+      cr->unset_dash();
+      
+      /*
+      // move to bottom left, draw line to middle left
+      cr->move_to( x , y + ySize );
+      cr->line_to( x , y + (ySize*0.47));
+      
+      // Curve
+      cr->curve_to( x + xSize * cutoff    , y+(ySize*0.5)  ,   // control point 1
+                    x + xSize * cutoff    , y+(ySize * 0.0),   // control point 2
+                    x + xSize * cutoff +10, y+ ySize       );  // end of curve 1
+      
+      if ( active )
+        setColour(cr, COLOUR_BLUE_1, 0.2 );
+      else
+        setColour(cr, COLOUR_GREY_1, 0.2 );
+      cr->close_path();
+      cr->fill_preserve();
+      
+      // stroke cutoff line
+      cr->set_line_width(1.5);
+      if ( active )
+        setColour(cr, COLOUR_BLUE_1 );
+      else
+        setColour(cr, COLOUR_GREY_1 );
+      cr->stroke();
+      */
+  }
+  
+  // highpass, lowpass outline
+  cr->rectangle( x, y, xSize, (ySize/2.f) - 5 );
+  cr->rectangle( x, y + ySize/2.f + 5, xSize, (ySize/2.f) - 5 );
+  setColour( cr, COLOUR_GREY_1 );
+  cr->set_line_width(1.1);
+  cr->stroke();
+  
+  cr->restore();
 }

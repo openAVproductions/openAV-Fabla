@@ -38,6 +38,8 @@ class Canvas : public Gtk::DrawingArea
     }
     
     void drawPads(Cairo::RefPtr<Cairo::Context> cr);
+    void drawSource(Cairo::RefPtr<Cairo::Context> cr);
+    void drawEffect(Cairo::RefPtr<Cairo::Context> cr);
     void drawMaster(Cairo::RefPtr<Cairo::Context> cr);
     void drawRemove(Cairo::RefPtr<Cairo::Context> cr);
     void drawWaveform(Cairo::RefPtr<Cairo::Context> cr);
@@ -211,14 +213,14 @@ class Canvas : public Gtk::DrawingArea
         // Affect & Remove
         drawX += 256 + 24;
         drawY = 74;
-        Background(cr, drawX, drawY, 159, 215, "Affect");
+        Background(cr, drawX, drawY, 159, 215, "Source");
         drawY += 215 + 24;
         Background(cr, drawX, drawY, 159, 215, "Remove");
         
         // Adjust and Master
         drawX += 159 + 24;
         drawY = 74;
-        Background(cr, drawX, drawY, 159, 215, "Adjust");
+        Background(cr, drawX, drawY, 159, 215, "Effect");
         drawY += 215 + 24;
         Background(cr, drawX, drawY, 159, 215, "Master");
         
@@ -227,9 +229,13 @@ class Canvas : public Gtk::DrawingArea
         
         drawRemove(cr);
         
-        drawPads(cr);
+        drawSource(cr);
+        
+        drawEffect(cr);
         
         drawWaveform(cr);
+        
+        drawPads(cr);
       }
       return true;
     }
