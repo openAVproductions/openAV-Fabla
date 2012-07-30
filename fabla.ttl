@@ -1,0 +1,52 @@
+@prefix atom:  <http://lv2plug.in/ns/ext/atom#> .
+@prefix doap:  <http://usefulinc.com/ns/doap#> .
+@prefix foaf:  <http://xmlns.com/foaf/0.1/> .
+@prefix lv2:   <http://lv2plug.in/ns/lv2core#> .
+@prefix state: <http://lv2plug.in/ns/ext/state#> .
+@prefix ui:    <http://lv2plug.in/ns/extensions/ui#> .
+@prefix urid:  <http://lv2plug.in/ns/ext/urid#> .
+@prefix work:  <http://lv2plug.in/ns/ext/worker#> .
+
+<http://www.openavproductions.com/fabla>
+	a lv2:Plugin ;
+	doap:name "Fabla" ;
+	lv2:requiredFeature urid:map ,
+		work:schedule ;
+	lv2:optionalFeature lv2:hardRTCapable ;
+	lv2:extensionData state:interface ,
+		work:interface ;
+	ui:ui <http://www.openavproductions.com/fabla/gui> ;
+  
+	lv2:port [
+		a lv2:InputPort ,
+			atom:AtomPort ;
+		atom:bufferType atom:Sequence ;
+		atom:supports <http://lv2plug.in/ns/ext/midi#MidiEvent> ,
+			<http://lv2plug.in/ns/ext/patch#Message> ;
+		lv2:index 0 ;
+		lv2:symbol "control" ;
+		lv2:name "Control"
+	] , [
+		a lv2:OutputPort ,
+			atom:AtomPort ;
+		atom:bufferType atom:Sequence ;
+		atom:supports <http://lv2plug.in/ns/ext/patch#Message> ;
+		lv2:index 1 ;
+		lv2:symbol "notify" ;
+		lv2:name "Notify"
+	] , [
+		a lv2:AudioPort ,
+			lv2:OutputPort ;
+		lv2:index 2 ;
+		lv2:symbol "out" ;
+		lv2:name "Out"
+	] .
+
+<http://www.openavproductions.com/fabla/gui>
+	a ui:GtkUI ;
+	lv2:requiredFeature urid:map ;
+	ui:portNotification [
+		ui:plugin <http://www.openavproductions.com/fabla> ;
+		lv2:symbol "notify" ;
+		ui:notifyType atom:Blank
+	] .
