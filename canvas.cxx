@@ -11,12 +11,68 @@
 
 using namespace std;
 
+void Canvas::drawWaveform(Cairo::RefPtr<Cairo::Context> cr)
+{
+  int border = 10;
+  int x = 33 + border;
+  int y = 74 + border;
+  
+  
+}
+
 void Canvas::drawPads(Cairo::RefPtr<Cairo::Context> cr)
 {
   int border = 10;
-  int x = 766 + border - 270;
-  int y = 330 + border;
+  int x =  36;
+  int y = 217;
   
+  cr->rectangle( x-2, y+62, 254, 247 );
+  setColour( cr, COLOUR_GREY_4 );
+  cr->fill();
+  
+  // 256 wide, 251 high
+  
+  float drawY = y + 62;
+  
+  bool padOn = true;
+  
+  // draw 1st one (bottom left)
+  
+  if ( padOn )
+  {
+    cr->set_source (padOnImageSurface, x, drawY+62*3);
+    cr->rectangle( x, drawY, padOnPixbuf->get_width(), padOnPixbuf->get_height() );
+    cr->paint();
+  }
+  else
+  {
+    cr->set_source (padOffImageSurface, x, drawY+62*3);
+    cr->rectangle( x, drawY, padOffPixbuf->get_width(), padOffPixbuf->get_height() );
+    cr->paint();
+  }
+  
+  padOn = false;
+  
+  // loop over rest
+  for ( int i = 1; i < 16; i++ )
+  {
+    
+    if ( padOn )
+    {
+      cr->set_source (padOnImageSurface, x + (62*(i%4)), drawY);
+      cr->rectangle( x + (62*(i%4)), drawY, padOnPixbuf->get_width(), padOnPixbuf->get_height() );
+      cr->paint();
+    }
+    else
+    {
+      cr->set_source (padOffImageSurface, x + (62*(i%4)), drawY);
+      cr->rectangle( x + (62*(i%4)), drawY, padOffPixbuf->get_width(), padOffPixbuf->get_height() );
+      cr->paint();
+    }
+    
+    if ( i % 4 == 0 )
+      drawY += 62;
+  }
   
 }
 

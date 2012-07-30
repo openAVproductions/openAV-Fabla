@@ -27,7 +27,7 @@ class Canvas : public Gtk::DrawingArea
       height = 546;
       set_size_request( width, height );
       
-      loadHeaderImage();
+      loadImages();
       
       // connect GTK signals
       add_events( Gdk::EXPOSURE_MASK | Gdk::BUTTON_PRESS_MASK | Gdk::BUTTON_RELEASE_MASK| Gdk::POINTER_MOTION_MASK );
@@ -40,6 +40,7 @@ class Canvas : public Gtk::DrawingArea
     void drawPads(Cairo::RefPtr<Cairo::Context> cr);
     void drawMaster(Cairo::RefPtr<Cairo::Context> cr);
     void drawRemove(Cairo::RefPtr<Cairo::Context> cr);
+    void drawWaveform(Cairo::RefPtr<Cairo::Context> cr);
     
     bool redraw()
     {
@@ -74,6 +75,11 @@ class Canvas : public Gtk::DrawingArea
     Glib::RefPtr< Gdk::Pixbuf > imagePointer;
     Cairo::RefPtr< Cairo::ImageSurface > imageSurfacePointer;
     
+    Glib::RefPtr< Gdk::Pixbuf > padOnPixbuf;
+    Glib::RefPtr< Gdk::Pixbuf > padOffPixbuf;
+    Cairo::RefPtr< Cairo::ImageSurface > padOnImageSurface;
+    Cairo::RefPtr< Cairo::ImageSurface > padOffImageSurface;
+    
     enum Colour {
       COLOUR_ORANGE_1 = 0,
       COLOUR_ORANGE_2,
@@ -97,9 +103,9 @@ class Canvas : public Gtk::DrawingArea
       COLOUR_TRANSPARENT,
     };
     
-    void loadHeaderImage()
+    void loadImages()
     {
-      // Load pixbuf
+      // Load big header image
       try {
         imagePointer = Gdk::Pixbuf::create_from_file ("/usr/lib/lv2/fabla.lv2/header.png");
         headerLoaded = true;
@@ -117,28 +123,41 @@ class Canvas : public Gtk::DrawingArea
         }
         catch(Glib::FileError& e)
         {
-          cout << "Refractor: Header image could not be loaded! Continuing..." << e.what() << endl;
+          cout << "Fabla: Header image could not be loaded! Continuing..." << e.what() << endl;
           headerLoaded = false;
           return;
         }
       }
-      
       // Detect transparent colors for loaded image
       Cairo::Format format = Cairo::FORMAT_RGB24;
       if (imagePointer->get_has_alpha())
       {
           format = Cairo::FORMAT_ARGB32;
       }
-      
       // Create a new ImageSurface
       imageSurfacePointer = Cairo::ImageSurface::create  (format, imagePointer->get_width(), imagePointer->get_height());
-      
       // Create the new Context for the ImageSurface
       Cairo::RefPtr< Cairo::Context > imageContextPointer = Cairo::Context::create (imageSurfacePointer);
-      
       // Draw the image on the new Context
       Gdk::Cairo::set_source_pixbuf (imageContextPointer, imagePointer, 0.0, 0.0);
       imageContextPointer->paint();
+      
+      
+      // PAD images
+      padOnPixbuf  = Gdk::Pixbuf::create_from_file ("/usr/lib/lv2/fabla.lv2/padon.png" );
+      padOffPixbuf = Gdk::Pixbuf::create_from_file ("/usr/lib/lv2/fabla.lv2/padoff.png");
+      
+      padOnImageSurface  = Cairo::ImageSurface::create  ( Cairo::FORMAT_ARGB32, padOnPixbuf->get_width() , padOnPixbuf->get_height()  );
+      padOffImageSurface = Cairo::ImageSurface::create  ( Cairo::FORMAT_ARGB32, padOffPixbuf->get_width(), padOffPixbuf->get_height() );
+      
+      Cairo::RefPtr< Cairo::Context > padOnContext  = Cairo::Context::create (padOnImageSurface );
+      Cairo::RefPtr< Cairo::Context > padOffContext = Cairo::Context::create (padOffImageSurface);
+      
+      Gdk::Cairo::set_source_pixbuf (padOnContext , padOnPixbuf , 0.0, 0.0);
+      Gdk::Cairo::set_source_pixbuf (padOffContext, padOffPixbuf, 0.0, 0.0);
+      
+      padOnContext->paint();
+      padOffContext->paint();
       
       headerLoaded = true;
     }
@@ -207,6 +226,10 @@ class Canvas : public Gtk::DrawingArea
         drawMaster(cr);
         
         drawRemove(cr);
+        
+        drawPads(cr);
+        
+        drawWaveform(cr);
       }
       return true;
     }
