@@ -23,7 +23,7 @@ class Canvas : public Gtk::DrawingArea
     
     Canvas()
     {
-      width = 956;
+      width = 690;
       height = 546;
       set_size_request( width, height );
       
@@ -37,6 +37,7 @@ class Canvas : public Gtk::DrawingArea
       signal_button_release_event().connect( sigc::mem_fun(*this, &Canvas::on_button_release_event) );
     }
     
+    void drawPads(Cairo::RefPtr<Cairo::Context> cr);
     void drawMaster(Cairo::RefPtr<Cairo::Context> cr);
     void drawRemove(Cairo::RefPtr<Cairo::Context> cr);
     
@@ -180,35 +181,16 @@ class Canvas : public Gtk::DrawingArea
         int drawX = 33;
         int drawY = 74;
         
-        // Oscillators
-        Background( cr, drawX, drawY, 159, 135, "OSC 1");
-        drawY += 135 + 24;
-        Background( cr, drawX, drawY, 159, 135, "OSC 2");
-        drawY += 135 + 24;
-        Background( cr, drawX, drawY, 159, 135, "OSC 3");
+        // Waveform
+        Background( cr, drawX, drawY, 256, 160, "Waveform");
         
+        // Pads
+        drawY += 160 + 24;
+        Background( cr, drawX, drawY, 256, 256 + 23-9, "Pads");
         
-        // ADSR
-        drawX += 159 + 24;
-        drawY = 74;
-        Background( cr, drawX, drawY, 159, 135, "ADSR 1");
-        drawY += 135 + 24;
-        Background( cr, drawX, drawY, 159, 135, "ADSR 2");
-        
-        // Stepper
-        drawY += 135 + 24;
-        Background( cr, drawX, drawY, 159 + 24 + 159, 135, "Step Seq");
-        
-        
-        // LFO
-        drawX += 159 + 24;
-        drawY = 74;
-        Background( cr, drawX, drawY, 159, 135, "LFO 1");
-        drawY += 135 + 24;
-        Background( cr, drawX, drawY, 159, 135, "LFO 2");
         
         // Affect & Remove
-        drawX += 159 + 24;
+        drawX += 256 + 24;
         drawY = 74;
         Background(cr, drawX, drawY, 159, 215, "Affect");
         drawY += 215 + 24;

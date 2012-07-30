@@ -11,10 +11,19 @@
 
 using namespace std;
 
+void Canvas::drawPads(Cairo::RefPtr<Cairo::Context> cr)
+{
+  int border = 10;
+  int x = 766 + border - 270;
+  int y = 330 + border;
+  
+  
+}
+
 void Canvas::drawMaster(Cairo::RefPtr<Cairo::Context> cr)
 {
   int border = 10;
-  int x = 766 + border;
+  int x = 766 + border - 270;
   int y = 330 + border;
   
   int xSize = 158 - 2 * border;
@@ -88,7 +97,7 @@ void Canvas::drawMaster(Cairo::RefPtr<Cairo::Context> cr)
     cr->fill();
     
     // text
-    cr->move_to( 795, 438 );
+    cr->move_to( 795-270, 438 );
     setColour( cr, COLOUR_GREY_1 );
     cr->show_text( "Sample" );
     
@@ -129,7 +138,7 @@ void Canvas::drawMaster(Cairo::RefPtr<Cairo::Context> cr)
     cr->fill();
     
     // text
-    cr->move_to( 795, 488 );
+    cr->move_to( 795-270, 488 );
     setColour( cr, COLOUR_GREY_1 );
     cr->show_text( "Session" );
     
@@ -196,7 +205,7 @@ void Canvas::drawMaster(Cairo::RefPtr<Cairo::Context> cr)
     
     // Fader on the top
     float masterVol = 0.7;
-    cr->rectangle( 878, y + ySize*0.87*(1-masterVol), 16, 24);
+    cr->rectangle( 878-270, y + ySize*0.87*(1-masterVol), 16, 24);
     setColour( cr, COLOUR_GREY_4 );
     cr->fill_preserve();
     setColour( cr, COLOUR_BLUE_1);
@@ -212,7 +221,7 @@ void Canvas::drawMaster(Cairo::RefPtr<Cairo::Context> cr)
 void Canvas::drawRemove(Cairo::RefPtr<Cairo::Context> cr)
 {
   int border = 10;
-  int x = 583 + border;
+  int x = 583 + border - 270;
   int y = 330 + border;
   
   int xSize = 158 - 2 * border;
@@ -226,7 +235,7 @@ void Canvas::drawRemove(Cairo::RefPtr<Cairo::Context> cr)
   
   // HIGHPASS
   {
-      int x = 593;
+      int x = 593 -270;
       int y = 340;
       
       int xSize = 138;
@@ -283,7 +292,7 @@ void Canvas::drawRemove(Cairo::RefPtr<Cairo::Context> cr)
   
   // LOWPASS
   {
-      int x = 593;
+      int x = 593 -270;
       int y = 340 + 175 / 2 + 5;
       
       int xSize = 138;
