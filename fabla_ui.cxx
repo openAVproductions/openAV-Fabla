@@ -11,7 +11,10 @@
 
 #include "uris.h"
 
+#include <iostream>
 #include <gtkmm.h>
+
+using namespace std;
 
 #include "canvas.hxx"
 
@@ -30,8 +33,7 @@ typedef struct {
 } FablaUI;
 
 static void
-on_load_clicked(GtkWidget* widget,
-                void*      handle)
+on_load_clicked(void* handle)
 {
   FablaUI* ui = (FablaUI*)handle;
 
@@ -55,19 +57,20 @@ on_load_clicked(GtkWidget* widget,
 
   /* Got what we need, destroy the dialog. */
   gtk_widget_destroy(dialog);
+  
+  cout << "write () from UI = " << ui->write << endl;
+  cout << "controller (from UI) = " << ui->controller << endl;
 
 #define OBJ_BUF_SIZE 1024
   uint8_t obj_buf[OBJ_BUF_SIZE];
   lv2_atom_forge_set_buffer(&ui->forge, obj_buf, OBJ_BUF_SIZE);
-
+  
   LV2_Atom* msg = write_set_file(&ui->forge, &ui->uris,
                                  filename, strlen(filename));
 
   ui->write(ui->controller, 0, lv2_atom_total_size(msg),
             ui->uris.atom_eventTransfer,
             msg);
-
-  g_free(filename);
 }
 
 static GtkWidget* make_gui(FablaUI *self) {
@@ -82,6 +85,10 @@ static GtkWidget* make_gui(FablaUI *self) {
     
     cout << "new canvast!" << endl;
     self->canvas = new Canvas();
+    
+    self->canvas->ui_instance = self;
+    cout << "self = " << self << " ui->canvas->ui_instance " << self->canvas->ui_instance << endl;
+    
     
     cout << "adding to window!" << endl;
     // get the gobject, and add that to the container
@@ -101,13 +108,11 @@ instantiate(const LV2UI_Descriptor*   descriptor,
 {
   FablaUI* ui = (FablaUI*)malloc(sizeof(FablaUI));
   
+  ui->write = write_function;
+  ui->controller = controller;
+  
   Gtk::Main::init_gtkmm_internals(); // for QT hosts
   
-  ui->canvas = (Canvas*)malloc(sizeof(Canvas));
-  
-  ui->canvas->write_function = write_function;
-  ui->canvas->controller     = controller;
-
   *widget = NULL;
 
   for (int i = 0; features[i]; ++i) {
@@ -170,7 +175,7 @@ port_event(LV2UI_Handle handle,
 
       const char* uri = (const char*)LV2_ATOM_BODY(file_uri);
       
-      
+      cout << " File path " << uri << endl;
       //gtk_label_set_text(GTK_LABEL(ui->label), uri);
     } else {
       fprintf(stderr, "Unknown message type.\n");

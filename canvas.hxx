@@ -14,12 +14,15 @@
 
 using namespace std;
 
+
+
+static void on_load_clicked(void* handle);
+
 class Canvas : public Gtk::DrawingArea
 {
   public:
     // core GUI instance writes to these on init
-    LV2UI_Controller controller;
-    LV2UI_Write_Function write_function;
+    void* ui_instance;
     
     Canvas()
     {
@@ -394,6 +397,20 @@ class Canvas : public Gtk::DrawingArea
     
     bool on_button_press_event(GdkEventButton* event)
     {
+      int x = event->x;
+      int y = event->y;
+      std::cout << x << " " << y << endl;
+      
+      
+      
+      if ( x > 509 && y > 448 && x < 544 && y < 464 )
+      {
+        cout << "load clicked, ui_instrance " << ui_instance << endl;
+        // load clicked
+        on_load_clicked( ui_instance );
+      }
+
+      
       /*
       // set mousedown to false first, if a hotspot is clicked, it will
       // be set to true, same with clickedWidget
