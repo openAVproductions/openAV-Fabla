@@ -80,7 +80,7 @@ class Canvas : public Gtk::DrawingArea
       
       signal_motion_notify_event() .connect( sigc::mem_fun(*this, &Canvas::on_mouse_move ) );
       signal_button_press_event()  .connect( sigc::mem_fun(*this, &Canvas::on_button_press_event) );
-      signal_button_release_event().connect( sigc::mem_fun(*this, &Canvas::on_button_release_event) );
+      signal_button_release_event().connect( sigc::mem_fun(*this, &Canvas::on_button_press_event) );
     }
     
     void drawPads(Cairo::RefPtr<Cairo::Context> cr);
@@ -466,22 +466,24 @@ class Canvas : public Gtk::DrawingArea
         int pad = 8+ ((x / 62) + 4-(y/62)*4);
         
         cout << "Pad " << pad << " clicked " << endl;
-        if ( event->button == 1 ) // play event
+        if ( event->button == 1 && event->type == Gdk::BUTTON_PRESS ) // play event
         {
+          padState[pad] = PAD_PLAYING;
           on_play_clicked( ui_instance, pad );
+          redraw();
         }
-        else if ( event->button == 3 ) // load event
+        if ( event->button == 1 && event->type == Gdk::BUTTON_RELEASE ) // play event
+        {
+          padState[pad] = PAD_LOADED;
+          redraw();
+        }
+        else if ( event->button == 3 && event->type == Gdk::BUTTON_PRESS  ) // load event
         {
           on_load_clicked( ui_instance, pad );
         }
       }
 
       
-    }
-    
-    
-    bool on_button_release_event(GdkEventButton* event)
-    {
     }
     
     bool on_mouse_move(GdkEventMotion* event)

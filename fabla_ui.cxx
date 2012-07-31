@@ -183,9 +183,14 @@ port_event(LV2UI_Handle handle,
            const void*  buffer)
 {
   FablaUI* ui = (FablaUI*)handle;
+  
+  fprintf(stderr, "UI port_Event\n");
+  
   if (format == ui->uris.atom_eventTransfer)
   {
     LV2_Atom* atom = (LV2_Atom*)buffer;
+    
+    
     
     if (atom->type == ui->uris.atom_Blank)
     {

@@ -344,7 +344,6 @@ run(LV2_Handle instance,
       {
         if ( data[1] >= 36 ) // note
         {
-          
           start_frame = ev->time.frames;
           self->playback[data[1]-36].frame = 0;
           self->playback[data[1]-36].play  = true;
