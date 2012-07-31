@@ -54,12 +54,12 @@ typedef struct {
    not modified.
 */
 static Sample*
-load_sample(Fabla* self, const char* path)
+load_sample(Fabla* self, int sampleNum, const char* path)
 {
   const size_t path_len  = strlen(path);
 
-  print(self, self->uris.log_Trace,
-        "Loading sample %s\n", path);
+  print(self, self->uris.log_Error,
+        "Loading sample %s to pad number %i\n", path, sampleNum);
 
   Sample* const  sample  = (Sample*)malloc(sizeof(Sample));
   SF_INFO* const info    = &sample->info;
@@ -141,13 +141,17 @@ work(LV2_Handle                  instance,
     LV2_Atom_Object* obj = (LV2_Atom_Object*)data;
 
     /* Get file path from message */
+    const LV2_Atom_Int* sampleNum = read_set_file_sample_number(&self->uris, obj);
     const LV2_Atom* file_path = read_set_file(&self->uris, obj);
+    
     if (!file_path) {
       return LV2_WORKER_ERR_UNKNOWN;
     }
-
+    
+    int padNum = sampleNum->body;
+    
     /* Load sample. */
-    Sample* sample = load_sample(self, LV2_ATOM_BODY(file_path) );
+    Sample* sample = load_sample(self, padNum, LV2_ATOM_BODY(file_path) );
     if (sample) {
       /* Loaded sample, send it to run() to be applied. */
       respond(handle, sizeof(sample), &sample);
@@ -261,7 +265,7 @@ instantiate(const LV2_Descriptor*     descriptor,
   const size_t len         = path_len + file_len;
   char*        sample_path = (char*)malloc(len + 1);
   snprintf(sample_path, len + 1, "%s%s", path, default_sample_file);
-  self->sample[0] = load_sample(self, sample_path);
+  self->sample[0] = load_sample(self, 0, sample_path);
   free(sample_path);
 
   return (LV2_Handle)self;
@@ -420,7 +424,7 @@ restore(LV2_Handle                  instance,
     const char* path = (const char*)value;
     print(self, self->uris.log_Trace, "Restoring file %s\n", path);
     free_sample(self, self->sample[0] );
-    self->sample[0] = load_sample(self, path);
+    self->sample[0] = load_sample(self, 0, path);
   }
 
   return LV2_STATE_SUCCESS;

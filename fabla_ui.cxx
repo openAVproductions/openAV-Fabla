@@ -16,7 +16,7 @@ using namespace std;
 #define FABLA_UI_URI "http://www.openavproductions.com/fabla/gui"
 
 static void
-on_load_clicked(void* handle)
+on_load_clicked(void* handle, int padNum)
 {
   FablaUI* ui = (FablaUI*)handle;
 
@@ -40,17 +40,14 @@ on_load_clicked(void* handle)
 
   /* Got what we need, destroy the dialog. */
   gtk_widget_destroy(dialog);
-  
-  cout << "write () from UI = " << ui->write << endl;
-  cout << "controller (from UI) = " << ui->controller << endl;
 
 #define OBJ_BUF_SIZE 1024
   uint8_t obj_buf[OBJ_BUF_SIZE];
   lv2_atom_forge_set_buffer(&ui->forge, obj_buf, OBJ_BUF_SIZE);
   
-  int sampleNum = 0;
+  cout << "UI writing padnum " << padNum << endl;
   
-  LV2_Atom* msg = write_set_file(&ui->forge, &ui->uris, sampleNum,
+  LV2_Atom* msg = write_set_file(&ui->forge, &ui->uris, padNum,
                                  filename, strlen(filename));
 
   ui->write(ui->controller, 0, lv2_atom_total_size(msg),

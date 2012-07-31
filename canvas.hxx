@@ -39,7 +39,7 @@ typedef struct {
 } FablaUI;
 
 
-static void on_load_clicked(void* handle);
+static void on_load_clicked(void* handle, int);
 
 class Canvas : public Gtk::DrawingArea
 {
@@ -445,14 +445,14 @@ class Canvas : public Gtk::DrawingArea
       int y = event->y;
       std::cout << x << " " << y << endl;
       
-      if ( x > 509 && y > 448 && x < 544 && y < 464 )
+      if ( x > 509 && y > 448 && x < 544 && y < 464 ) // LOAD BUTTON
       {
         cout << "load clicked, ui_instrance " << ui_instance << endl;
         // load clicked
-        on_load_clicked( ui_instance );
+        //on_load_clicked( ui_instance );
       }
       
-      if ( x > 35 && y > 280 && x < 290 && y < 528 )
+      if ( x > 35 && y > 280 && x < 290 && y < 528 ) // PADS
       {
         int x = event->x - 35;
         int y = event->y - 280;
@@ -460,7 +460,14 @@ class Canvas : public Gtk::DrawingArea
         int pad = 8+ ((x / 62) + 4-(y/62)*4);
         
         cout << "Pad " << pad << " clicked " << endl;
-        
+        if ( event->button == 1 ) // play event
+        {
+          
+        }
+        else if ( event->button == 3 ) // load event
+        {
+          on_load_clicked( ui_instance, pad );
+        }
       }
 
       

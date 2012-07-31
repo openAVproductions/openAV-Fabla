@@ -194,8 +194,44 @@ read_set_file(const FablaURIs*     uris,
 		fprintf(stderr, "Ignored set message with no file PATH.\n");
 		return NULL;
 	}
+  
+	const LV2_Atom* sampleNum = NULL;
+	lv2_atom_object_get(body, uris->eg_sampleNumber, &sampleNum, 0);
+	if (!sampleNum) {
+		fprintf(stderr, "Ignored set message with no sample num.\n");
+		return NULL;
+	}
 
 	return file_path;
+}
+
+
+static inline const LV2_Atom_Int*
+read_set_file_sample_number(const FablaURIs*     uris,
+              const LV2_Atom_Object* obj)
+{
+	if (obj->body.otype != uris->patch_Set) {
+		fprintf(stderr, "Ignoring unknown message type %d\n", obj->body.otype);
+		return NULL;
+	}
+
+	/* Get body of message. */
+	const LV2_Atom_Object* body = NULL;
+	lv2_atom_object_get(obj, uris->patch_body, &body, 0);
+	if (!body) {
+		fprintf(stderr, "Malformed set message has no body.\n");
+		return NULL;
+	}
+	if (!is_object_type(uris, body->atom.type)) {
+		fprintf(stderr, "Malformed set message has non-object body.\n");
+		return NULL;
+	}
+
+	/* Get file path from body. */
+	const LV2_Atom_Int* padNum = 0;
+	lv2_atom_object_get(body, uris->eg_sampleNumber, &padNum, 0);
+
+	return padNum;
 }
 
 #endif  /* SAMPLER_URIS_H */
