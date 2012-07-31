@@ -50,10 +50,13 @@ class Canvas : public Gtk::DrawingArea
     Fabla* dspInstance;
     bool  haveInstanceAccess;
     
+    int selectedSample;
     std::string sampleNames[16];
     
     Canvas()
     {
+      selectedSample = 0;
+      
       width = 690;
       height = 546;
       set_size_request( width, height );

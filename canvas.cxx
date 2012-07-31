@@ -40,13 +40,23 @@ void Canvas::drawWaveform(Cairo::RefPtr<Cairo::Context> cr)
   g_mutex_lock( &dspInstance->sampleMutex );
   {
     // gather data on the sample were drawing:
-    long   sampleFrames = dspInstance->sample[0]->info.frames;
-    float* current = dspInstance->sample[0]->data;
+    long   sampleFrames = dspInstance->sample[selectedSample]->info.frames;
+    float* current = dspInstance->sample[selectedSample]->data;
     
-    for (long i = 0; i < sampleFrames; i += 20 )
+    if ( sampleFrames == 0 )
+    {
+      cout << "Warning, GUI attempted drawing sample with 0 frames!" << endl;
+      return;
+    }
+    
+    // draw the number of lines that is equal the number of pixels available
+    // horizontally. 237 is the pixels horizontally
+    int sampleIncrement = sampleFrames / 237;
+    
+    for (long i = 0; i < sampleFrames; i += sampleIncrement )
     {
       cr->line_to( x + xSize * ( float(i) / sampleFrames), y + ySize * 0.5 + (*current) * ySize * 0.5 );
-      current += 20;
+      current += sampleIncrement;
     }
     cr->set_line_width(0.8);
     setColour( cr, COLOUR_GREY_4 );
