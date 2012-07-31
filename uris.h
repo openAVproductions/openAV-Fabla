@@ -21,10 +21,11 @@
 
 #define LV2_MIDI__MidiEvent "http://lv2plug.in/ns/ext/midi#MidiEvent"
 
-#define FABLA_URI            "http://www.openavproductions.com/fabla"
-#define FABLA_URI__file        FABLA_URI "#file"
-#define FABLA_URI__applySample FABLA_URI "#applySample"
-#define FABLA_URI__freeSample  FABLA_URI "#freeSample"
+#define FABLA_URI               "http://www.openavproductions.com/fabla"
+#define FABLA_URI__file         FABLA_URI "#file"
+#define FABLA_URI__applySample  FABLA_URI "#applySample"
+#define FABLA_URI__freeSample   FABLA_URI "#freeSample"
+#define FABLA_URI__sampleNumber FABLA_URI "#sampleNumber"
 
 // GMutex:
 // for loading / freeing samples, and GUI drawing. It will *never* block
@@ -40,6 +41,7 @@ typedef struct {
 	LV2_URID eg_applySample;
 	LV2_URID eg_file;
 	LV2_URID eg_freeSample;
+  LV2_URID eg_sampleNumber;
 	LV2_URID log_Error;
 	LV2_URID log_Trace;
 	LV2_URID midi_Event;
@@ -104,6 +106,7 @@ map_sampler_uris(LV2_URID_Map* map, FablaURIs* uris)
 	uris->eg_applySample     = map->map(map->handle, FABLA_URI__applySample);
 	uris->eg_file            = map->map(map->handle, FABLA_URI__file);
 	uris->eg_freeSample      = map->map(map->handle, FABLA_URI__freeSample);
+	uris->eg_sampleNumber    = map->map(map->handle, FABLA_URI__sampleNumber);
 	uris->log_Error          = map->map(map->handle, LV2_LOG__Error);
 	uris->log_Trace          = map->map(map->handle, LV2_LOG__Trace);
 	uris->midi_Event         = map->map(map->handle, LV2_MIDI__MidiEvent);
@@ -130,6 +133,7 @@ is_object_type(const FablaURIs* uris, LV2_URID type)
 static inline LV2_Atom*
 write_set_file(LV2_Atom_Forge*    forge,
                const FablaURIs* uris,
+               int                sampleNum,
                const char*        filename,
                const size_t       filename_len)
 {
@@ -143,6 +147,9 @@ write_set_file(LV2_Atom_Forge*    forge,
 
 	lv2_atom_forge_property_head(forge, uris->eg_file, 0);
 	lv2_atom_forge_path(forge, filename, filename_len);
+  
+	lv2_atom_forge_property_head(forge, uris->eg_sampleNumber, 0);
+	lv2_atom_forge_int(forge, sampleNum);
 
 	lv2_atom_forge_pop(forge, &body_frame);
 	lv2_atom_forge_pop(forge, &set_frame);

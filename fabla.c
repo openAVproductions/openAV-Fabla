@@ -42,6 +42,7 @@ print(Fabla* self, LV2_URID type, const char* fmt, ...)
 */
 typedef struct {
   LV2_Atom atom;
+  int      sampleNum;
   Sample*  sample;
 } SampleMessage;
 
@@ -146,7 +147,7 @@ work(LV2_Handle                  instance,
     }
 
     /* Load sample. */
-    Sample* sample = load_sample(self, LV2_ATOM_BODY(file_path));
+    Sample* sample = load_sample(self, LV2_ATOM_BODY(file_path) );
     if (sample) {
       /* Loaded sample, send it to run() to be applied. */
       respond(handle, sizeof(sample), &sample);
@@ -169,8 +170,11 @@ work_response(LV2_Handle  instance,
               const void* data)
 {
   Fabla* self = (Fabla*)instance;
-
+  
+  int sampleNum = 0;
+  
   SampleMessage msg = { { sizeof(Sample*), self->uris.eg_freeSample },
+                        sampleNum,
                         self->sample[0] };
 
   /* Send a message to the worker to free the current sample */
@@ -179,13 +183,14 @@ work_response(LV2_Handle  instance,
   g_mutex_lock( &self->sampleMutex );
   {
     /* Install the new sample */
-    self->sample[0] = *(Sample**)data;
+    self->sample[sampleNum] = *(Sample**)data;
 
     /* Send a notification that we're using a new sample. */
     lv2_atom_forge_frame_time(&self->forge, self->frame_offset);
     write_set_file(&self->forge, &self->uris,
-                   self->sample[0]->path,
-                   self->sample[0]->path_len);
+                   sampleNum,
+                   self->sample[sampleNum]->path,
+                   self->sample[sampleNum]->path_len);
   }
   g_mutex_unlock( &self->sampleMutex );
   

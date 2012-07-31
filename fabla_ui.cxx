@@ -48,7 +48,9 @@ on_load_clicked(void* handle)
   uint8_t obj_buf[OBJ_BUF_SIZE];
   lv2_atom_forge_set_buffer(&ui->forge, obj_buf, OBJ_BUF_SIZE);
   
-  LV2_Atom* msg = write_set_file(&ui->forge, &ui->uris,
+  int sampleNum = 0;
+  
+  LV2_Atom* msg = write_set_file(&ui->forge, &ui->uris, sampleNum,
                                  filename, strlen(filename));
 
   ui->write(ui->controller, 0, lv2_atom_total_size(msg),
