@@ -11,6 +11,7 @@
 
 using namespace std;
 
+
 void Canvas::drawWaveform(Cairo::RefPtr<Cairo::Context> cr)
 {
   cr->save();

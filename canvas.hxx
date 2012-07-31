@@ -445,153 +445,27 @@ class Canvas : public Gtk::DrawingArea
       int y = event->y;
       std::cout << x << " " << y << endl;
       
-      
-      
       if ( x > 509 && y > 448 && x < 544 && y < 464 )
       {
         cout << "load clicked, ui_instrance " << ui_instance << endl;
         // load clicked
         on_load_clicked( ui_instance );
       }
-
       
-      /*
-      // set mousedown to false first, if a hotspot is clicked, it will
-      // be set to true, same with clickedWidget
-      mouseDown = false;
-      clickedWidget = CLICKED_WIDGET_NONE;
-      
-      // for calculation of mouseMove
-      clickValue = 1 - ( event->y / height);
-      clickValueX = 1- ( event->x / height);
-      
-      cout << "Refractor: Press event \tX " << event->x << "\tY " << event->y << endl;
-      if ( event->button == 1 || event->button == 3 )
+      if ( x > 35 && y > 280 && x < 290 && y < 528 )
       {
-        int x = event->x;
-        int y = event->y;
+        int x = event->x - 35;
+        int y = event->y - 280;
         
+        int pad = 8+ ((x / 62) + 4-(y/62)*4);
         
-        if ( x > 623 && y > 26 && y < 70 ) // OpenAV
-        {
-          // If GVFS isn't installed on the local machine, GTK won't know
-          // how to handle 
-          GError* e = NULL;
-          gtk_show_uri(NULL, "http://www.openavproductions.com", GDK_CURRENT_TIME, &e);
-          if ( e )
-          {
-            cout << "Error opening \"www.openavproductions.com\"... " << e->message << endl;
-          }
-          return true;
-        }
-        
-        if ( x > 411 && y > 341 && x < 549 && y < 424 )
-        {
-          //cout << "Bitcrush click!" << endl;
-          mouseDown = true;
-          target = &guiState->bitcrush;
-          clickedWidget = CLICKED_WIDGET_BITCRUSHER;
-        }
-        
-        if ( x > 411 && y > 434 && x < 549 && y < 516 )
-        {
-          //cout << "Distort click!" << endl;
-          mouseDown = true;
-          target = &guiState->distortion;
-          clickedWidget = CLICKED_WIDGET_DISTORTION;
-        }
-        
-        if ( x > 594 && y > 341 && x < 732 && y < 424 )
-        {
-          //cout << "Highpass click!" << endl;
-          mouseDown = true;
-          target = &guiState->highpass;
-          clickedWidget = CLICKED_WIDGET_HIGHPASS;
-        }
-        
-        if ( x > 594 && y > 434 && x < 732 && y < 516 )
-        {
-          //cout << "Lowpass click!" << endl;
-          mouseDown = true;
-          target = &guiState->lowpass;
-          clickedWidget = CLICKED_WIDGET_LOWPASS;
-        }
-        
-        if ( x > 236 && y > 340 && x < 236 + 138 && y < 340 + 175 ) // RETRIGGER ZONE
-        {
-          // location 399, 330
-          // size = 158 x 195
-          
-          if ( event->button == 3 )
-          {
-            float writeVal;
-            for (int i = 0; i < 16; i++)
-            {
-              
-              // can't use a control port like this, only the "latest" value
-              // is accepted, so the others aren't affected. Need to look at using
-              // a custom "reset" Atom event. 
-              guiState->retriggerArray[i] = 0;
-              redraw(220, 340, 200, 500 );
-              writeVal = int(i);
-              guiState->write_function( guiState->controller, REFRACTOR_CONTROL_RETRIGGER, sizeof(float), 0, (const void*)&writeVal );
-            }
-            return true;
-          }
-          
-          int border = 10;
-          int x = 216 + border;
-          int y = 330 + border;
-          
-          int xSize = 158 - 2 * border;
-          int ySize = 195 - 2 * border;
-          
-          int slice = (event->y - y) / (ySize / 16.f);
-          int retrg = (event->x - x) / (xSize /  5.f);
-          
-          // write value into gui state
-          guiState->retriggerArray[slice] = retrg;
-          redraw(x,y,xSize,ySize);
-          
-          // multiplex slice & retrigger into the one float variable, to send to DSP
-          float value = slice + (retrg / 10.f);
-          //cout << "Retrigger slice " << slice << ", retrig " << retrg << "  value " << value << endl;
-          
-          guiState->write_function( guiState->controller, REFRACTOR_CONTROL_RETRIGGER, sizeof(float), 0, (const void*)&value);
-        }
-        
-        if ( x > 859 && y > 341 && x < 917 && y < 516 )
-        {
-          if ( event->button == 3 )
-          {
-            guiState->masterVol = 0.7;
-            redraw(859, 341, 200, 500 );
-            guiState->write_function( guiState->controller, CLICKED_WIDGET_MASTER_VOLUME, sizeof(float), 0, (const void*)&guiState->masterVol);
-            return true;
-          }
-          clickedWidget = CLICKED_WIDGET_MASTER_VOLUME;
-          mouseDown = true;
-          target = &guiState->masterVol;
-        }
-        
-        if ( x > 127 && y > 341 && x < 185 && y < 516 )
-        {
-          if ( event->button == 3 )
-          {
-            guiState->pitch = 0.5;
-            redraw(127, 185, 200, 500 );
-            guiState->write_function( guiState->controller, CLICKED_WIDGET_PITCH, sizeof(float), 0, (const void*)&guiState->pitch);
-            return true;
-          }
-          
-          clickedWidget = CLICKED_WIDGET_PITCH;
-          mouseDown = true;
-          target = &guiState->pitch;
-        }
+        cout << "Pad " << pad << " clicked " << endl;
         
       }
-      */
+
+      
     }
+    
     
     bool on_button_release_event(GdkEventButton* event)
     {
