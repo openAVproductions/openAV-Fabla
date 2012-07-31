@@ -315,8 +315,8 @@ run(LV2_Handle instance,
         if ( data[1] == 36 ) // note
         {
           start_frame = ev->time.frames;
-          self->frame = 0;
-          self->play  = true;
+          self->playback[data[1]-36].frame = 0;
+          self->playback[data[1]-36].play  = true;
         }
       }
     }
@@ -338,12 +338,14 @@ run(LV2_Handle instance,
             "Unknown event type %d\n", ev->body.type);
     }
   }
-
+  
+  int sampleNum = 0;
+  
   /* Render the sample (possibly already in progress) */
-  if (self->play)
+  if (self->playback[sampleNum].play)
   {
-    uint32_t       f  = self->frame;
-    const uint32_t lf = self->sample[0]->info.frames;
+    uint32_t       f  = self->playback[sampleNum].frame;
+    const uint32_t lf = self->sample[sampleNum]->info.frames;
     
     for (pos = 0; pos < start_frame; ++pos) {
       output[pos] = 0;
@@ -359,10 +361,10 @@ run(LV2_Handle instance,
 
     }
     
-    self->frame = f;
+    self->playback[sampleNum].frame = f;
 
     if (f == lf) {
-      self->play = false;
+      self->playback[sampleNum].play = false;
     }
   }
 

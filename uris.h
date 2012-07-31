@@ -60,7 +60,6 @@ typedef struct {
 typedef struct {
   sf_count_t frame;
   bool play;
-  
 } SamplePlayback;
 
 typedef struct {
@@ -91,8 +90,7 @@ typedef struct {
   uint32_t frame_offset;
 
   /* Playback state */
-  sf_count_t frame;
-  bool       play;
+  SamplePlayback playback[16];
 } Fabla;
 
 static inline void
