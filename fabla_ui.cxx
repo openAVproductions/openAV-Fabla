@@ -15,6 +15,32 @@ using namespace std;
 
 #define FABLA_UI_URI "http://www.openavproductions.com/fabla/gui"
 
+struct MidiEvent
+{
+  LV2_Atom atom;
+  char buf[4];
+};
+
+static void
+on_play_clicked(void* handle, int padNum)
+{
+  FablaUI* ui = (FablaUI*)handle;
+  
+  // write a MIDI event that will trigger that pad to play
+  MidiEvent midiEvent;
+  midiEvent.atom.type = ui->uris.midi_Event;
+  midiEvent.atom.size = sizeof(char) * 4;
+  midiEvent.buf[0] = 144;
+  midiEvent.buf[1] = 36+padNum;
+  midiEvent.buf[2] = 127;
+  
+  // now write the LV2_Atom to the atom port:
+  ui->write(ui->controller, 0, sizeof(MidiEvent),
+          ui->uris.atom_eventTransfer,
+          &midiEvent);
+}
+
+
 static void
 on_load_clicked(void* handle, int padNum)
 {
@@ -57,22 +83,16 @@ on_load_clicked(void* handle, int padNum)
 
 static GtkWidget* make_gui(FablaUI *self) {
     
-    cout << "Init GTKMM!" << endl;
     Gtk::Main::init_gtkmm_internals(); // for QT hosts
     
-    
-    cout << "create container!" << endl;
     // Return a pointer to a gtk widget containing our GUI
     GtkWidget* container = gtk_vbox_new(FALSE, 2);
     
-    cout << "new canvast!" << endl;
     self->canvas = new Canvas();
     
     self->canvas->ui_instance = self;
-    cout << "self = " << self << " ui->canvas->ui_instance " << self->canvas->ui_instance << endl;
+    //cout << "self = " << self << " ui->canvas->ui_instance " << self->canvas->ui_instance << endl;
     
-    
-    cout << "adding to window!" << endl;
     // get the gobject, and add that to the container
     gtk_container_add((GtkContainer*)container, (GtkWidget*)self->canvas->gobj() );
     

@@ -39,6 +39,7 @@ typedef struct {
 } FablaUI;
 
 
+static void on_play_clicked(void* handle, int);
 static void on_load_clicked(void* handle, int);
 
 class Canvas : public Gtk::DrawingArea
@@ -467,7 +468,7 @@ class Canvas : public Gtk::DrawingArea
         cout << "Pad " << pad << " clicked " << endl;
         if ( event->button == 1 ) // play event
         {
-          
+          on_play_clicked( ui_instance, pad );
         }
         else if ( event->button == 3 ) // load event
         {

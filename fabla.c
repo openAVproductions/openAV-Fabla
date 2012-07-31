@@ -331,7 +331,7 @@ run(LV2_Handle instance,
 
   /* Start a sequence in the notify output port. */
   lv2_atom_forge_sequence_head(&self->forge, &self->notify_frame, 0);
-
+  
   /* Read incoming events */
   LV2_ATOM_SEQUENCE_FOREACH(self->control_port, ev)
   {
@@ -340,10 +340,11 @@ run(LV2_Handle instance,
     if (ev->body.type == uris->midi_Event) // MIDI event on Atom port
     {
       uint8_t* const data = (uint8_t* const)(ev + 1);
-      if ( data[0] == 144 ) // event & channel
+      if ( (data[0] & 0xF0) == 0x90 ) // event & channel
       {
-        if ( data[1] == 36 ) // note
+        if ( data[1] >= 36 ) // note
         {
+          
           start_frame = ev->time.frames;
           self->playback[data[1]-36].frame = 0;
           self->playback[data[1]-36].play  = true;
@@ -375,38 +376,36 @@ run(LV2_Handle instance,
     }
   }
   
-  int sampleNum = 0;
   
-  /* Render the sample (possibly already in progress) */
-  if (self->playback[sampleNum].play)
+  // nframes
+  for (int i = 0; i < sample_count; i++)
   {
-    uint32_t       f  = self->playback[sampleNum].frame;
-    const uint32_t lf = self->sample[sampleNum]->info.frames;
+    float tmp = 0.f;
     
-    for (pos = 0; pos < start_frame; ++pos) {
-      output[pos] = 0;
-    }
-    
-    if ( lf != 0 )
+    // pads
+    for ( int p = 0; p < 16; p++ )
     {
-      // sample has data
-      for (; pos < sample_count && f < lf; ++pos, ++f)
+      // sample loaded && playing
+      if ( self->sample[p] && self->playback[p].play ) // check sample loaded
       {
-        output[pos] = self->sample[0]->data[f];
+        // add sample
+        if ( self->playback[p].frame < self->sample[p]->info.frames )
+        {
+          
+          tmp += self->sample[p]->data[self->playback[p].frame++];
+        }
+        else // stop sample
+        {
+          self->playback[p].play  = false;
+          self->playback[p].frame = 0;
+        }
       }
     }
     
-    self->playback[sampleNum].frame = f;
-
-    if (f == lf) {
-      self->playback[sampleNum].play = false;
-    }
+    // write output
+    output[i] = tmp;
   }
-
-  /* Add zeros to end if sample not long enough (or not playing) */
-  for (; pos < sample_count; ++pos) {
-    output[pos] = 0.0f;
-  }
+  
 }
 
 static LV2_State_Status

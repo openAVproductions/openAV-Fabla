@@ -165,7 +165,7 @@ void Canvas::drawPads(Cairo::RefPtr<Cairo::Context> cr)
       cr->paint();
     }
     
-    cout << "X " << X << "  Y " << drawY << "  " << int(padState[i]) << endl;
+    //cout << "X " << X << "  Y " << drawY << "  " << int(padState[i]) << endl;
   }
   
   
