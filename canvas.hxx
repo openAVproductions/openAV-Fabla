@@ -46,6 +46,7 @@ class Canvas : public Gtk::DrawingArea
   public:
     // core GUI instance writes to these on init
     void* ui_instance;
+    bool  haveInstanceAccess;
     
     Canvas()
     {

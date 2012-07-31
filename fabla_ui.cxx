@@ -11,6 +11,8 @@ using namespace std;
 
 #include "canvas.hxx"
 
+#include "instance-access.h"
+
 #define FABLA_UI_URI "http://www.openavproductions.com/fabla/gui"
 
 static void
@@ -95,9 +97,20 @@ instantiate(const LV2UI_Descriptor*   descriptor,
   Gtk::Main::init_gtkmm_internals(); // for QT hosts
   
   *widget = NULL;
-
-  for (int i = 0; features[i]; ++i) {
-    if (!strcmp(features[i]->URI, LV2_URID_URI "#map")) {
+  
+  bool haveInstanceAccess = false;
+  
+  for(int i = 0; features[i]; i++)
+  {
+    if (!strcmp(features[i]->URI, LV2_INSTANCE_ACCESS_URI ))
+    {
+      cout << "Found feature instance access!" << endl;
+      //self->dspInstance = (FablaUI*)features[i]->data;
+      haveInstanceAccess = true;
+    }
+    else if (!strcmp(features[i]->URI, LV2_URID__map))
+    {
+      cout << "Found feature URID map!" << endl;
       ui->map = (LV2_URID_Map*)features[i]->data;
     }
   }
@@ -125,6 +138,8 @@ instantiate(const LV2UI_Descriptor*   descriptor,
   
   cout << "Creating UI!" << endl;
   *widget = (LV2UI_Widget)make_gui(ui);
+  
+  ui->canvas->haveInstanceAccess = haveInstanceAccess;
   
   return ui;
 }

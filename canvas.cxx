@@ -22,9 +22,16 @@ void Canvas::drawWaveform(Cairo::RefPtr<Cairo::Context> cr)
   int xSize = 255 - 2 * border;
   int ySize = 138 - 2 * border;
   
+  setColour( cr, COLOUR_GREY_4 );
+  
+  if ( haveInstanceAccess )
+  {
+    setColour( cr, COLOUR_BLUE_1 );
+  }
+  
   // highpass, lowpass graph backgrounds
   cr->rectangle( x, y, xSize, ySize );
-  setColour( cr, COLOUR_GREY_4 );
+  
   cr->fill();
   
   cr->rectangle( x, y, xSize, ySize );
