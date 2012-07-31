@@ -53,7 +53,7 @@ typedef struct {
    worker thread only.  The sample is loaded and returned only, plugin state is
    not modified.
 */
-static Sample*
+static SampleMessage*
 load_sample(Fabla* self, int sampleNum, const char* path)
 {
   const size_t path_len  = strlen(path);
@@ -61,6 +61,7 @@ load_sample(Fabla* self, int sampleNum, const char* path)
   print(self, self->uris.log_Error,
         "Loading sample %s to pad number %i\n", path, sampleNum);
 
+  SampleMessage* sampleMessage  = (SampleMessage*)malloc(sizeof(SampleMessage));
   Sample* const  sample  = (Sample*)malloc(sizeof(Sample));
   SF_INFO* const info    = &sample->info;
   SNDFILE* const sndfile = sf_open(path, SFM_READ, info);
@@ -93,8 +94,11 @@ load_sample(Fabla* self, int sampleNum, const char* path)
   sample->path     = (char*)malloc(path_len + 1);
   sample->path_len = path_len;
   memcpy(sample->path, path, path_len + 1);
-
-  return sample;
+  
+  sampleMessage->sampleNum = sampleNum;
+  sampleMessage->sample = sample;
+  
+  return sampleMessage;
 }
 
 static void
@@ -129,6 +133,7 @@ work(LV2_Handle                  instance,
   {
     g_mutex_lock( &self->sampleMutex );
     {
+      print(self, self->uris.log_Error, "Freeing sample now\n" );
       // lock mutex, then work with sample, as GUI might be drawing it!
       SampleMessage* msg = (SampleMessage*)data;
       free_sample(self, msg->sample);
@@ -151,10 +156,11 @@ work(LV2_Handle                  instance,
     int padNum = sampleNum->body;
     
     /* Load sample. */
-    Sample* sample = load_sample(self, padNum, LV2_ATOM_BODY(file_path) );
-    if (sample) {
+    SampleMessage* sampleMessage = load_sample(self, padNum, LV2_ATOM_BODY(file_path) );
+    
+    if (sampleMessage) {
       /* Loaded sample, send it to run() to be applied. */
-      respond(handle, sizeof(sample), &sample);
+      respond(handle, sizeof(SampleMessage), &sampleMessage);
     }
   }
 
@@ -177,19 +183,24 @@ work_response(LV2_Handle  instance,
   
   int sampleNum = 0;
   
-  SampleMessage msg = { { sizeof(Sample*), self->uris.eg_freeSample },
-                        sampleNum,
-                        self->sample[0] };
-
-  /* Send a message to the worker to free the current sample */
-  self->schedule->schedule_work(self->schedule->handle, sizeof(msg), &msg);
-
+  Sample* freeOldSample = 0;
+  
+  // lock the Sample array mutex, so GUI can't draw while we update contents
   g_mutex_lock( &self->sampleMutex );
   {
-    /* Install the new sample */
-    self->sample[sampleNum] = *(Sample**)data;
-
-    /* Send a notification that we're using a new sample. */
+    
+    // Get details from the message
+    SampleMessage* message =  *(SampleMessage**)data;
+    sampleNum = message->sampleNum;
+    
+    // check if there's currently a sample loaded on the pad
+    // this gets used later to see if we need to de-allocate the old sample
+    freeOldSample = self->sample[sampleNum];
+    
+    // point to the new sample
+    self->sample[sampleNum] = message->sample;
+    
+    // Send a notification that we're using a new sample
     lv2_atom_forge_frame_time(&self->forge, self->frame_offset);
     write_set_file(&self->forge, &self->uris,
                    sampleNum,
@@ -197,6 +208,24 @@ work_response(LV2_Handle  instance,
                    self->sample[sampleNum]->path_len);
   }
   g_mutex_unlock( &self->sampleMutex );
+  
+  
+  
+  // now check if we currently have a sample loaded on this pad:
+  // we have the pad number from the load message earlier, and we've just
+  // *UNLOCKED* the mutex: In freewheeling the worker thread gets called
+  // immidiatly, so we have to ensure its unlocked before getting locked
+  // again, since the GMutex is *NOT* defined to be a recursive mutex
+  if ( freeOldSample )
+  {
+    // send worker to free the current sample, 
+      
+    SampleMessage msg = { { sizeof(Sample*), self->uris.eg_freeSample },
+                        sampleNum,
+                        freeOldSample };
+    
+    self->schedule->schedule_work(self->schedule->handle, sizeof(msg), &msg);
+  }
   
   return LV2_WORKER_SUCCESS;
 }
@@ -265,7 +294,8 @@ instantiate(const LV2_Descriptor*     descriptor,
   const size_t len         = path_len + file_len;
   char*        sample_path = (char*)malloc(len + 1);
   snprintf(sample_path, len + 1, "%s%s", path, default_sample_file);
-  self->sample[0] = load_sample(self, 0, sample_path);
+  SampleMessage* message = load_sample(self, 0, sample_path);
+  self->sample[0] = message->sample;
   free(sample_path);
 
   return (LV2_Handle)self;
@@ -323,17 +353,23 @@ run(LV2_Handle instance,
     else if (is_object_type(uris, ev->body.type) )
     {
       const LV2_Atom_Object* obj = (LV2_Atom_Object*)&ev->body;
-      if (obj->body.otype == uris->patch_Set) {
+      
+      if (obj->body.otype == uris->patch_Set)
+      {
         /* Received a set message, send it to the worker. */
-        print(self, self->uris.log_Trace, "Queueing set message\n");
+        print(self, self->uris.log_Error, "Queueing set message\n");
         self->schedule->schedule_work(self->schedule->handle,
                                       lv2_atom_total_size(&ev->body),
                                       &ev->body);
-      } else {
+      }
+      else
+      {
         print(self, self->uris.log_Trace,
               "Unknown object type %d\n", obj->body.otype);
       }
-    } else {
+    }
+    else
+    {
       print(self, self->uris.log_Trace,
             "Unknown event type %d\n", ev->body.type);
     }
@@ -358,7 +394,6 @@ run(LV2_Handle instance,
       {
         output[pos] = self->sample[0]->data[f];
       }
-
     }
     
     self->playback[sampleNum].frame = f;
@@ -426,7 +461,8 @@ restore(LV2_Handle                  instance,
     const char* path = (const char*)value;
     print(self, self->uris.log_Trace, "Restoring file %s\n", path);
     free_sample(self, self->sample[0] );
-    self->sample[0] = load_sample(self, 0, path);
+    SampleMessage* message = load_sample(self, 0, path);
+    self->sample[0] = message->sample;
   }
 
   return LV2_STATE_SUCCESS;

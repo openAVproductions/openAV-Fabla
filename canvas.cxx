@@ -14,6 +14,8 @@ using namespace std;
 
 void Canvas::drawWaveform(Cairo::RefPtr<Cairo::Context> cr)
 {
+  return;
+  
   cr->save();
   
   int border = 10;
@@ -47,6 +49,7 @@ void Canvas::drawWaveform(Cairo::RefPtr<Cairo::Context> cr)
     if ( sampleFrames == 0 )
     {
       cout << "Warning, GUI attempted drawing sample with 0 frames!" << endl;
+      g_mutex_unlock( &dspInstance->sampleMutex );
       return;
     }
     
@@ -97,6 +100,14 @@ void Canvas::drawPads(Cairo::RefPtr<Cairo::Context> cr)
   
   
   PadState pad = PAD_EMPTY;
+  
+  /*
+  // debugging pad names
+  for(int i = 0; i < 16; i++)
+  {
+    cout << sampleNames[i] << endl;
+  }
+  */
   
   if ( sampleNames[0].compare("") )
   {

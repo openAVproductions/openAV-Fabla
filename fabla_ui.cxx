@@ -166,10 +166,12 @@ port_event(LV2UI_Handle handle,
   if (format == ui->uris.atom_eventTransfer)
   {
     LV2_Atom* atom = (LV2_Atom*)buffer;
+    
     if (atom->type == ui->uris.atom_Blank)
     {
       LV2_Atom_Object* obj      = (LV2_Atom_Object*)atom;
       const LV2_Atom*  file_uri = read_set_file(&ui->uris, obj);
+      const LV2_Atom_Int* sampleNum = read_set_file_sample_number(&ui->uris, obj);
       
       if (!file_uri)
       {
@@ -177,12 +179,12 @@ port_event(LV2UI_Handle handle,
         return;
       }
 
+      int pad = sampleNum->body;
       const char* uri = (const char*)LV2_ATOM_BODY(file_uri);
       
-      cout << " File path " << uri << endl;
-      ui->canvas->sampleNames[0] = uri;
+      cout << " File path " << uri << "  on pad " << pad << endl;
+      ui->canvas->sampleNames[pad] = uri;
       ui->canvas->redraw();
-      
     }
     else
     {
