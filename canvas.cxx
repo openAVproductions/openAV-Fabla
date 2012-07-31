@@ -14,8 +14,6 @@ using namespace std;
 
 void Canvas::drawWaveform(Cairo::RefPtr<Cairo::Context> cr)
 {
-  return;
-  
   cr->save();
   
   int border = 10;
@@ -96,77 +94,41 @@ void Canvas::drawPads(Cairo::RefPtr<Cairo::Context> cr)
   
   // 256 wide, 251 high
   
-  float drawY = y + 62;
-  
-  
-  PadState pad = PAD_EMPTY;
-  
-  /*
-  // debugging pad names
-  for(int i = 0; i < 16; i++)
-  {
-    cout << sampleNames[i] << endl;
-  }
-  */
-  
-  if ( sampleNames[0].compare("") )
-  {
-    pad = PAD_LOADED;
-  }
-  
-  
-  // draw 1st one (bottom left)
-  
-  if ( pad == PAD_PLAYING )
-  {
-    cr->set_source (padPlayImageSurface, x, drawY+62*3);
-    cr->rectangle( x, drawY, padPlayPixbuf->get_width(), padPlayPixbuf->get_height() );
-    cr->paint();
-  }
-  else if ( pad == PAD_LOADED )
-  {
-    cr->set_source (padLoadImageSurface, x, drawY+62*3);
-    cr->rectangle( x, drawY, padLoadPixbuf->get_width(), padLoadPixbuf->get_height() );
-    cr->paint();
-  }
-  else
-  {
-    cr->set_source (padEmptyImageSurface, x, drawY+62*3);
-    cr->rectangle( x, drawY, padEmptyPixbuf->get_width(), padEmptyPixbuf->get_height() );
-    cr->paint();
-  }
+  float drawY = y + 62*5;
   
   // loop over rest
-  for ( int i = 1; i < 16; i++ )
+  for ( int i = 0; i < 16; i++ )
   {
-    pad = PAD_EMPTY;
-    if ( sampleNames[i].compare("") )
+    int X = x + (62*(i%4));
+    
+    if ( i % 4 == 0)
     {
-      pad = PAD_LOADED;
+      drawY -= 62;
     }
     
-    if ( pad == PAD_PLAYING )
+    if ( padState[i] == PAD_PLAYING )
     {
-      cr->set_source (padPlayImageSurface, x + (62*(i%4)), drawY);
-      cr->rectangle( x + (62*(i%4)), drawY, padPlayPixbuf->get_width(), padPlayPixbuf->get_height() );
+      cr->set_source (padPlayImageSurface, X, drawY);
+      cr->rectangle( X, drawY, padPlayPixbuf->get_width(), padPlayPixbuf->get_height() );
       cr->paint();
     }
-    else if ( pad == PAD_LOADED )
+    else if ( padState[i] == PAD_LOADED )
     {
-      cr->set_source (padLoadImageSurface, x + (62*(i%4)), drawY);
-      cr->rectangle( x + (62*(i%4)), drawY, padLoadPixbuf->get_width(), padLoadPixbuf->get_height() );
+      cr->set_source (padLoadImageSurface, X, drawY);
+      cr->rectangle( X, drawY, padLoadPixbuf->get_width(), padLoadPixbuf->get_height() );
       cr->paint();
     }
     else
     {
-      cr->set_source (padEmptyImageSurface, x + (62*(i%4)), drawY);
-      cr->rectangle( x + (62*(i%4)), drawY, padEmptyPixbuf->get_width(), padEmptyPixbuf->get_height() );
+      cr->set_source (padEmptyImageSurface, X, drawY);
+      cr->rectangle( X, drawY, padEmptyPixbuf->get_width(), padEmptyPixbuf->get_height() );
       cr->paint();
     }
     
-    if ( i % 4 == 0 )
-      drawY += 62;
+    cout << "X " << X << "  Y " << drawY << "  " << int(padState[i]) << endl;
   }
+  
+  
   
   cr->restore();
 }

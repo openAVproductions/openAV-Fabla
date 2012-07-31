@@ -59,8 +59,13 @@ class Canvas : public Gtk::DrawingArea
       PAD_PLAYING,
     };
     
+    PadState padState[16];
+    
     Canvas()
     {
+      for(int i = 0; i < 16; i++)
+        padState[i] = PAD_EMPTY;
+      
       selectedSample = 0;
       
       width = 690;

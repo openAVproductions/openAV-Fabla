@@ -184,6 +184,7 @@ port_event(LV2UI_Handle handle,
       
       cout << " File path " << uri << "  on pad " << pad << endl;
       ui->canvas->sampleNames[pad] = uri;
+      ui->canvas->padState[pad] = Canvas::PAD_LOADED;
       ui->canvas->redraw();
     }
     else
