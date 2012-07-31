@@ -144,7 +144,7 @@ instantiate(const LV2UI_Descriptor*   descriptor,
   ui->canvas->haveInstanceAccess = haveInstanceAccess;
   
   // dsp instance to canvas
-  ui->canvas->dspInstance = dspInstance;
+  ui->canvas->dspInstance = (Fabla*)dspInstance;
   
   return ui;
 }
@@ -182,6 +182,7 @@ port_event(LV2UI_Handle handle,
       
       cout << " File path " << uri << endl;
       ui->canvas->sampleNames[0] = uri;
+      ui->canvas->redraw();
       
     }
     else

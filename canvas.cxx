@@ -29,10 +29,31 @@ void Canvas::drawWaveform(Cairo::RefPtr<Cairo::Context> cr)
     setColour( cr, COLOUR_BLUE_1 );
   }
   
-  // highpass, lowpass graph backgrounds
+  // rectangle behind the waveform
   cr->rectangle( x, y, xSize, ySize );
-  
   cr->fill();
+  
+  // draw the waveform here, using dspInstance to get the sample data.
+  // We use a mutex that's in the DSP part to serialize access to the
+  // sample data, as it can be loaded / freed using the Worker thread in
+  // DSP.
+  g_mutex_lock( &dspInstance->sampleMutex );
+  {
+    // gather data on the sample were drawing:
+    long   sampleFrames = dspInstance->sample[0]->info.frames;
+    float* current = dspInstance->sample[0]->data;
+    
+    for (long i = 0; i < sampleFrames; i += 20 )
+    {
+      cr->line_to( x + xSize * ( float(i) / sampleFrames), y + ySize * 0.5 + (*current) * ySize * 0.5 );
+      current += 20;
+    }
+    cr->set_line_width(0.8);
+    setColour( cr, COLOUR_GREY_4 );
+    cr->stroke();
+  }
+  g_mutex_unlock( &dspInstance->sampleMutex );
+  
   
   cr->rectangle( x, y, xSize, ySize );
   setColour( cr, COLOUR_GREY_1 );

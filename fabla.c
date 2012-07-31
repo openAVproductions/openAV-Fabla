@@ -64,7 +64,11 @@ load_sample(Fabla* self, const char* path)
   SF_INFO* const info    = &sample->info;
   SNDFILE* const sndfile = sf_open(path, SFM_READ, info);
 
-  if (!sndfile || !info->frames || (info->channels != 1)) {
+  if (!sndfile || !info->frames || (info->channels != 2)) {
+    print(self, self->uris.log_Error,
+          "Stereo sample '%s'\n", path);
+  }
+  else if (!sndfile || !info->frames || (info->channels != 1)) {
     print(self, self->uris.log_Error,
           "Failed to open sample '%s'.\n", path);
     free(sample);
