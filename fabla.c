@@ -183,9 +183,13 @@ work(LV2_Handle                  instance,
   
   if (atom->type == self->uris.eg_freeSample)
   {
-    /* Free old sample */
-    SampleMessage* msg = (SampleMessage*)data;
-    free_sample(self, msg->sample);
+    g_mutex_lock( &self->sampleMutex );
+    {
+      // lock mutex, then work with sample, as GUI might be drawing it!
+      SampleMessage* msg = (SampleMessage*)data;
+      free_sample(self, msg->sample);
+    }
+    g_mutex_unlock( &self->sampleMutex );
   }
   else
   {
@@ -229,15 +233,19 @@ work_response(LV2_Handle  instance,
   /* Send a message to the worker to free the current sample */
   self->schedule->schedule_work(self->schedule->handle, sizeof(msg), &msg);
 
-  /* Install the new sample */
-  self->sample[0] = *(Sample**)data;
+  g_mutex_lock( &self->sampleMutex );
+  {
+    /* Install the new sample */
+    self->sample[0] = *(Sample**)data;
 
-  /* Send a notification that we're using a new sample. */
-  lv2_atom_forge_frame_time(&self->forge, self->frame_offset);
-  write_set_file(&self->forge, &self->uris,
-                 self->sample[0]->path,
-                 self->sample[0]->path_len);
-
+    /* Send a notification that we're using a new sample. */
+    lv2_atom_forge_frame_time(&self->forge, self->frame_offset);
+    write_set_file(&self->forge, &self->uris,
+                   self->sample[0]->path,
+                   self->sample[0]->path_len);
+  }
+  g_mutex_unlock( &self->sampleMutex );
+  
   return LV2_WORKER_SUCCESS;
 }
 
@@ -275,14 +283,7 @@ instantiate(const LV2_Descriptor*     descriptor,
   }
   memset(self, 0, sizeof(Fabla));
   
-  for ( int i = 0; i < 16; i++ )
-  {
-    self->sample[i] = NULL;
-  }
-  
-  //g_mutex_init( &self->sampleMutex );
-  
-  
+  g_mutex_init( &self->sampleMutex );
   
   /* Get host features */
   for (int i = 0; features[i]; ++i) {
