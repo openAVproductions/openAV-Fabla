@@ -17,6 +17,12 @@
 
 #include "./uris.h"
 
+
+// GMutex:
+// for loading / freeing samples, and GUI drawing. It will *never* block
+// the RT thread, don't worry :)
+#include <gtk/gtk.h>
+
 enum {
   SAMPLER_CONTROL  = 0,
   SAMPLER_RESPONSE = 1,
@@ -48,7 +54,8 @@ typedef struct {
   LV2_Atom_Forge forge;
 
   /* Sample */
-  Sample* sample;
+  GMutex sampleMutex; // never gets locked in the RT thread
+  Sample* sample[16];
 
   /* Ports */
   float*               output_port;
@@ -217,19 +224,19 @@ work_response(LV2_Handle  instance,
   Fabla* self = (Fabla*)instance;
 
   SampleMessage msg = { { sizeof(Sample*), self->uris.eg_freeSample },
-                        self->sample };
+                        self->sample[0] };
 
   /* Send a message to the worker to free the current sample */
   self->schedule->schedule_work(self->schedule->handle, sizeof(msg), &msg);
 
   /* Install the new sample */
-  self->sample = *(Sample**)data;
+  self->sample[0] = *(Sample**)data;
 
   /* Send a notification that we're using a new sample. */
   lv2_atom_forge_frame_time(&self->forge, self->frame_offset);
   write_set_file(&self->forge, &self->uris,
-                 self->sample->path,
-                 self->sample->path_len);
+                 self->sample[0]->path,
+                 self->sample[0]->path_len);
 
   return LV2_WORKER_SUCCESS;
 }
@@ -267,7 +274,16 @@ instantiate(const LV2_Descriptor*     descriptor,
     return NULL;
   }
   memset(self, 0, sizeof(Fabla));
-
+  
+  for ( int i = 0; i < 16; i++ )
+  {
+    self->sample[i] = NULL;
+  }
+  
+  //g_mutex_init( &self->sampleMutex );
+  
+  
+  
   /* Get host features */
   for (int i = 0; features[i]; ++i) {
     if (!strcmp(features[i]->URI, LV2_URID__map)) {
@@ -296,7 +312,7 @@ instantiate(const LV2_Descriptor*     descriptor,
   const size_t len         = path_len + file_len;
   char*        sample_path = (char*)malloc(len + 1);
   snprintf(sample_path, len + 1, "%s%s", path, default_sample_file);
-  self->sample = load_sample(self, sample_path);
+  self->sample[0] = load_sample(self, sample_path);
   free(sample_path);
 
   return (LV2_Handle)self;
@@ -310,7 +326,7 @@ static void
 cleanup(LV2_Handle instance)
 {
   Fabla* self = (Fabla*)instance;
-  free_sample(self, self->sample);
+  free_sample(self, self->sample[0] );
   free(self);
 }
 
@@ -374,7 +390,7 @@ run(LV2_Handle instance,
   if (self->play)
   {
     uint32_t       f  = self->frame;
-    const uint32_t lf = self->sample->info.frames;
+    const uint32_t lf = self->sample[0]->info.frames;
     
     for (pos = 0; pos < start_frame; ++pos) {
       output[pos] = 0;
@@ -385,7 +401,7 @@ run(LV2_Handle instance,
       // sample has data
       for (; pos < sample_count && f < lf; ++pos, ++f)
       {
-        output[pos] = self->sample->data[f];
+        output[pos] = self->sample[0]->data[f];
       }
 
     }
@@ -419,12 +435,12 @@ save(LV2_Handle                instance,
 
   Fabla* self  = (Fabla*)instance;
   char*    apath = map_path->abstract_path(map_path->handle,
-                                           self->sample->path);
+                                           self->sample[0]->path);
 
   store(handle,
         self->uris.eg_file,
         apath,
-        strlen(self->sample->path) + 1,
+        strlen(self->sample[0]->path) + 1,
         self->uris.atom_Path,
         LV2_STATE_IS_POD | LV2_STATE_IS_PORTABLE);
 
@@ -454,8 +470,8 @@ restore(LV2_Handle                  instance,
   if (value) {
     const char* path = (const char*)value;
     print(self, self->uris.log_Trace, "Restoring file %s\n", path);
-    free_sample(self, self->sample);
-    self->sample = load_sample(self, path);
+    free_sample(self, self->sample[0] );
+    self->sample[0] = load_sample(self, path);
   }
 
   return LV2_STATE_SUCCESS;
