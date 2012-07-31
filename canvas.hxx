@@ -10,10 +10,33 @@
 
 #include <gdkmm.h>
 
+#include "uris.h"
+
+#include "lv2/lv2plug.in/ns/extensions/ui/ui.h"
+
+#include "lv2/lv2plug.in/ns/ext/atom/atom.h"
+#include "lv2/lv2plug.in/ns/ext/atom/forge.h"
+#include "lv2/lv2plug.in/ns/ext/atom/util.h"
+#include "lv2/lv2plug.in/ns/ext/patch/patch.h"
+#include "lv2/lv2plug.in/ns/ext/urid/urid.h"
 #include "lv2/lv2plug.in/ns/extensions/ui/ui.h"
 
 using namespace std;
 
+class Canvas;
+
+// this needs to be accessible by fabla.c
+typedef struct {
+  LV2_Atom_Forge forge;
+
+  LV2_URID_Map* map;
+  FablaURIs   uris;
+
+  LV2UI_Write_Function write;
+  LV2UI_Controller     controller;
+  
+  Canvas* canvas;
+} FablaUI;
 
 
 static void on_load_clicked(void* handle);

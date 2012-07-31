@@ -33,6 +33,12 @@ typedef struct {
 } Sample;
 
 typedef struct {
+  sf_count_t frame;
+  bool play;
+  
+} SamplePlayback;
+
+typedef struct {
   /* Features */
   LV2_URID_Map*        map;
   LV2_Worker_Schedule* schedule;
@@ -121,7 +127,8 @@ load_sample(Fabla* self, const char* path)
 
   /* Read data */
   float* const data = malloc(sizeof(float) * info->frames);
-  if (!data) {
+  if (!data)
+  {
     print(self, self->uris.log_Error,
           "Failed to allocate memory for sample.\n");
     return NULL;
@@ -166,11 +173,15 @@ work(LV2_Handle                  instance,
 {
   Fabla*  self = (Fabla*)instance;
   LV2_Atom* atom = (LV2_Atom*)data;
-  if (atom->type == self->uris.eg_freeSample) {
+  
+  if (atom->type == self->uris.eg_freeSample)
+  {
     /* Free old sample */
     SampleMessage* msg = (SampleMessage*)data;
     free_sample(self, msg->sample);
-  } else {
+  }
+  else
+  {
     /* Handle set message (load sample). */
     LV2_Atom_Object* obj = (LV2_Atom_Object*)data;
 
@@ -323,15 +334,21 @@ run(LV2_Handle instance,
   lv2_atom_forge_sequence_head(&self->forge, &self->notify_frame, 0);
 
   /* Read incoming events */
-  LV2_ATOM_SEQUENCE_FOREACH(self->control_port, ev) {
+  LV2_ATOM_SEQUENCE_FOREACH(self->control_port, ev)
+  {
     self->frame_offset = ev->time.frames;
-    if (ev->body.type == uris->midi_Event)
+    
+    if (ev->body.type == uris->midi_Event) // MIDI event on Atom port
     {
       uint8_t* const data = (uint8_t* const)(ev + 1);
-      if ((data[0] & 0xF0) == 0x90) {
-        start_frame = ev->time.frames;
-        self->frame = 0;
-        self->play  = true;
+      if ( data[0] == 144 ) // event & channel
+      {
+        if ( data[1] == 36 ) // note
+        {
+          start_frame = ev->time.frames;
+          self->frame = 0;
+          self->play  = true;
+        }
       }
     }
     else if (is_object_type(uris, ev->body.type) )
@@ -354,18 +371,25 @@ run(LV2_Handle instance,
   }
 
   /* Render the sample (possibly already in progress) */
-  if (self->play) {
+  if (self->play)
+  {
     uint32_t       f  = self->frame;
     const uint32_t lf = self->sample->info.frames;
-
+    
     for (pos = 0; pos < start_frame; ++pos) {
       output[pos] = 0;
     }
+    
+    if ( lf != 0 )
+    {
+      // sample has data
+      for (; pos < sample_count && f < lf; ++pos, ++f)
+      {
+        output[pos] = self->sample->data[f];
+      }
 
-    for (; pos < sample_count && f < lf; ++pos, ++f) {
-      output[pos] = self->sample->data[f];
     }
-
+    
     self->frame = f;
 
     if (f == lf) {
