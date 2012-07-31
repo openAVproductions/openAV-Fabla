@@ -46,7 +46,11 @@ class Canvas : public Gtk::DrawingArea
   public:
     // core GUI instance writes to these on init
     void* ui_instance;
+    
+    void* dspInstance;
     bool  haveInstanceAccess;
+    
+    std::string sampleNames[16];
     
     Canvas()
     {

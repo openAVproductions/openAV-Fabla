@@ -99,13 +99,14 @@ instantiate(const LV2UI_Descriptor*   descriptor,
   *widget = NULL;
   
   bool haveInstanceAccess = false;
+  void* dspInstance = 0;
   
   for(int i = 0; features[i]; i++)
   {
     if (!strcmp(features[i]->URI, LV2_INSTANCE_ACCESS_URI ))
     {
       cout << "Found feature instance access!" << endl;
-      //self->dspInstance = (FablaUI*)features[i]->data;
+      dspInstance = (Fabla*)features[i]->data;
       haveInstanceAccess = true;
     }
     else if (!strcmp(features[i]->URI, LV2_URID__map))
@@ -139,7 +140,11 @@ instantiate(const LV2UI_Descriptor*   descriptor,
   cout << "Creating UI!" << endl;
   *widget = (LV2UI_Widget)make_gui(ui);
   
+  // instance access
   ui->canvas->haveInstanceAccess = haveInstanceAccess;
+  
+  // dsp instance to canvas
+  ui->canvas->dspInstance = dspInstance;
   
   return ui;
 }
@@ -159,12 +164,16 @@ port_event(LV2UI_Handle handle,
            const void*  buffer)
 {
   FablaUI* ui = (FablaUI*)handle;
-  if (format == ui->uris.atom_eventTransfer) {
+  if (format == ui->uris.atom_eventTransfer)
+  {
     LV2_Atom* atom = (LV2_Atom*)buffer;
-    if (atom->type == ui->uris.atom_Blank) {
+    if (atom->type == ui->uris.atom_Blank)
+    {
       LV2_Atom_Object* obj      = (LV2_Atom_Object*)atom;
       const LV2_Atom*  file_uri = read_set_file(&ui->uris, obj);
-      if (!file_uri) {
+      
+      if (!file_uri)
+      {
         fprintf(stderr, "Unknown message sent to UI.\n");
         return;
       }
@@ -172,11 +181,16 @@ port_event(LV2UI_Handle handle,
       const char* uri = (const char*)LV2_ATOM_BODY(file_uri);
       
       cout << " File path " << uri << endl;
-      //gtk_label_set_text(GTK_LABEL(ui->label), uri);
-    } else {
+      ui->canvas->sampleNames[0] = uri;
+      
+    }
+    else
+    {
       fprintf(stderr, "Unknown message type.\n");
     }
-  } else {
+  }
+  else
+  {
     fprintf(stderr, "Unknown format.\n");
   }
 }

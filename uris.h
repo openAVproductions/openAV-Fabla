@@ -2,11 +2,22 @@
 #ifndef FABLA_URIS_H
 #define FABLA_URIS_H
 
+#include <sndfile.h>
+
 #include "lv2/lv2plug.in/ns/ext/atom/forge.h"
 #include "lv2/lv2plug.in/ns/ext/atom/util.h"
 #include "lv2/lv2plug.in/ns/ext/state/state.h"
 #include "lv2/lv2plug.in/ns/ext/log/log.h"
 #include "lv2/lv2plug.in/ns/ext/patch/patch.h"
+
+#include "lv2/lv2plug.in/ns/ext/atom/forge.h"
+#include "lv2/lv2plug.in/ns/ext/atom/util.h"
+#include "lv2/lv2plug.in/ns/ext/log/log.h"
+#include "lv2/lv2plug.in/ns/ext/patch/patch.h"
+#include "lv2/lv2plug.in/ns/ext/state/state.h"
+#include "lv2/lv2plug.in/ns/ext/urid/urid.h"
+#include "lv2/lv2plug.in/ns/ext/worker/worker.h"
+#include "lv2/lv2plug.in/ns/lv2core/lv2.h"
 
 #define LV2_MIDI__MidiEvent "http://lv2plug.in/ns/ext/midi#MidiEvent"
 
@@ -14,6 +25,11 @@
 #define FABLA_URI__file        FABLA_URI "#file"
 #define FABLA_URI__applySample FABLA_URI "#applySample"
 #define FABLA_URI__freeSample  FABLA_URI "#freeSample"
+
+// GMutex:
+// for loading / freeing samples, and GUI drawing. It will *never* block
+// the RT thread, don't worry :)
+#include <gtk/gtk.h>
 
 typedef struct {
 	LV2_URID atom_Blank;
@@ -30,6 +46,52 @@ typedef struct {
 	LV2_URID patch_Set;
 	LV2_URID patch_body;
 } FablaURIs;
+
+
+typedef struct {
+  SF_INFO info;      /**< Info about sample from sndfile */
+  float*  data;      /**< Sample data in float */
+  char*   path;      /**< Path of file */
+  size_t  path_len;  /**< Length of path */
+} Sample;
+
+typedef struct {
+  sf_count_t frame;
+  bool play;
+  
+} SamplePlayback;
+
+typedef struct {
+  /* Features */
+  LV2_URID_Map*        map;
+  LV2_Worker_Schedule* schedule;
+  LV2_Log_Log*         log;
+
+  /* Forge for creating atoms */
+  LV2_Atom_Forge forge;
+
+  /* Sample */
+  GMutex sampleMutex; // never gets locked in the RT thread
+  Sample* sample[16];
+
+  /* Ports */
+  float*               output_port;
+  LV2_Atom_Sequence*   control_port;
+  LV2_Atom_Sequence*   notify_port;
+
+  /* Forge frame for notify port (for writing worker replies). */
+  LV2_Atom_Forge_Frame notify_frame;
+
+  /* URIs */
+  FablaURIs uris;
+
+  /* Current position in run() */
+  uint32_t frame_offset;
+
+  /* Playback state */
+  sf_count_t frame;
+  bool       play;
+} Fabla;
 
 static inline void
 map_sampler_uris(LV2_URID_Map* map, FablaURIs* uris)

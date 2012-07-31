@@ -39,6 +39,11 @@ void Canvas::drawWaveform(Cairo::RefPtr<Cairo::Context> cr)
   cr->set_line_width(1.1);
   cr->stroke();
   
+  // filename text
+  cr->move_to( x + 7.5, y + 84 + 20 );
+  setColour( cr, COLOUR_GREY_4 );
+  cr->show_text( sampleNames[0] );
+  
   cr->restore();
 }
 
