@@ -53,6 +53,12 @@ class Canvas : public Gtk::DrawingArea
     int selectedSample;
     std::string sampleNames[16];
     
+    enum PadState {
+      PAD_EMPTY = 0,
+      PAD_LOADED,
+      PAD_PLAYING,
+    };
+    
     Canvas()
     {
       selectedSample = 0;
@@ -111,10 +117,12 @@ class Canvas : public Gtk::DrawingArea
     Glib::RefPtr< Gdk::Pixbuf > imagePointer;
     Cairo::RefPtr< Cairo::ImageSurface > imageSurfacePointer;
     
-    Glib::RefPtr< Gdk::Pixbuf > padOnPixbuf;
-    Glib::RefPtr< Gdk::Pixbuf > padOffPixbuf;
-    Cairo::RefPtr< Cairo::ImageSurface > padOnImageSurface;
-    Cairo::RefPtr< Cairo::ImageSurface > padOffImageSurface;
+    Glib::RefPtr< Gdk::Pixbuf > padPlayPixbuf;
+    Glib::RefPtr< Gdk::Pixbuf > padLoadPixbuf;
+    Glib::RefPtr< Gdk::Pixbuf > padEmptyPixbuf;
+    Cairo::RefPtr< Cairo::ImageSurface > padPlayImageSurface;
+    Cairo::RefPtr< Cairo::ImageSurface > padLoadImageSurface;
+    Cairo::RefPtr< Cairo::ImageSurface > padEmptyImageSurface;
     
     enum Colour {
       COLOUR_ORANGE_1 = 0,
@@ -180,20 +188,25 @@ class Canvas : public Gtk::DrawingArea
       
       
       // PAD images
-      padOnPixbuf  = Gdk::Pixbuf::create_from_file ("/usr/lib/lv2/fabla.lv2/padon.png" );
-      padOffPixbuf = Gdk::Pixbuf::create_from_file ("/usr/lib/lv2/fabla.lv2/padoff.png");
+      padPlayPixbuf  = Gdk::Pixbuf::create_from_file ("/usr/lib/lv2/fabla.lv2/padplay.png" );
+      padLoadPixbuf  = Gdk::Pixbuf::create_from_file ("/usr/lib/lv2/fabla.lv2/padload.png");
+      padEmptyPixbuf = Gdk::Pixbuf::create_from_file ("/usr/lib/lv2/fabla.lv2/padempty.png");
       
-      padOnImageSurface  = Cairo::ImageSurface::create  ( Cairo::FORMAT_ARGB32, padOnPixbuf->get_width() , padOnPixbuf->get_height()  );
-      padOffImageSurface = Cairo::ImageSurface::create  ( Cairo::FORMAT_ARGB32, padOffPixbuf->get_width(), padOffPixbuf->get_height() );
+      padPlayImageSurface  = Cairo::ImageSurface::create  ( Cairo::FORMAT_ARGB32, padPlayPixbuf->get_width(), padPlayPixbuf->get_height()  );
+      padLoadImageSurface  = Cairo::ImageSurface::create  ( Cairo::FORMAT_ARGB32, padLoadPixbuf->get_width(), padLoadPixbuf->get_height()  );
+      padEmptyImageSurface = Cairo::ImageSurface::create  ( Cairo::FORMAT_ARGB32, padEmptyPixbuf->get_width(),padEmptyPixbuf->get_height() );
       
-      Cairo::RefPtr< Cairo::Context > padOnContext  = Cairo::Context::create (padOnImageSurface );
-      Cairo::RefPtr< Cairo::Context > padOffContext = Cairo::Context::create (padOffImageSurface);
+      Cairo::RefPtr< Cairo::Context > padPlayContext  = Cairo::Context::create (padPlayImageSurface );
+      Cairo::RefPtr< Cairo::Context > padLoadContext  = Cairo::Context::create (padLoadImageSurface );
+      Cairo::RefPtr< Cairo::Context > padEmptyContext = Cairo::Context::create (padEmptyImageSurface);
       
-      Gdk::Cairo::set_source_pixbuf (padOnContext , padOnPixbuf , 0.0, 0.0);
-      Gdk::Cairo::set_source_pixbuf (padOffContext, padOffPixbuf, 0.0, 0.0);
+      Gdk::Cairo::set_source_pixbuf (padPlayContext , padPlayPixbuf , 0.0, 0.0);
+      Gdk::Cairo::set_source_pixbuf (padLoadContext , padLoadPixbuf , 0.0, 0.0);
+      Gdk::Cairo::set_source_pixbuf (padEmptyContext, padEmptyPixbuf, 0.0, 0.0);
       
-      padOnContext->paint();
-      padOffContext->paint();
+      padPlayContext->paint();
+      padLoadContext->paint();
+      padEmptyContext->paint();
       
       headerLoaded = true;
     }

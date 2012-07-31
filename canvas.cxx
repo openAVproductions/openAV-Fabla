@@ -94,39 +94,61 @@ void Canvas::drawPads(Cairo::RefPtr<Cairo::Context> cr)
   
   float drawY = y + 62;
   
-  bool padOn = true;
+  
+  PadState pad = PAD_EMPTY;
+  
+  if ( sampleNames[0].compare("") )
+  {
+    pad = PAD_LOADED;
+  }
+  
   
   // draw 1st one (bottom left)
   
-  if ( padOn )
+  if ( pad == PAD_PLAYING )
   {
-    cr->set_source (padOnImageSurface, x, drawY+62*3);
-    cr->rectangle( x, drawY, padOnPixbuf->get_width(), padOnPixbuf->get_height() );
+    cr->set_source (padPlayImageSurface, x, drawY+62*3);
+    cr->rectangle( x, drawY, padPlayPixbuf->get_width(), padPlayPixbuf->get_height() );
+    cr->paint();
+  }
+  else if ( pad == PAD_LOADED )
+  {
+    cr->set_source (padLoadImageSurface, x, drawY+62*3);
+    cr->rectangle( x, drawY, padLoadPixbuf->get_width(), padLoadPixbuf->get_height() );
     cr->paint();
   }
   else
   {
-    cr->set_source (padOffImageSurface, x, drawY+62*3);
-    cr->rectangle( x, drawY, padOffPixbuf->get_width(), padOffPixbuf->get_height() );
+    cr->set_source (padEmptyImageSurface, x, drawY+62*3);
+    cr->rectangle( x, drawY, padEmptyPixbuf->get_width(), padEmptyPixbuf->get_height() );
     cr->paint();
   }
-  
-  padOn = false;
   
   // loop over rest
   for ( int i = 1; i < 16; i++ )
   {
-    
-    if ( padOn )
+    pad = PAD_EMPTY;
+    if ( sampleNames[i].compare("") )
     {
-      cr->set_source (padOnImageSurface, x + (62*(i%4)), drawY);
-      cr->rectangle( x + (62*(i%4)), drawY, padOnPixbuf->get_width(), padOnPixbuf->get_height() );
+      pad = PAD_LOADED;
+    }
+    
+    if ( pad == PAD_PLAYING )
+    {
+      cr->set_source (padPlayImageSurface, x + (62*(i%4)), drawY);
+      cr->rectangle( x + (62*(i%4)), drawY, padPlayPixbuf->get_width(), padPlayPixbuf->get_height() );
+      cr->paint();
+    }
+    else if ( pad == PAD_LOADED )
+    {
+      cr->set_source (padLoadImageSurface, x + (62*(i%4)), drawY);
+      cr->rectangle( x + (62*(i%4)), drawY, padLoadPixbuf->get_width(), padLoadPixbuf->get_height() );
       cr->paint();
     }
     else
     {
-      cr->set_source (padOffImageSurface, x + (62*(i%4)), drawY);
-      cr->rectangle( x + (62*(i%4)), drawY, padOffPixbuf->get_width(), padOffPixbuf->get_height() );
+      cr->set_source (padEmptyImageSurface, x + (62*(i%4)), drawY);
+      cr->rectangle( x + (62*(i%4)), drawY, padEmptyPixbuf->get_width(), padEmptyPixbuf->get_height() );
       cr->paint();
     }
     
