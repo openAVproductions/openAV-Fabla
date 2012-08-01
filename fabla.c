@@ -430,17 +430,23 @@ save(LV2_Handle                instance,
   
   for(int i = 0; i < 16; i++ )
   {
-    char*    apath = map_path->abstract_path(map_path->handle,
+    if ( self->sample[i] )
+    {
+      char*    apath = map_path->abstract_path(map_path->handle,
                                              self->sample[i]->path);
-
-    store(handle,
-          self->uris.eg_file,
-          apath,
-          strlen(self->sample[i]->path) + 1,
-          self->uris.atom_Path,
-          LV2_STATE_IS_POD | LV2_STATE_IS_PORTABLE);
-    
-    free(apath);
+      
+      print(self, self->uris.log_Error,
+            "Store %i '%s'\n", i, apath);
+      
+      store(handle,
+            self->uris.eg_file,
+            apath,
+            strlen(self->sample[i]->path) + 1,
+            self->uris.atom_Path,
+            LV2_STATE_IS_POD | LV2_STATE_IS_PORTABLE);
+      
+      free(apath);
+    }
   }
   
   return LV2_STATE_SUCCESS;
