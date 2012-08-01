@@ -54,8 +54,13 @@ class Canvas : public Gtk::DrawingArea
     int selectedSample;
     std::string sampleNames[16];
     
+    // source
     float attack, release;
     float speed, gain;
+    
+    // effect
+    float echoTime, echoAmp;
+    float reverbTime, reverbAmp;
     
     enum PadState {
       PAD_EMPTY = 0,
@@ -70,11 +75,18 @@ class Canvas : public Gtk::DrawingArea
       for(int i = 0; i < 16; i++)
         padState[i] = PAD_EMPTY;
       
+      // source
       attack = 0.5;
       release = 0.5;
-      
       speed = 1;
       gain = 0.5;
+      
+      // effect
+      echoAmp = 0.2;
+      echoTime = 0.5;
+      reverbAmp = 0.5;
+      reverbTime = 0.5;
+      
       
       selectedSample = 0;
       

@@ -563,15 +563,11 @@ void Canvas::drawEffect(Cairo::RefPtr<Cairo::Context> cr)
       cr->stroke();
       cr->unset_dash();
       
-      /*
-      // move to bottom right, draw line to middle right
-      cr->move_to( x + xSize, y + ySize );
-      cr->line_to( x + xSize, y + (ySize*0.47));
       
-      // Curve
-      cr->curve_to( x + xSize - (xSize*cutoff)    , y+(ySize*0.5)    ,   // control point 1
-                    x + xSize - (xSize*cutoff)    , y+(ySize * 0.0)     ,   // control point 2
-                    x + xSize - (xSize*cutoff) -10, y+    ySize     );  // end of curve 1
+      
+      // draw echo
+      cr->move_to( x        , y );
+      cr->line_to( x + xSize, y + ySize);
       
       if ( active )
         setColour(cr, COLOUR_BLUE_1, 0.2 );
@@ -587,7 +583,6 @@ void Canvas::drawEffect(Cairo::RefPtr<Cairo::Context> cr)
       else
         setColour(cr, COLOUR_GREY_1 );
       cr->stroke();
-      */
   }
   
   // LOWPASS
@@ -619,15 +614,10 @@ void Canvas::drawEffect(Cairo::RefPtr<Cairo::Context> cr)
       cr->stroke();
       cr->unset_dash();
       
-      /*
       // move to bottom left, draw line to middle left
       cr->move_to( x , y + ySize );
-      cr->line_to( x , y + (ySize*0.47));
-      
-      // Curve
-      cr->curve_to( x + xSize * cutoff    , y+(ySize*0.5)  ,   // control point 1
-                    x + xSize * cutoff    , y+(ySize * 0.0),   // control point 2
-                    x + xSize * cutoff +10, y+ ySize       );  // end of curve 1
+      cr->line_to( x + xSize*0.3, y + (ySize*0.4*reverbAmp));
+      cr->line_to( x + xSize*0.3+xSize*0.7*reverbTime, y + (ySize));
       
       if ( active )
         setColour(cr, COLOUR_BLUE_1, 0.2 );
@@ -643,7 +633,7 @@ void Canvas::drawEffect(Cairo::RefPtr<Cairo::Context> cr)
       else
         setColour(cr, COLOUR_GREY_1 );
       cr->stroke();
-      */
+      
   }
   
   // highpass, lowpass outline
