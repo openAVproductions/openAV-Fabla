@@ -479,6 +479,17 @@ class Canvas : public Gtk::DrawingArea
         //on_load_clicked( ui_instance );
       }
       
+      if ( x > 508 && y > 199 && x < 646 && y < 281 ) // REVERB
+      {
+        reverbTime = (event->x - 508) / 138.f;
+        reverbAmp  = 1 - (event->y - 199) / 82.f;
+        cout << "reverb graph click at " << x << " " << y << endl;
+        ui_instance->write( ui_instance->controller, SAMPLER_REVERB_SIZE, sizeof(float), 0, (const void*) &reverbTime);
+        ui_instance->write( ui_instance->controller, SAMPLER_REVERB_WET , sizeof(float), 0, (const void*) &reverbAmp );
+        redraw();
+      }
+
+      
       if ( x > 35 && y > 280 && x < 290 && y < 528 ) // PADS
       {
         int x = event->x - 35;

@@ -535,7 +535,7 @@ void Canvas::drawEffect(Cairo::RefPtr<Cairo::Context> cr)
   setColour( cr, COLOUR_GREY_4 );
   cr->fill();
   
-  // HIGHPASS
+  // Echo
   {
       int ySize = 175 / 2 - 5;
       
@@ -585,7 +585,7 @@ void Canvas::drawEffect(Cairo::RefPtr<Cairo::Context> cr)
       cr->stroke();
   }
   
-  // LOWPASS
+  // Reverb
   {
       int y = 330 + border - 235 + 93;
       int ySize = 175 / 2 - 5;
@@ -615,9 +615,9 @@ void Canvas::drawEffect(Cairo::RefPtr<Cairo::Context> cr)
       cr->unset_dash();
       
       // move to bottom left, draw line to middle left
-      cr->move_to( x , y + ySize );
-      cr->line_to( x + xSize*0.3, y + (ySize*0.4*reverbAmp));
-      cr->line_to( x + xSize*0.3+xSize*0.7*reverbTime, y + (ySize));
+      cr->move_to( x , y + ySize*0.99 );
+      cr->line_to( x + xSize*0.1, y + ySize*0.6 - (ySize*0.6*reverbAmp));
+      cr->line_to( x + xSize*0.3+xSize*0.7*reverbTime, y + (ySize*0.99));
       
       if ( active )
         setColour(cr, COLOUR_BLUE_1, 0.2 );
@@ -634,6 +634,15 @@ void Canvas::drawEffect(Cairo::RefPtr<Cairo::Context> cr)
         setColour(cr, COLOUR_GREY_1 );
       cr->stroke();
       
+      
+      // center circle
+      cr->arc( x+10+(xSize-20)*reverbTime, y+10+(ySize-20)*(1-reverbAmp), 6.5, 0, 6.29 );
+      if ( active )
+        setColour(cr, COLOUR_ORANGE_1 );
+      else
+        setColour(cr, COLOUR_GREY_1 );
+      cr->set_line_width(2.1);
+      cr->stroke();
   }
   
   // highpass, lowpass outline

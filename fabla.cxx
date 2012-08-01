@@ -10,12 +10,6 @@
 #include "../dsp/cpp_ui.h"
 #include "../dsp/reverb/reverb.cpp"
 
-enum {
-  SAMPLER_CONTROL  = 0,
-  SAMPLER_RESPONSE = 1,
-  SAMPLER_OUT      = 2
-};
-
 static const char* default_sample_file = "click.wav";
 
 
@@ -244,18 +238,27 @@ connect_port(LV2_Handle instance,
              void*      data)
 {
   Fabla* self = (Fabla*)instance;
-  switch (port) {
-  case SAMPLER_CONTROL:
-    self->control_port = (LV2_Atom_Sequence*)data;
-    break;
-  case SAMPLER_RESPONSE:
-    self->notify_port = (LV2_Atom_Sequence*)data;
-    break;
-  case SAMPLER_OUT:
-    self->output_port = (float*)data;
-    break;
-  default:
-    break;
+  switch (port)
+  {
+    case SAMPLER_CONTROL:
+      self->control_port = (LV2_Atom_Sequence*)data;
+      break;
+    case SAMPLER_RESPONSE:
+      self->notify_port = (LV2_Atom_Sequence*)data;
+      break;
+    case SAMPLER_REVERB_SIZE:
+      self->reverb_size = (float*)data;
+      self->faust_reverb_size = self->reverbUI->getFloatPointer("---FreeverbRoomSize");
+      break;
+    case SAMPLER_REVERB_WET:
+      self->reverb_wet = (float*)data;
+      self->faust_reverb_wet  = self->reverbUI->getFloatPointer("---FreeverbWet");
+      break;
+    case SAMPLER_OUT:
+      self->output_port = (float*)data;
+      break;
+    default:
+      break;
   }
 }
 
@@ -317,14 +320,6 @@ instantiate(const LV2_Descriptor*     descriptor,
     self->reverbDSP = new ReverbDSP();
     self->reverbDSP->buildUserInterface(self->reverbUI);
     self->reverbDSP->init(rate);
-    
-    float* damp = self->reverbUI->getFloatPointer("---FreeverbDamp");
-    float* size = self->reverbUI->getFloatPointer("---FreeverbDamp");
-    float* wet  = self->reverbUI->getFloatPointer("---FreeverbDamp");
-    
-    *damp = 0.2;
-    *size = 0.7;
-    *wet  = 0.7;
     
     return (LV2_Handle)self;
   }
@@ -404,6 +399,9 @@ run(LV2_Handle instance,
     }
   }
   
+  // copy the effect port values to FAUST variables
+  *self->faust_reverb_wet     = *self->reverb_wet;
+  *self->faust_reverb_size    = *self->reverb_size;
   
   // nframes
   for (int i = 0; i < sample_count; i++)
@@ -431,13 +429,12 @@ run(LV2_Handle instance,
     
     // compute faust units
     float* buf[2];
-    float newOutputSample;
     buf[0] = &tmp;
-    buf[1] = &output[i];
+    buf[1] = &tmp;
     self->reverbDSP->compute( 1, &buf[0], &buf[1] );
     
     // write output
-    //output[i] = tmp;
+    output[i] = tmp;
   }
   
 }

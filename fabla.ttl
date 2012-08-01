@@ -40,6 +40,18 @@
     lv2:index 2 ;
     lv2:symbol "out" ;
     lv2:name "Out"
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 3 ;
+    lv2:symbol "reverbsize" ;
+    lv2:name "Reverb Roomsize"
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 4 ;
+    lv2:symbol "reverbwet" ;
+    lv2:name "Reverb Wet"
   ] .
 
 <http://www.openavproductions.com/fabla/gui>
@@ -48,5 +60,5 @@
   ui:portNotification [
     ui:plugin <http://www.openavproductions.com/fabla> ;
     lv2:symbol "notify" ;
-    ui:notifyType atom:Blank atom:Sequence;
+    ui:notifyType atom:Sequence;
   ] .

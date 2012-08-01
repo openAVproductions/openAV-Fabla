@@ -35,6 +35,16 @@
 class CppUI;
 class ReverbDSP;
 
+
+enum {
+  SAMPLER_CONTROL       = 0,
+  SAMPLER_RESPONSE      = 1,
+  SAMPLER_OUT           = 2,
+  SAMPLER_REVERB_SIZE   = 3,
+  SAMPLER_REVERB_WET    = 4,
+  
+};
+
 typedef struct {
 	LV2_URID atom_Blank;
 	LV2_URID atom_Path;
@@ -84,6 +94,13 @@ typedef struct {
   LV2_Atom_Sequence*   control_port;
   LV2_Atom_Sequence*   notify_port;
 
+  // effect floats
+  float* reverb_size;
+  float* reverb_wet;
+  float* faust_reverb_size;
+  float* faust_reverb_wet;
+  
+  
   /* Forge frame for notify port (for writing worker replies). */
   LV2_Atom_Forge_Frame notify_frame;
 
