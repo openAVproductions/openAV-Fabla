@@ -6,6 +6,10 @@
 
 #include "uris.hxx"
 
+// include faust stuff
+#include "../dsp/cpp_ui.h"
+#include "../dsp/reverb/reverb.cpp"
+
 enum {
   SAMPLER_CONTROL  = 0,
   SAMPLER_RESPONSE = 1,
@@ -306,7 +310,22 @@ instantiate(const LV2_Descriptor*     descriptor,
     SampleMessage* message = load_sample(self, 0, sample_path);
     self->sample[0] = message->sample;
     free(sample_path);
-
+    
+    // Set up the Faust DSP units
+    char* nullArray[0];
+    self->reverbUI = new CppUI(0, nullArray);
+    self->reverbDSP = new ReverbDSP();
+    self->reverbDSP->buildUserInterface(self->reverbUI);
+    self->reverbDSP->init(rate);
+    
+    float* damp = self->reverbUI->getFloatPointer("---FreeverbDamp");
+    float* size = self->reverbUI->getFloatPointer("---FreeverbDamp");
+    float* wet  = self->reverbUI->getFloatPointer("---FreeverbDamp");
+    
+    *damp = 0.2;
+    *size = 0.7;
+    *wet  = 0.7;
+    
     return (LV2_Handle)self;
   }
   
@@ -408,10 +427,17 @@ run(LV2_Handle instance,
           self->playback[p].frame = 0;
         }
       }
-    }
+    } // pads
+    
+    // compute faust units
+    float* buf[2];
+    float newOutputSample;
+    buf[0] = &tmp;
+    buf[1] = &output[i];
+    self->reverbDSP->compute( 1, &buf[0], &buf[1] );
     
     // write output
-    output[i] = tmp;
+    //output[i] = tmp;
   }
   
 }

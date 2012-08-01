@@ -95,6 +95,11 @@ typedef struct {
 
   /* Playback state */
   SamplePlayback playback[16];
+  
+  // FAUST DSP units
+  CppUI*     reverbUI;
+  ReverbDSP* reverbDSP;
+  
 } Fabla;
 
 static inline void
