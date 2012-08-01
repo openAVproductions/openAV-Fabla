@@ -200,6 +200,10 @@ work_response(LV2_Handle  instance,
     // point to the new sample
     self->sample[sampleNum] = message->sample;
     
+    // set the "playback" of the current sample past the end by a frame:
+    // stops the sample from playing just after being loaded
+    self->playback[sampleNum].frame = message->sample->info.frames + 1;
+    
     // Send a notification that we're using a new sample
     lv2_atom_forge_frame_time(&self->forge, self->frame_offset);
     write_set_file(&self->forge, &self->uris,
@@ -422,18 +426,23 @@ save(LV2_Handle                instance,
   }
 
   Fabla* self  = (Fabla*)instance;
-  char*    apath = map_path->abstract_path(map_path->handle,
-                                           self->sample[0]->path);
+  
+  
+  for(int i = 0; i < 16; i++ )
+  {
+    char*    apath = map_path->abstract_path(map_path->handle,
+                                             self->sample[i]->path);
 
-  store(handle,
-        self->uris.eg_file,
-        apath,
-        strlen(self->sample[0]->path) + 1,
-        self->uris.atom_Path,
-        LV2_STATE_IS_POD | LV2_STATE_IS_PORTABLE);
-
-  free(apath);
-
+    store(handle,
+          self->uris.eg_file,
+          apath,
+          strlen(self->sample[i]->path) + 1,
+          self->uris.atom_Path,
+          LV2_STATE_IS_POD | LV2_STATE_IS_PORTABLE);
+    
+    free(apath);
+  }
+  
   return LV2_STATE_SUCCESS;
 }
 
