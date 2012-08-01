@@ -537,10 +537,6 @@ void Canvas::drawEffect(Cairo::RefPtr<Cairo::Context> cr)
   
   // HIGHPASS
   {
-      int x = 593 -270;
-      int y = 340;
-      
-      int xSize = 138;
       int ySize = 175 / 2 - 5;
       
       bool active = true;
@@ -596,10 +592,7 @@ void Canvas::drawEffect(Cairo::RefPtr<Cairo::Context> cr)
   
   // LOWPASS
   {
-      int x = 593 -270;
-      int y = 340 + 175 / 2 + 5;
-      
-      int xSize = 138;
+      int y = 330 + border - 235 + 93;
       int ySize = 175 / 2 - 5;
       
       bool active = true;
@@ -681,12 +674,8 @@ void Canvas::drawSource(Cairo::RefPtr<Cairo::Context> cr)
   setColour( cr, COLOUR_GREY_4 );
   cr->fill();
   
-  // HIGHPASS
+  // AD enveloped
   {
-      int x = 593 -270;
-      int y = 340;
-      
-      int xSize = 138;
       int ySize = 175 / 2 - 5;
       
       bool active = true;
@@ -713,15 +702,15 @@ void Canvas::drawSource(Cairo::RefPtr<Cairo::Context> cr)
       cr->stroke();
       cr->unset_dash();
       
-      /*
-      // move to bottom right, draw line to middle right
-      cr->move_to( x + xSize, y + ySize );
-      cr->line_to( x + xSize, y + (ySize*0.47));
+      // move to bottom left
+      cr->move_to( x  , y + ySize );
       
-      // Curve
-      cr->curve_to( x + xSize - (xSize*cutoff)    , y+(ySize*0.5)    ,   // control point 1
-                    x + xSize - (xSize*cutoff)    , y+(ySize * 0.0)     ,   // control point 2
-                    x + xSize - (xSize*cutoff) -10, y+    ySize     );  // end of curve 1
+      // line to top, with x + attack
+      cr->line_to( x + (xSize*0.3)*attack, y+2 );
+      
+      cr->line_to( x + xSize - (xSize*0.3)*release, y+2 );
+      
+      cr->line_to( x + xSize, y+ySize );
       
       if ( active )
         setColour(cr, COLOUR_BLUE_1, 0.2 );
@@ -737,17 +726,13 @@ void Canvas::drawSource(Cairo::RefPtr<Cairo::Context> cr)
       else
         setColour(cr, COLOUR_GREY_1 );
       cr->stroke();
-      */
+      
   }
   
   // LOWPASS
   {
-      int x = 593 -270;
-      int y = 340 + 175 / 2 + 5;
-      
-      int xSize = 138;
+      int y = 330 + border - 235 + 93;
       int ySize = 175 / 2 - 5;
-      
       bool active = true;
       float lowpass = 1.0;
       float cutoff = 0.2 + (lowpass*0.7f);
@@ -772,31 +757,19 @@ void Canvas::drawSource(Cairo::RefPtr<Cairo::Context> cr)
       cr->stroke();
       cr->unset_dash();
       
-      /*
-      // move to bottom left, draw line to middle left
-      cr->move_to( x , y + ySize );
-      cr->line_to( x , y + (ySize*0.47));
+      // move to left, volume
+      cr->move_to( x        , y + ySize*(1-gain) );
+      cr->line_to( x + xSize, y + ySize*(1-gain) );
       
-      // Curve
-      cr->curve_to( x + xSize * cutoff    , y+(ySize*0.5)  ,   // control point 1
-                    x + xSize * cutoff    , y+(ySize * 0.0),   // control point 2
-                    x + xSize * cutoff +10, y+ ySize       );  // end of curve 1
+      // line to top, with x + attack
+      cr->move_to( x + (xSize*0.5*speed), y+2 );
+      cr->line_to( x + (xSize*0.5*speed), y+ySize );
       
-      if ( active )
-        setColour(cr, COLOUR_BLUE_1, 0.2 );
-      else
-        setColour(cr, COLOUR_GREY_1, 0.2 );
-      cr->close_path();
-      cr->fill_preserve();
-      
-      // stroke cutoff line
-      cr->set_line_width(1.5);
       if ( active )
         setColour(cr, COLOUR_BLUE_1 );
       else
         setColour(cr, COLOUR_GREY_1 );
       cr->stroke();
-      */
   }
   
   // highpass, lowpass outline
