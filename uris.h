@@ -60,6 +60,7 @@ typedef struct {
 typedef struct {
   sf_count_t frame;
   bool play;
+  float volume;
 } SamplePlayback;
 
 typedef struct {

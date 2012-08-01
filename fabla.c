@@ -347,6 +347,7 @@ run(LV2_Handle instance,
           start_frame = ev->time.frames;
           self->playback[data[1]-36].frame = 0;
           self->playback[data[1]-36].play  = true;
+          self->playback[data[1]-36].volume= (data[2] / 127.f);
         }
       }
     }
@@ -390,8 +391,7 @@ run(LV2_Handle instance,
         // add sample
         if ( self->playback[p].frame < self->sample[p]->info.frames )
         {
-          
-          tmp += self->sample[p]->data[self->playback[p].frame++];
+          tmp += self->sample[p]->data[self->playback[p].frame++] * self->playback[p].volume;
         }
         else // stop sample
         {
