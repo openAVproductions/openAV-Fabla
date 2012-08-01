@@ -35,12 +35,11 @@ def configure(conf):
     
     
     # faust include and fast math 
-    conf.env.CXXFLAGS = ['-g', '-pg', '-I/usr/lib/faust/','-I/usr/lib/faust/gui','-Wall','-O3','-ffast-math']
+    conf.env.CXXFLAGS = ['-g', '-pg', '-I/usr/lib/faust/','-I/usr/lib/faust/gui','-Wall','-fPIC'] #,'-O3','-ffast-math']
     
     
     # Check for gtkmm to build UI
     autowaf.check_pkg(conf, 'gtkmm-2.4', uselib_store='GTKMM')
-    #autowaf.check_pkg(conf, 'lv2-gui', uselib_store='LV2GUI')
     autowaf.check_pkg(conf, 'sndfile', uselib_store='SNDFILE')
     
     # Set env['pluginlib_PATTERN']
@@ -83,9 +82,9 @@ def build(bld):
         includes = '../..'
 
     # Build plugin library
-    obj = bld(features     = 'c cshlib',
+    obj = bld(features     = 'cxx cshlib',
               env          = penv,
-              source       = 'fabla.c',
+              source       = 'fabla.cxx',
               name         = 'fabla',
               target       = '%s/fabla' % bundle,
               install_path = '${LV2DIR}/%s' % bundle,

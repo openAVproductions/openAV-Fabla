@@ -2,7 +2,7 @@
 
 #include <gtk/gtk.h>
 
-#include "uris.h"
+#include "uris.hxx"
 
 #include <iostream>
 #include <gtkmm.h>

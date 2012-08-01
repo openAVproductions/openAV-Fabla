@@ -10,7 +10,7 @@
 
 #include <gdkmm.h>
 
-#include "uris.h"
+#include "uris.hxx"
 
 #include "lv2/lv2plug.in/ns/extensions/ui/ui.h"
 

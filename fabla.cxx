@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "./uris.h"
+#include "uris.hxx"
 
 enum {
   SAMPLER_CONTROL  = 0,
@@ -78,7 +78,7 @@ load_sample(Fabla* self, int sampleNum, const char* path)
   }
 
   /* Read data */
-  float* const data = malloc(sizeof(float) * info->frames);
+  float* const data = (float*)malloc(sizeof(float) * info->frames);
   if (!data)
   {
     print(self, self->uris.log_Error,
@@ -156,7 +156,7 @@ work(LV2_Handle                  instance,
     int padNum = sampleNum->body;
     
     /* Load sample. */
-    SampleMessage* sampleMessage = load_sample(self, padNum, LV2_ATOM_BODY(file_path) );
+    SampleMessage* sampleMessage = load_sample(self, padNum, (const char*)LV2_ATOM_BODY(file_path) );
     
     if (sampleMessage) {
       /* Loaded sample, send it to run() to be applied. */
@@ -280,31 +280,36 @@ instantiate(const LV2_Descriptor*     descriptor,
       self->log = (LV2_Log_Log*)features[i]->data;
     }
   }
+  
+  bool haveFeatures = true;
+  
   if (!self->map) {
     print(self, self->uris.log_Error, "Missing feature urid:map.\n");
-    goto fail;
+    haveFeatures = false;
   } else if (!self->schedule) {
     print(self, self->uris.log_Error, "Missing feature work:schedule.\n");
-    goto fail;
+    haveFeatures = false;
   }
+  
+  if ( haveFeatures )
+  {
+    /* Map URIs and initialise forge */
+    map_sampler_uris(self->map, &self->uris);
+    lv2_atom_forge_init(&self->forge, self->map);
 
-  /* Map URIs and initialise forge */
-  map_sampler_uris(self->map, &self->uris);
-  lv2_atom_forge_init(&self->forge, self->map);
+    /* Load the default sample file */
+    const size_t path_len    = strlen(path);
+    const size_t file_len    = strlen(default_sample_file);
+    const size_t len         = path_len + file_len;
+    char*        sample_path = (char*)malloc(len + 1);
+    snprintf(sample_path, len + 1, "%s%s", path, default_sample_file);
+    SampleMessage* message = load_sample(self, 0, sample_path);
+    self->sample[0] = message->sample;
+    free(sample_path);
 
-  /* Load the default sample file */
-  const size_t path_len    = strlen(path);
-  const size_t file_len    = strlen(default_sample_file);
-  const size_t len         = path_len + file_len;
-  char*        sample_path = (char*)malloc(len + 1);
-  snprintf(sample_path, len + 1, "%s%s", path, default_sample_file);
-  SampleMessage* message = load_sample(self, 0, sample_path);
-  self->sample[0] = message->sample;
-  free(sample_path);
-
-  return (LV2_Handle)self;
-
-fail:
+    return (LV2_Handle)self;
+  }
+  
   free(self);
   return 0;
 }

@@ -1,3 +1,3 @@
 #! /bin/sh
 
-jalv.gtkmm http://www.openavproductions.com/fabla
+jalv.gtk http://www.openavproductions.com/fabla

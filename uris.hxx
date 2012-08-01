@@ -32,6 +32,9 @@
 // the RT thread, don't worry :)
 #include <gtk/gtk.h>
 
+class CppUI;
+class ReverbDSP;
+
 typedef struct {
 	LV2_URID atom_Blank;
 	LV2_URID atom_Path;
