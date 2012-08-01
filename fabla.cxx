@@ -456,25 +456,101 @@ save(LV2_Handle                instance,
   Fabla* self  = (Fabla*)instance;
   
   
-  for(int i = 0; i < 16; i++ )
+  if ( self->sample[0] )
   {
-    if ( self->sample[i] )
-    {
-      char*    apath = map_path->abstract_path(map_path->handle,
-                                             self->sample[i]->path);
-      
-      print(self, self->uris.log_Error,
-            "Store %i '%s'\n", i, apath);
-      
-      store(handle,
-            self->uris.eg_file,
-            apath,
-            strlen(self->sample[i]->path) + 1,
-            self->uris.atom_Path,
-            LV2_STATE_IS_POD | LV2_STATE_IS_PORTABLE);
-      
-      free(apath);
-    }
+    char* apath = map_path->abstract_path(map_path->handle, self->sample[0]->path);
+    store(handle, self->uris.sampleRestorePad1, apath, strlen(self->sample[0]->path) + 1, self->uris.atom_Path, LV2_STATE_IS_POD | LV2_STATE_IS_PORTABLE);
+    free(apath);
+  }
+  if ( self->sample[1] )
+  {
+    char* apath = map_path->abstract_path(map_path->handle, self->sample[1]->path);
+    store(handle, self->uris.sampleRestorePad2, apath, strlen(self->sample[1]->path) + 1, self->uris.atom_Path, LV2_STATE_IS_POD | LV2_STATE_IS_PORTABLE);
+    free(apath);
+  }
+  if ( self->sample[2] )
+  {
+    char* apath = map_path->abstract_path(map_path->handle, self->sample[2]->path);
+    store(handle, self->uris.sampleRestorePad3, apath, strlen(self->sample[2]->path) + 1, self->uris.atom_Path, LV2_STATE_IS_POD | LV2_STATE_IS_PORTABLE);
+    free(apath);
+  }
+  if ( self->sample[3] )
+  {
+    char* apath = map_path->abstract_path(map_path->handle, self->sample[3]->path);
+    store(handle, self->uris.sampleRestorePad4, apath, strlen(self->sample[3]->path) + 1, self->uris.atom_Path, LV2_STATE_IS_POD | LV2_STATE_IS_PORTABLE);
+    free(apath);
+  }
+  if ( self->sample[4] )
+  {
+    char* apath = map_path->abstract_path(map_path->handle, self->sample[4]->path);
+    store(handle, self->uris.sampleRestorePad5, apath, strlen(self->sample[4]->path) + 1, self->uris.atom_Path, LV2_STATE_IS_POD | LV2_STATE_IS_PORTABLE);
+    free(apath);
+  }
+  if ( self->sample[5] )
+  {
+    char* apath = map_path->abstract_path(map_path->handle, self->sample[5]->path);
+    store(handle, self->uris.sampleRestorePad6, apath, strlen(self->sample[5]->path) + 1, self->uris.atom_Path, LV2_STATE_IS_POD | LV2_STATE_IS_PORTABLE);
+    free(apath);
+  }
+  if ( self->sample[6] )
+  {
+    char* apath = map_path->abstract_path(map_path->handle, self->sample[6]->path);
+    store(handle, self->uris.sampleRestorePad7, apath, strlen(self->sample[6]->path) + 1, self->uris.atom_Path, LV2_STATE_IS_POD | LV2_STATE_IS_PORTABLE);
+    free(apath);
+  }
+  if ( self->sample[7] )
+  {
+    char* apath = map_path->abstract_path(map_path->handle, self->sample[7]->path);
+    store(handle, self->uris.sampleRestorePad8, apath, strlen(self->sample[7]->path) + 1, self->uris.atom_Path, LV2_STATE_IS_POD | LV2_STATE_IS_PORTABLE);
+    free(apath);
+  }
+  if ( self->sample[8] )
+  {
+    char* apath = map_path->abstract_path(map_path->handle, self->sample[8]->path);
+    store(handle, self->uris.sampleRestorePad9, apath, strlen(self->sample[8]->path) + 1, self->uris.atom_Path, LV2_STATE_IS_POD | LV2_STATE_IS_PORTABLE);
+    free(apath);
+  }
+  if ( self->sample[9] )
+  {
+    char* apath = map_path->abstract_path(map_path->handle, self->sample[9]->path);
+    store(handle, self->uris.sampleRestorePad10, apath, strlen(self->sample[9]->path) + 1, self->uris.atom_Path, LV2_STATE_IS_POD | LV2_STATE_IS_PORTABLE);
+    free(apath);
+  }
+  if ( self->sample[10] )
+  {
+    char* apath = map_path->abstract_path(map_path->handle, self->sample[10]->path);
+    store(handle, self->uris.sampleRestorePad11, apath, strlen(self->sample[10]->path) + 1, self->uris.atom_Path, LV2_STATE_IS_POD | LV2_STATE_IS_PORTABLE);
+    free(apath);
+  }
+  if ( self->sample[11] )
+  {
+    char* apath = map_path->abstract_path(map_path->handle, self->sample[11]->path);
+    store(handle, self->uris.sampleRestorePad12, apath, strlen(self->sample[11]->path) + 1, self->uris.atom_Path, LV2_STATE_IS_POD | LV2_STATE_IS_PORTABLE);
+    free(apath);
+  }
+  if ( self->sample[12] )
+  {
+    char* apath = map_path->abstract_path(map_path->handle, self->sample[12]->path);
+    store(handle, self->uris.sampleRestorePad13, apath, strlen(self->sample[12]->path) + 1, self->uris.atom_Path, LV2_STATE_IS_POD | LV2_STATE_IS_PORTABLE);
+    free(apath);
+  }
+  if ( self->sample[13] )
+  {
+    char* apath = map_path->abstract_path(map_path->handle, self->sample[13]->path);
+    store(handle, self->uris.sampleRestorePad14, apath, strlen(self->sample[13]->path) + 1, self->uris.atom_Path, LV2_STATE_IS_POD | LV2_STATE_IS_PORTABLE);
+    free(apath);
+  }
+  if ( self->sample[14] )
+  {
+    char* apath = map_path->abstract_path(map_path->handle, self->sample[14]->path);
+    store(handle, self->uris.sampleRestorePad15, apath, strlen(self->sample[14]->path) + 1, self->uris.atom_Path, LV2_STATE_IS_POD | LV2_STATE_IS_PORTABLE);
+    free(apath);
+  }
+  if ( self->sample[15] )
+  {
+    char* apath = map_path->abstract_path(map_path->handle, self->sample[15]->path);
+    store(handle, self->uris.sampleRestorePad16, apath, strlen(self->sample[15]->path) + 1, self->uris.atom_Path, LV2_STATE_IS_POD | LV2_STATE_IS_PORTABLE);
+    free(apath);
   }
   
   return LV2_STATE_SUCCESS;
@@ -493,17 +569,149 @@ restore(LV2_Handle                  instance,
   uint32_t type;
   uint32_t valflags;
 
-  const void* value = retrieve(
-    handle,
-    self->uris.eg_file,
-    &size, &type, &valflags);
-
+  const void* value = retrieve( handle, self->uris.sampleRestorePad1, &size, &type, &valflags);
   if (value) {
     const char* path = (const char*)value;
     print(self, self->uris.log_Trace, "Restoring file %s\n", path);
-    free_sample(self, self->sample[0] );
+    if ( self->sample[0] ) {
+      free_sample(self, self->sample[0] ); }
     SampleMessage* message = load_sample(self, 0, path);
     self->sample[0] = message->sample;
+  }
+  value = retrieve( handle, self->uris.sampleRestorePad2, &size, &type, &valflags);
+  if (value) {
+    const char* path = (const char*)value;
+    print(self, self->uris.log_Trace, "Restoring file %s\n", path);
+    if ( self->sample[1] ) {
+      free_sample(self, self->sample[1] ); }
+    SampleMessage* message = load_sample(self, 1, path);
+    self->sample[1] = message->sample;
+  }
+  value = retrieve( handle, self->uris.sampleRestorePad3, &size, &type, &valflags);
+  if (value) {
+    const char* path = (const char*)value;
+    print(self, self->uris.log_Trace, "Restoring file %s\n", path);
+    if ( self->sample[2] ) {
+      free_sample(self, self->sample[2] ); }
+    SampleMessage* message = load_sample(self, 2, path);
+    self->sample[2] = message->sample;
+  }
+  value = retrieve( handle, self->uris.sampleRestorePad4, &size, &type, &valflags);
+  if (value) {
+    const char* path = (const char*)value;
+    print(self, self->uris.log_Trace, "Restoring file %s\n", path);
+    if ( self->sample[3] ) {
+      free_sample(self, self->sample[3] ); }
+    SampleMessage* message = load_sample(self, 3, path);
+    self->sample[3] = message->sample;
+  }
+  value = retrieve( handle, self->uris.sampleRestorePad5, &size, &type, &valflags);
+  if (value) {
+    const char* path = (const char*)value;
+    print(self, self->uris.log_Trace, "Restoring file %s\n", path);
+    if ( self->sample[4] ) {
+      free_sample(self, self->sample[4] ); }
+    SampleMessage* message = load_sample(self, 4, path);
+    self->sample[4] = message->sample;
+  }
+  value = retrieve( handle, self->uris.sampleRestorePad6, &size, &type, &valflags);
+  if (value) {
+    const char* path = (const char*)value;
+    print(self, self->uris.log_Trace, "Restoring file %s\n", path);
+    if ( self->sample[5] ) {
+      free_sample(self, self->sample[5] ); }
+    SampleMessage* message = load_sample(self, 5, path);
+    self->sample[5] = message->sample;
+  }
+  value = retrieve( handle, self->uris.sampleRestorePad7, &size, &type, &valflags);
+  if (value) {
+    const char* path = (const char*)value;
+    print(self, self->uris.log_Trace, "Restoring file %s\n", path);
+    if ( self->sample[6] ) {
+      free_sample(self, self->sample[6] ); }
+    SampleMessage* message = load_sample(self, 6, path);
+    self->sample[6] = message->sample;
+  }
+  value = retrieve( handle, self->uris.sampleRestorePad8, &size, &type, &valflags);
+  if (value) {
+    const char* path = (const char*)value;
+    print(self, self->uris.log_Trace, "Restoring file %s\n", path);
+    if ( self->sample[7] ) {
+      free_sample(self, self->sample[7] ); }
+    SampleMessage* message = load_sample(self, 7, path);
+    self->sample[7] = message->sample;
+  }
+  value = retrieve( handle, self->uris.sampleRestorePad9, &size, &type, &valflags);
+  if (value) {
+    const char* path = (const char*)value;
+    print(self, self->uris.log_Trace, "Restoring file %s\n", path);
+    if ( self->sample[8] ) {
+      free_sample(self, self->sample[8] ); }
+    SampleMessage* message = load_sample(self, 8, path);
+    self->sample[8] = message->sample;
+  }
+  value = retrieve( handle, self->uris.sampleRestorePad10, &size, &type, &valflags);
+  if (value) {
+    const char* path = (const char*)value;
+    print(self, self->uris.log_Trace, "Restoring file %s\n", path);
+    if ( self->sample[9] ) {
+      free_sample(self, self->sample[9] ); }
+    SampleMessage* message = load_sample(self, 9, path);
+    self->sample[9] = message->sample;
+  }
+  value = retrieve( handle, self->uris.sampleRestorePad11, &size, &type, &valflags);
+  if (value) {
+    const char* path = (const char*)value;
+    print(self, self->uris.log_Trace, "Restoring file %s\n", path);
+    if ( self->sample[10] ) {
+      free_sample(self, self->sample[10] ); }
+    SampleMessage* message = load_sample(self, 10, path);
+    self->sample[10] = message->sample;
+  }
+  value = retrieve( handle, self->uris.sampleRestorePad12, &size, &type, &valflags);
+  if (value) {
+    const char* path = (const char*)value;
+    print(self, self->uris.log_Trace, "Restoring file %s\n", path);
+    if ( self->sample[11] ) {
+      free_sample(self, self->sample[11] ); }
+    SampleMessage* message = load_sample(self, 11, path);
+    self->sample[11] = message->sample;
+  }
+  value = retrieve( handle, self->uris.sampleRestorePad13, &size, &type, &valflags);
+  if (value) {
+    const char* path = (const char*)value;
+    print(self, self->uris.log_Trace, "Restoring file %s\n", path);
+    if ( self->sample[12] ) {
+      free_sample(self, self->sample[12] ); }
+    SampleMessage* message = load_sample(self, 12, path);
+    self->sample[12] = message->sample;
+  }
+  value = retrieve( handle, self->uris.sampleRestorePad14, &size, &type, &valflags);
+  if (value) {
+    const char* path = (const char*)value;
+    print(self, self->uris.log_Trace, "Restoring file %s\n", path);
+    if ( self->sample[13] ) {
+      free_sample(self, self->sample[13] ); }
+    SampleMessage* message = load_sample(self, 13, path);
+    self->sample[13] = message->sample;
+  }
+  value = retrieve( handle, self->uris.sampleRestorePad15, &size, &type, &valflags);
+  if (value) {
+    const char* path = (const char*)value;
+    print(self, self->uris.log_Trace, "Restoring file %s\n", path);
+    if ( self->sample[14] ) {
+      free_sample(self, self->sample[14] ); }
+    SampleMessage* message = load_sample(self, 14, path);
+    self->sample[14] = message->sample;
+  }
+  value = retrieve( handle, self->uris.sampleRestorePad16, &size, &type, &valflags);
+  if (value) {
+    const char* path = (const char*)value;
+    print(self, self->uris.log_Trace, "Restoring file %s\n", path);
+    if ( self->sample[15] ) {
+      free_sample(self, self->sample[15] ); }
+    SampleMessage* message = load_sample(self, 15, path);
+    self->sample[15] = message->sample;
   }
 
   return LV2_STATE_SUCCESS;
