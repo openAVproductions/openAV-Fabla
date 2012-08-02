@@ -257,6 +257,10 @@ connect_port(LV2_Handle instance,
     case SAMPLER_OUT:
       self->output_port = (float*)data;
       break;
+    case SAMPLER_MASTER_VOL:
+      cout <<" connecing master vol" << endl;
+      self->master_vol = (float*)data;
+      break;
     default:
       break;
   }
@@ -345,7 +349,7 @@ run(LV2_Handle instance,
   sf_count_t   start_frame = 0;
   sf_count_t   pos         = 0;
   float*       output      = self->output_port;
-
+  
   /* Set up forge to write directly to notify output port. */
   const uint32_t notify_capacity = self->notify_port->atom.size;
   lv2_atom_forge_set_buffer(&self->forge,
@@ -434,7 +438,7 @@ run(LV2_Handle instance,
     self->reverbDSP->compute( 1, &buf[0], &buf[1] );
     
     // write output
-    output[i] = tmp;
+    output[i] = tmp * (*self->master_vol);
   }
   
 }

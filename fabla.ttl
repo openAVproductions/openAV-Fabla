@@ -52,6 +52,12 @@
     lv2:index 4 ;
     lv2:symbol "reverbwet" ;
     lv2:name "Reverb Wet"
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 5 ;
+    lv2:symbol "mastervolume";
+    lv2:name "Master Volume"
   ] .
 
 <http://www.openavproductions.com/fabla/gui>

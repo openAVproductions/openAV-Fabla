@@ -367,8 +367,7 @@ void Canvas::drawMaster(Cairo::RefPtr<Cairo::Context> cr)
     cr->stroke();
     
     // Fader on the top
-    float masterVol = 0.7;
-    cr->rectangle( 878-270, y + ySize*0.87*(1-masterVol), 16, 24);
+    cr->rectangle( 878-270, y + ySize*0.87*(1-volume), 16, 24);
     setColour( cr, COLOUR_GREY_4 );
     cr->fill_preserve();
     setColour( cr, COLOUR_BLUE_1);

@@ -62,6 +62,9 @@ class Canvas : public Gtk::DrawingArea
     float echoTime, echoAmp;
     float reverbTime, reverbAmp;
     
+    // master
+    float volume;
+    
     enum PadState {
       PAD_EMPTY = 0,
       PAD_LOADED,
@@ -86,6 +89,9 @@ class Canvas : public Gtk::DrawingArea
       echoTime = 0.5;
       reverbAmp = 0.5;
       reverbTime = 0.5;
+      
+      // master
+      volume = 0.707;
       
       
       selectedSample = 0;
@@ -488,6 +494,13 @@ class Canvas : public Gtk::DrawingArea
         ui_instance->write( ui_instance->controller, SAMPLER_REVERB_WET , sizeof(float), 0, (const void*) &reverbAmp );
         redraw();
       }
+      
+      if ( x > 588 && y > 340 && x < 644 && y < 518 ) // master vol
+      {
+        volume = 1 - (event->y - 340) / 178.f;
+        ui_instance->write( ui_instance->controller, SAMPLER_MASTER_VOL , sizeof(float), 0, (const void*) &volume );
+        redraw();
+      }
 
       
       if ( x > 35 && y > 280 && x < 290 && y < 528 ) // PADS
@@ -517,8 +530,8 @@ class Canvas : public Gtk::DrawingArea
           on_load_clicked( ui_instance, pad );
         }
       }
-
       
+      return true;
     }
     
     bool on_mouse_move(GdkEventMotion* event)
@@ -622,6 +635,8 @@ class Canvas : public Gtk::DrawingArea
         guiState->write_function( guiState->controller, clickedWidget, sizeof(float), 0, (const void*)&value);
       }
       */
+      
+      return true;
     }
     
 };

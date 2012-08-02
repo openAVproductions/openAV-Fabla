@@ -59,7 +59,7 @@ enum {
   SAMPLER_OUT           = 2,
   SAMPLER_REVERB_SIZE   = 3,
   SAMPLER_REVERB_WET    = 4,
-  
+  SAMPLER_MASTER_VOL    = 5,
 };
 
 typedef struct {
@@ -133,6 +133,9 @@ typedef struct {
   float* reverb_wet;
   float* faust_reverb_size;
   float* faust_reverb_wet;
+  
+  // master volume
+  float* master_vol;
   
   
   /* Forge frame for notify port (for writing worker replies). */
