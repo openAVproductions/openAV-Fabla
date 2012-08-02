@@ -1,13 +1,26 @@
 @prefix lv2:  <http://lv2plug.in/ns/lv2core#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix ui:   <http://lv2plug.in/ns/extensions/ui#> .
+@prefix pset: <http://lv2plug.in/ns/ext/presets#> .
 
 <http://www.openavproductions.com/fabla>
-	a lv2:Plugin ;
-	lv2:binary <fabla@LIB_EXT@> ;
-	rdfs:seeAlso <fabla.ttl> .
+  a lv2:Plugin ;
+  lv2:binary <fabla@LIB_EXT@> ;
+  rdfs:seeAlso <fabla.ttl> .
 
 <http://www.openavproductions.com/fabla/gui>
-	a ui:GtkUI ;
-	ui:binary <fabla_gui@LIB_EXT@> ;
-	rdfs:seeAlso <fabla.ttl> .
+  a ui:GtkUI ;
+  ui:binary <fabla_gui@LIB_EXT@> ;
+  rdfs:seeAlso <fabla.ttl> .
+
+<http://www.openavproductions.com/fabla/preset#minimal>
+  a             pset:Preset ;
+  rdfs:label    "Minimal" ;
+  lv2:appliesTo <http://www.openavproductions.com/fabla>;
+  rdfs:seeAlso  <fablapresets.ttl> .
+
+<http://www.openavproductions.com/fabla/preset#maximal>
+  a             pset:Preset ;
+  rdfs:label    "Drum N Bass" ;
+  lv2:appliesTo <http://www.openavproductions.com/fabla>;
+  rdfs:seeAlso  <fablapresets.ttl> .

@@ -102,4 +102,4 @@ def build(bld):
               includes     = includes)
     
     # install files
-    #bld.install_files('${PREFIX}/lib/lv2/fabla/', 'header.png')
+    bld.install_files('${PREFIX}/lib/lv2/fabla.lv2/', 'fablapresets.ttl')
