@@ -146,6 +146,8 @@ class Canvas : public Gtk::DrawingArea
     
     int width, height;
     
+    int clickPlaySample = 0;
+    
     // Image header
     bool headerLoaded;
     Glib::RefPtr< Gdk::Pixbuf > imagePointer;
@@ -154,9 +156,11 @@ class Canvas : public Gtk::DrawingArea
     Glib::RefPtr< Gdk::Pixbuf > padPlayPixbuf;
     Glib::RefPtr< Gdk::Pixbuf > padLoadPixbuf;
     Glib::RefPtr< Gdk::Pixbuf > padEmptyPixbuf;
+    Glib::RefPtr< Gdk::Pixbuf > padSelectPixbuf;
     Cairo::RefPtr< Cairo::ImageSurface > padPlayImageSurface;
     Cairo::RefPtr< Cairo::ImageSurface > padLoadImageSurface;
     Cairo::RefPtr< Cairo::ImageSurface > padEmptyImageSurface;
+    Cairo::RefPtr< Cairo::ImageSurface > padSelectImageSurface;
     
     enum Colour {
       COLOUR_ORANGE_1 = 0,
@@ -225,22 +229,27 @@ class Canvas : public Gtk::DrawingArea
       padPlayPixbuf  = Gdk::Pixbuf::create_from_file ("/usr/lib/lv2/fabla.lv2/padplay.png" );
       padLoadPixbuf  = Gdk::Pixbuf::create_from_file ("/usr/lib/lv2/fabla.lv2/padload.png");
       padEmptyPixbuf = Gdk::Pixbuf::create_from_file ("/usr/lib/lv2/fabla.lv2/padempty.png");
+      padSelectPixbuf= Gdk::Pixbuf::create_from_file ("/usr/lib/lv2/fabla.lv2/padselect.png");
       
       padPlayImageSurface  = Cairo::ImageSurface::create  ( Cairo::FORMAT_ARGB32, padPlayPixbuf->get_width(), padPlayPixbuf->get_height()  );
       padLoadImageSurface  = Cairo::ImageSurface::create  ( Cairo::FORMAT_ARGB32, padLoadPixbuf->get_width(), padLoadPixbuf->get_height()  );
       padEmptyImageSurface = Cairo::ImageSurface::create  ( Cairo::FORMAT_ARGB32, padEmptyPixbuf->get_width(),padEmptyPixbuf->get_height() );
+      padSelectImageSurface= Cairo::ImageSurface::create  ( Cairo::FORMAT_ARGB32,padSelectPixbuf->get_width(),padSelectPixbuf->get_height());
       
       Cairo::RefPtr< Cairo::Context > padPlayContext  = Cairo::Context::create (padPlayImageSurface );
       Cairo::RefPtr< Cairo::Context > padLoadContext  = Cairo::Context::create (padLoadImageSurface );
       Cairo::RefPtr< Cairo::Context > padEmptyContext = Cairo::Context::create (padEmptyImageSurface);
+      Cairo::RefPtr< Cairo::Context > padSelectContext= Cairo::Context::create (padSelectImageSurface);
       
       Gdk::Cairo::set_source_pixbuf (padPlayContext , padPlayPixbuf , 0.0, 0.0);
       Gdk::Cairo::set_source_pixbuf (padLoadContext , padLoadPixbuf , 0.0, 0.0);
       Gdk::Cairo::set_source_pixbuf (padEmptyContext, padEmptyPixbuf, 0.0, 0.0);
+      Gdk::Cairo::set_source_pixbuf (padSelectContext,padSelectPixbuf,0.0, 0.0);
       
       padPlayContext->paint();
       padLoadContext->paint();
       padEmptyContext->paint();
+      padSelectContext->paint();
       
       headerLoaded = true;
     }
@@ -519,14 +528,20 @@ class Canvas : public Gtk::DrawingArea
         {
           padState[pad] = PAD_PLAYING;
           on_play_clicked( ui_instance, pad );
+          
+          // save the current clicked sample number, so when we release
+          // the mouse button, we can deactivate that one, even if the mouse
+          // moved
+          clickPlaySample = pad;
+          
           redraw();
         }
         if ( event->button == 1 && event->type == Gdk::BUTTON_RELEASE ) // play event
         {
-          if ( sampleNames[pad].compare( "" ) )
-            padState[pad] = PAD_LOADED;
+          if ( sampleNames[clickPlaySample].compare( "" ) )
+            padState[clickPlaySample] = PAD_LOADED;
           else
-            padState[pad] = PAD_EMPTY;
+            padState[clickPlaySample] = PAD_EMPTY;
           redraw();
         }
         else if ( event->button == 3 && event->type == Gdk::BUTTON_PRESS  ) // load event

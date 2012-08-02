@@ -160,6 +160,12 @@ void Canvas::drawPads(Cairo::RefPtr<Cairo::Context> cr)
       cr->rectangle( X, drawY, padPlayPixbuf->get_width(), padPlayPixbuf->get_height() );
       cr->paint();
     }
+    else if ( i == selectedSample ) // selected sample = orange
+    {
+      cr->set_source (padSelectImageSurface, X, drawY);
+      cr->rectangle( X, drawY, padSelectPixbuf->get_width(), padSelectPixbuf->get_height() );
+      cr->paint();
+    }
     else if ( padState[i] == PAD_LOADED )
     {
       cr->set_source (padLoadImageSurface, X, drawY);
