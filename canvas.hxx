@@ -9,6 +9,7 @@
 #include <iostream>
 
 #include <gdkmm.h>
+#include <glibmm.h>
 
 #include "uris.hxx"
 
