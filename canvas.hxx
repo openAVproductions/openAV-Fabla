@@ -498,6 +498,9 @@ class Canvas : public Gtk::DrawingArea
         int pad = 8+ ((x / 62) + 4-(y/62)*4);
         
         cout << "Pad " << pad << " clicked " << endl;
+        
+        selectedSample = pad;
+        
         if ( event->button == 1 && event->type == Gdk::BUTTON_PRESS ) // play event
         {
           padState[pad] = PAD_PLAYING;

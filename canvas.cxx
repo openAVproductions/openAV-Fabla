@@ -8,6 +8,7 @@
 #include <iostream>
 
 #include <gdkmm.h>
+#include <giomm.h>
 
 using namespace std;
 
@@ -44,6 +45,27 @@ void Canvas::drawWaveform(Cairo::RefPtr<Cairo::Context> cr)
     return;
   }
   
+  // draw "frequency guides"
+  {
+    std::valarray< double > dashes(2);
+    dashes[0] = 2.0;
+    dashes[1] = 2.0;
+    cr->set_dash (dashes, 0.0);
+    cr->set_line_width(1.0);
+    cr->set_source_rgb (0.4,0.4,0.4);
+    for ( int i = 0; i < 4; i++ )
+    {
+      cr->move_to( x + ((xSize / 4.f)*i), y );
+      cr->line_to( x + ((xSize / 4.f)*i), y + ySize );
+    }
+    for ( int i = 0; i < 4; i++ )
+    {
+      cr->move_to( x       , y + ((ySize / 4.f)*i) );
+      cr->line_to( x +xSize, y + ((ySize / 4.f)*i) );
+    }
+    cr->stroke();
+    cr->unset_dash();
+  }
   
   // draw the waveform here, using dspInstance to get the sample data.
   // We use a mutex that's in the DSP part to serialize access to the
@@ -52,65 +74,51 @@ void Canvas::drawWaveform(Cairo::RefPtr<Cairo::Context> cr)
   g_mutex_lock( &dspInstance->sampleMutex );
   {
     // gather data on the sample were drawing:
-    long   sampleFrames = dspInstance->sample[selectedSample]->info.frames;
-    float* current = dspInstance->sample[selectedSample]->data;
     
-    if ( sampleFrames == 0 )
+    if ( dspInstance->sample[selectedSample] )
     {
-      cout << "Warning, GUI attempted drawing sample with 0 frames!" << endl;
-      g_mutex_unlock( &dspInstance->sampleMutex );
-      return;
-    }
-    
-    // draw "frequency guides"
-    {
-      std::valarray< double > dashes(2);
-      dashes[0] = 2.0;
-      dashes[1] = 2.0;
-      cr->set_dash (dashes, 0.0);
-      cr->set_line_width(1.0);
-      cr->set_source_rgb (0.4,0.4,0.4);
-      for ( int i = 0; i < 4; i++ )
+      
+      long   sampleFrames = dspInstance->sample[selectedSample]->info.frames;
+      float* current = dspInstance->sample[selectedSample]->data;
+      
+      if ( sampleFrames == 0 || current == 0 )
       {
-        cr->move_to( x + ((xSize / 4.f)*i), y );
-        cr->line_to( x + ((xSize / 4.f)*i), y + ySize );
+        cout << "Warning, GUI attempted drawing sample with 0 frames!" << endl;
+        g_mutex_unlock( &dspInstance->sampleMutex );
+        return;
       }
-      for ( int i = 0; i < 4; i++ )
-      {
-        cr->move_to( x       , y + ((ySize / 4.f)*i) );
-        cr->line_to( x +xSize, y + ((ySize / 4.f)*i) );
-      }
+      
+      // draw the number of lines that is equal the number of pixels available
+      // horizontally. 237 is the pixels horizontally
+      int sampleIncrement = sampleFrames / 237;
+      
+      cr->move_to(x      , y+ySize*0.5);
+      cr->line_to(x+xSize, y+ySize*0.5);
+      cr->set_line_width(0.8);
+      setColour( cr, COLOUR_GREY_1 );
       cr->stroke();
-      cr->unset_dash();
+      
+      cr->move_to(x      , y+ySize*0.5);
+      for (long i = 0; i < sampleFrames; i += sampleIncrement )
+      {
+        cr->line_to( x + xSize * ( float(i) / sampleFrames), y + ySize * 0.5 + (*current) * ySize * 0.4 );
+        current += sampleIncrement;
+      }
+      
+      setColour( cr, COLOUR_ORANGE_1, 1 );
+      cr->stroke();
     }
-    
-    // draw the number of lines that is equal the number of pixels available
-    // horizontally. 237 is the pixels horizontally
-    int sampleIncrement = sampleFrames / 237;
-    
-    cr->move_to(x      , y+ySize*0.5);
-    cr->line_to(x+xSize, y+ySize*0.5);
-    cr->set_line_width(0.8);
-    setColour( cr, COLOUR_GREY_1 );
-    cr->stroke();
-    
-    cr->move_to(x      , y+ySize*0.5);
-    for (long i = 0; i < sampleFrames; i += sampleIncrement )
-    {
-      cr->line_to( x + xSize * ( float(i) / sampleFrames), y + ySize * 0.5 + (*current) * ySize * 0.4 );
-      current += sampleIncrement;
-    }
-    
-    setColour( cr, COLOUR_ORANGE_1, 1 );
-    cr->stroke();
   }
   g_mutex_unlock( &dspInstance->sampleMutex );
   
-  // filename text
-  cr->move_to( x + 7.5, y + 84 + 25 );
-  setColour( cr, COLOUR_GREY_1 );
-  cr->show_text( sampleNames[0] );
   
+  if ( sampleNames[selectedSample].compare("") )
+  {
+    // filename text
+    cr->move_to( x + 7.5, y + 84 + 25 );
+    setColour( cr, COLOUR_GREY_1 );
+    cr->show_text( sampleNames[selectedSample].substr( sampleNames[selectedSample].rfind("/")+1 ) );
+  }
   // outline
   cr->rectangle( x-2, y, xSize+4, ySize );
   setColour( cr, COLOUR_GREY_1 );
