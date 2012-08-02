@@ -10,9 +10,6 @@
 #include "../dsp/cpp_ui.h"
 #include "../dsp/reverb/reverb.cpp"
 
-static const char* default_sample_file = "click.wav";
-
-
 /**
    Print an error message to the host log if available, or stderr otherwise.
 */
@@ -309,16 +306,6 @@ instantiate(const LV2_Descriptor*     descriptor,
     /* Map URIs and initialise forge */
     map_sampler_uris(self->map, &self->uris);
     lv2_atom_forge_init(&self->forge, self->map);
-
-    /* Load the default sample file */
-    const size_t path_len    = strlen(path);
-    const size_t file_len    = strlen(default_sample_file);
-    const size_t len         = path_len + file_len;
-    char*        sample_path = (char*)malloc(len + 1);
-    snprintf(sample_path, len + 1, "%s%s", path, default_sample_file);
-    SampleMessage* message = load_sample(self, 0, sample_path);
-    self->sample[0] = message->sample;
-    free(sample_path);
     
     // Set up the Faust DSP units
     char* nullArray[0];

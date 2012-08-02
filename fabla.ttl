@@ -42,7 +42,8 @@
     a lv2:OutputPort ,
       atom:AtomPort ;
     atom:bufferType atom:Sequence ;
-    atom:supports <http://lv2plug.in/ns/ext/patch#Message> ;
+    atom:supports <http://lv2plug.in/ns/ext/midi#MidiEvent> ,
+                  <http://lv2plug.in/ns/ext/patch#Message> ;
     lv2:index 3 ;
     lv2:symbol "notify" ;
     lv2:name "Notify"

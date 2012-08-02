@@ -523,7 +523,10 @@ class Canvas : public Gtk::DrawingArea
         }
         if ( event->button == 1 && event->type == Gdk::BUTTON_RELEASE ) // play event
         {
-          padState[pad] = PAD_LOADED;
+          if ( sampleNames[pad].compare( "" ) )
+            padState[pad] = PAD_LOADED;
+          else
+            padState[pad] = PAD_EMPTY;
           redraw();
         }
         else if ( event->button == 3 && event->type == Gdk::BUTTON_PRESS  ) // load event
