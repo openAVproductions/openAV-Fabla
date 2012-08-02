@@ -254,11 +254,13 @@ connect_port(LV2_Handle instance,
       self->reverb_wet = (float*)data;
       self->faust_reverb_wet  = self->reverbUI->getFloatPointer("---FreeverbWet");
       break;
-    case SAMPLER_OUT:
-      self->output_port = (float*)data;
+    case SAMPLER_OUT_L:
+      self->output_port_L = (float*)data;
+      break;
+    case SAMPLER_OUT_R:
+      self->output_port_R = (float*)data;
       break;
     case SAMPLER_MASTER_VOL:
-      cout <<" connecing master vol" << endl;
       self->master_vol = (float*)data;
       break;
     default:
@@ -348,7 +350,8 @@ run(LV2_Handle instance,
   FablaURIs* uris        = &self->uris;
   sf_count_t   start_frame = 0;
   sf_count_t   pos         = 0;
-  float*       output      = self->output_port;
+  float*       output_L    = self->output_port_L;
+  float*       output_R    = self->output_port_R;
   
   /* Set up forge to write directly to notify output port. */
   const uint32_t notify_capacity = self->notify_port->atom.size;
@@ -407,6 +410,8 @@ run(LV2_Handle instance,
   *self->faust_reverb_wet     = *self->reverb_wet;
   *self->faust_reverb_size    = *self->reverb_size;
   
+  float outL, outR;
+  
   // nframes
   for (int i = 0; i < sample_count; i++)
   {
@@ -432,13 +437,15 @@ run(LV2_Handle instance,
     } // pads
     
     // compute faust units
-    float* buf[2];
+    float* buf[3];
     buf[0] = &tmp;
-    buf[1] = &tmp;
+    buf[1] = &outL;
+    buf[2] = &outR;
     self->reverbDSP->compute( 1, &buf[0], &buf[1] );
     
     // write output
-    output[i] = tmp * (*self->master_vol);
+    output_L[i] = outL * (*self->master_vol);
+    output_R[i] = outR * (*self->master_vol);
   }
   
 }

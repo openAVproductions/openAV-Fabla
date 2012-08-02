@@ -54,12 +54,15 @@ class ReverbDSP;
 
 
 enum {
-  SAMPLER_CONTROL       = 0,
-  SAMPLER_RESPONSE      = 1,
-  SAMPLER_OUT           = 2,
-  SAMPLER_REVERB_SIZE   = 3,
-  SAMPLER_REVERB_WET    = 4,
-  SAMPLER_MASTER_VOL    = 5,
+  SAMPLER_OUT_L         = 0,
+  SAMPLER_OUT_R         = 1,
+  
+  SAMPLER_CONTROL       = 2,
+  SAMPLER_RESPONSE      = 3,
+  
+  SAMPLER_REVERB_SIZE   = 4,
+  SAMPLER_REVERB_WET    = 5,
+  SAMPLER_MASTER_VOL    = 6,
 };
 
 typedef struct {
@@ -124,7 +127,8 @@ typedef struct {
   Sample* sample[16];
 
   /* Ports */
-  float*               output_port;
+  float*               output_port_L;
+  float*               output_port_R;
   LV2_Atom_Sequence*   control_port;
   LV2_Atom_Sequence*   notify_port;
 

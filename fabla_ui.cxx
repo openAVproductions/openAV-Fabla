@@ -35,7 +35,7 @@ on_play_clicked(void* handle, int padNum)
   midiEvent.buf[2] = 127;
   
   // now write the LV2_Atom to the atom port:
-  ui->write(ui->controller, 0, sizeof(MidiEvent),
+  ui->write(ui->controller, SAMPLER_CONTROL, sizeof(MidiEvent),
           ui->uris.atom_eventTransfer,
           &midiEvent);
 }
@@ -76,7 +76,7 @@ on_load_clicked(void* handle, int padNum)
   LV2_Atom* msg = write_set_file(&ui->forge, &ui->uris, padNum,
                                  filename, strlen(filename));
 
-  ui->write(ui->controller, 0, lv2_atom_total_size(msg),
+  ui->write(ui->controller, SAMPLER_CONTROL, lv2_atom_total_size(msg),
             ui->uris.atom_eventTransfer,
             msg);
 }
