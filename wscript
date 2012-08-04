@@ -35,7 +35,8 @@ def configure(conf):
     
     
     # faust include and fast math 
-    conf.env.CXXFLAGS = ['-g', '-pg', '-I/usr/lib/faust/','-I/usr/lib/faust/gui','-Wall','-fPIC'] #,'-O3','-ffast-math']
+    conf.env.CFLAGS = ['-I/usr/lib/faust/','-I/usr/lib/faust/gui','-Wall','-fPIC','-O3','-ffast-math'] #['-g', '-pg', 
+    conf.env.CXXFLAGS = ['-I/usr/lib/faust/','-I/usr/lib/faust/gui','-Wall','-fPIC','-O3','-ffast-math'] #['-g', '-pg', 
     
     
     # Check for gtkmm to build UI

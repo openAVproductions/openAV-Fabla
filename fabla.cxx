@@ -402,7 +402,7 @@ run(LV2_Handle instance,
   // nframes
   for (int i = 0; i < sample_count; i++)
   {
-    float tmp = 0.f;
+    float tmp = 1e-15;  // DC offset: float denormals
     
     // pads
     for ( int p = 0; p < 16; p++ )
@@ -413,7 +413,8 @@ run(LV2_Handle instance,
         // add sample
         if ( self->playback[p].frame < self->sample[p]->info.frames )
         {
-          tmp += self->sample[p]->data[self->playback[p].frame++] * self->playback[p].volume;
+          tmp += self->sample[p]->data[self->playback[p].frame++] // sample value
+                  * self->playback[p].volume;                     // master volume
         }
         else // stop sample
         {
