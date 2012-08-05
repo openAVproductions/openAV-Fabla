@@ -259,7 +259,16 @@ connect_port(LV2_Handle instance,
     case SAMPLER_LOWPASS:
       self->lowpass = (float*)data;
       self->faust_lowpass  = self->faustUI->getFloatPointer("---fablalopcutoff");
-      *self->faust_highpass = 10000;
+      *self->faust_lowpass = 10000;
+      break;
+    case SAMPLER_ECHO_FEEDBACK:
+      self->echo_feedback = (float*)data;
+      self->faust_echo_feedback = self->faustUI->getFloatPointer("---fabla-stereoecho-echo  1000feedback");
+      *self->faust_echo_feedback = 0.f;
+      break;
+    case SAMPLER_ECHO_TIME:
+      self->echo_time = (float*)data;
+      self->faust_echo_time  = self->faustUI->getFloatPointer("---fabla-stereoecho-echo  1000millisecond");
       break;
     case SAMPLER_OUT_L:
       self->output_port_L = (float*)data;
@@ -406,6 +415,9 @@ run(LV2_Handle instance,
   // copy the effect port values to FAUST variables
   *self->faust_reverb_wet     = *self->reverb_wet;
   *self->faust_reverb_size    = *self->reverb_size;
+  
+  *self->faust_echo_feedback  = *self->echo_feedback * 90;
+  *self->faust_echo_time      = *self->echo_time * 990;
   
   *self->faust_highpass =  10 + (*self->highpass *  4000);
   *self->faust_lowpass  = 100 + (*self->lowpass  * 12000);

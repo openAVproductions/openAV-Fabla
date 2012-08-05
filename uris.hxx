@@ -67,6 +67,9 @@ enum {
   
   SAMPLER_HIGHPASS      = 7,
   SAMPLER_LOWPASS       = 8,
+  
+  SAMPLER_ECHO_TIME     = 9,
+  SAMPLER_ECHO_FEEDBACK =10,
 };
 
 typedef struct {
@@ -137,6 +140,11 @@ typedef struct {
   LV2_Atom_Sequence*   notify_port;
 
   // effect floats
+  float* echo_time;
+  float* echo_feedback;
+  float* faust_echo_time;
+  float* faust_echo_feedback;
+  
   float* reverb_size;
   float* reverb_wet;
   float* faust_reverb_size;

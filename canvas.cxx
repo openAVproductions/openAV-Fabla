@@ -201,7 +201,6 @@ void Canvas::drawMaster(Cairo::RefPtr<Cairo::Context> cr)
   cr->set_line_width(1.1);
   
   // LIMITER ZONE
-    float limiter = 0.5;
     //graph background
     cr->rectangle( x, y, 76, 76);
     setColour( cr, COLOUR_GREY_4 );
@@ -575,18 +574,26 @@ void Canvas::drawEffect(Cairo::RefPtr<Cairo::Context> cr)
       cr->stroke();
       cr->unset_dash();
       
-      
-      
-      // draw echo
-      cr->move_to( x        , y );
-      cr->line_to( x + xSize, y + ySize);
-      
       if ( active )
         setColour(cr, COLOUR_BLUE_1, 0.2 );
       else
         setColour(cr, COLOUR_GREY_1, 0.2 );
       cr->close_path();
       cr->fill_preserve();
+      
+      
+      int drawX = x + 5;
+      // draw echo "sticks"
+      for ( int i = 0; i < 40; i++)
+      {
+        int drawY = y + (ySize-20)*(1-echoAmp)*((i+1.f)/4);
+        cr->move_to( drawX, y + ySize);
+        cr->line_to( drawX, drawY );
+        drawX += 5 + ( (ySize-40)*echoTime );
+        
+        if ( drawY > y + ySize - 15 || drawX > x + xSize )
+          break;
+      }
       
       // stroke cutoff line
       cr->set_line_width(1.5);
@@ -595,6 +602,17 @@ void Canvas::drawEffect(Cairo::RefPtr<Cairo::Context> cr)
       else
         setColour(cr, COLOUR_GREY_1 );
       cr->stroke();
+      
+            
+      // center circle
+      cr->arc( x+10+(xSize-20)*echoTime, y+10+(ySize-20)*(1-echoAmp), 6.5, 0, 6.29 );
+      if ( active )
+        setColour(cr, COLOUR_ORANGE_1 );
+      else
+        setColour(cr, COLOUR_GREY_1 );
+      cr->set_line_width(2.1);
+      cr->stroke();
+      
   }
   
   // Reverb

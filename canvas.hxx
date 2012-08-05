@@ -70,6 +70,7 @@ class Canvas : public Gtk::DrawingArea
     float highpass, lowpass;
     
     // master
+    float limiter;
     float volume;
     
     enum PadState {
@@ -94,11 +95,20 @@ class Canvas : public Gtk::DrawingArea
       // effect
       echoAmp = 0.2;
       echoTime = 0.5;
+      echoActive = false;
       reverbAmp = 0.5;
       reverbTime = 0.5;
+      reverbActive = false;
+      
+      // remove
+      lowpass  = 1.f;
+      highpass = 0.f;
+      lowpassActive = false;
+      highpassActive = false;
       
       // master
       volume = 0.707;
+      limiter = 0.f;
       
       
       selectedSample = 0;
@@ -542,6 +552,35 @@ class Canvas : public Gtk::DrawingArea
           {
             float tmp = 0.f;
             ui_instance->write( ui_instance->controller, SAMPLER_HIGHPASS, sizeof(float), 0, (const void*) &tmp);
+          }
+        }
+        redraw();
+      }
+      
+      if ( x > 508 && y > 105 && x < 646 && y < 189 ) // ECHO
+      {
+        if ( event->button == 1 && event->type == Gdk::BUTTON_PRESS )
+        {
+          echoTime = (event->x - 508) / 138.f;
+          echoAmp  = 1 - (event->y - 105) / 82.f;
+          
+          cout << "ECHO graph click at " << x << " " << y << " eT: " << echoTime << " eA " << echoAmp << endl;
+          ui_instance->write( ui_instance->controller, SAMPLER_ECHO_FEEDBACK, sizeof(float), 0, (const void*) &echoAmp );
+          ui_instance->write( ui_instance->controller, SAMPLER_ECHO_TIME    , sizeof(float), 0, (const void*) &echoTime);
+        }
+        else if ( event->type == Gdk::BUTTON_PRESS )
+        {
+          echoActive = !echoActive;
+          cout << "echoActive = " << echoActive << endl;
+          if ( echoActive )
+          {
+            ui_instance->write( ui_instance->controller, SAMPLER_ECHO_TIME, sizeof(float), 0, (const void*) &echoTime);
+            ui_instance->write( ui_instance->controller, SAMPLER_ECHO_FEEDBACK , sizeof(float), 0, (const void*) &echoAmp );
+          }
+          else
+          {
+            float tmp = 0.f;
+            ui_instance->write( ui_instance->controller, SAMPLER_ECHO_FEEDBACK , sizeof(float), 0, (const void*) &tmp );
           }
         }
         redraw();
