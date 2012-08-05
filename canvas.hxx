@@ -547,9 +547,10 @@ class Canvas : public Gtk::DrawingArea
         {
           lowpass = (event->x - 324) / 138.f;
           cout << "lowpass graph click at " << x << endl;
-          ui_instance->write( ui_instance->controller, SAMPLER_LOWPASS, sizeof(float), 0, (const void*) &lowpass);
+          if ( lowpassActive )
+            ui_instance->write( ui_instance->controller, SAMPLER_LOWPASS, sizeof(float), 0, (const void*) &lowpass);
         }
-        else if ( event->type == Gdk::BUTTON_PRESS ) // turn off / on
+        else if ( event->type == Gdk::BUTTON_PRESS  && event->button == 3 ) // turn off / on
         {
           lowpassActive = !lowpassActive;
           cout << "lowpassActive= " << lowpassActive << endl;
@@ -570,9 +571,10 @@ class Canvas : public Gtk::DrawingArea
         {
           highpass = (event->x - 324) / 138.f;
           cout << "highpass graph click at " << x << endl;
-          ui_instance->write( ui_instance->controller, SAMPLER_HIGHPASS, sizeof(float), 0, (const void*) &highpass);
+          if ( highpassActive )
+            ui_instance->write( ui_instance->controller, SAMPLER_HIGHPASS, sizeof(float), 0, (const void*) &highpass);
         }
-        else if ( event->type == Gdk::BUTTON_PRESS ) // turn off / on
+        else if ( event->type == Gdk::BUTTON_PRESS && event->button == 3 ) // turn off / on
         {
           highpassActive = !highpassActive;
           cout << "HigpassActive = " << highpassActive << endl;
