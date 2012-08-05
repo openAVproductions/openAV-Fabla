@@ -732,14 +732,14 @@ void Canvas::drawSource(Cairo::RefPtr<Cairo::Context> cr)
       cr->unset_dash();
       
       // move to bottom left
-      cr->move_to( x  , y + ySize );
+      cr->move_to( x+5  , y + ySize );
       
       // line to top, with x + attack
-      cr->line_to( x + (xSize*0.3)*attack, y+2 );
+      cr->line_to( x + 5 + ((xSize*0.4)-5)*attack, y+ySize*0.25 + ySize*0.5*((1-gain)+0.5) );
       
-      cr->line_to( x + xSize - (xSize*0.3)*release, y+2 );
+      cr->line_to( x + xSize*0.75, y+ ySize*0.25 + ySize*0.5*((1-gain)+0.5) );
       
-      cr->line_to( x + xSize, y+ySize );
+      cr->line_to( x + xSize - (xSize*0.25*(1-release)), y+ySize );
       
       if ( active )
         setColour(cr, COLOUR_BLUE_1, 0.2 );
@@ -758,7 +758,7 @@ void Canvas::drawSource(Cairo::RefPtr<Cairo::Context> cr)
       
   }
   
-  // LOWPASS
+  // Speed / PAN
   {
       int y = 330 + border - 235 + 93;
       int ySize = 175 / 2 - 5;
@@ -786,9 +786,9 @@ void Canvas::drawSource(Cairo::RefPtr<Cairo::Context> cr)
       cr->stroke();
       cr->unset_dash();
       
-      // move to left, volume
-      cr->move_to( x        , y + ySize*(1-gain) );
-      cr->line_to( x + xSize, y + ySize*(1-gain) );
+      // speed line
+      //cr->move_to( x        , y + ySize*((1-gain)-0.5) );
+      //cr->line_to( x + xSize, y + ySize*((1-gain)-0.5) );
       
       // line to top, with x + attack
       cr->move_to( x + (xSize*0.5*speed), y+2 );

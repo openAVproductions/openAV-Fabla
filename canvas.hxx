@@ -55,7 +55,7 @@ class Canvas : public Gtk::DrawingArea
     int selectedSample;
     std::string sampleNames[16];
     
-    // source
+    // source  (always active)
     float attack, release;
     float speed, gain;
     
@@ -87,13 +87,13 @@ class Canvas : public Gtk::DrawingArea
         padState[i] = PAD_EMPTY;
       
       // source
-      attack = 0.5;
-      release = 0.5;
+      attack = 0.0;
+      release = 0.0;
       speed = 1;
-      gain = 0.5;
+      gain = 1;
       
       // effect
-      echoAmp = 0.2;
+      echoAmp = 0.5;
       echoTime = 0.5;
       echoActive = false;
       reverbAmp = 0.5;
@@ -510,6 +510,36 @@ class Canvas : public Gtk::DrawingArea
         // load clicked
         //on_load_clicked( ui_instance );
       }
+
+      if ( x > 324 && y > 105 && x < 462 && y < 188 && event->type == Gdk::BUTTON_PRESS ) // ADSR / Gain
+      {
+        // X defines what changes: attack, release, gain
+        // Y defines the new value for that parameter 
+        
+        float X = (event->x - 324) / 138.f;
+        float Y = 1 - (event->y - 105) / 82.f;
+        if ( X < 0.25 ) // Attack
+        {
+          attack = Y;
+          cout << "attack = " << attack << endl;
+        }
+        else if ( X > 0.33 && X < 0.75 ) // Gain
+        {
+          gain = 0.5 + Y;
+        }
+        else if ( X > 0.75 ) // Release
+        {
+          release = Y;
+          cout << "release = " << release << endl;
+        }
+        redraw();
+      }
+      
+      if ( x > 324 && y > 198 && x < 462 && y < 282 ) // SPEED / PAN
+      {
+        cout << "Speed pan" << endl;
+      }
+      
       
       if ( x > 324 && y > 433 && x < 462 && y < 517 ) // lowpass
       {
