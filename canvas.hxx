@@ -61,7 +61,13 @@ class Canvas : public Gtk::DrawingArea
     
     // effect
     float echoTime, echoAmp;
+    bool echoActive, reverbActive;
     float reverbTime, reverbAmp;
+    
+    // remove
+    bool  highpassActive;
+    bool  lowpassActive;
+    float highpass, lowpass;
     
     // master
     float volume;
@@ -146,7 +152,7 @@ class Canvas : public Gtk::DrawingArea
     
     int width, height;
     
-    int clickPlaySample = 0;
+    int clickPlaySample;
     
     // Image header
     bool headerLoaded;
@@ -495,13 +501,80 @@ class Canvas : public Gtk::DrawingArea
         //on_load_clicked( ui_instance );
       }
       
+      if ( x > 324 && y > 433 && x < 462 && y < 517 ) // lowpass
+      {
+        if ( event->button == 1 && event->type == Gdk::BUTTON_PRESS ) // set cutoff
+        {
+          lowpass = (event->x - 324) / 138.f;
+          cout << "lowpass graph click at " << x << endl;
+          ui_instance->write( ui_instance->controller, SAMPLER_LOWPASS, sizeof(float), 0, (const void*) &lowpass);
+        }
+        else if ( event->type == Gdk::BUTTON_PRESS ) // turn off / on
+        {
+          lowpassActive = !lowpassActive;
+          cout << "lowpassActive= " << lowpassActive << endl;
+          if ( lowpassActive )
+            ui_instance->write( ui_instance->controller, SAMPLER_LOWPASS, sizeof(float), 0, (const void*) &lowpass);
+          else
+          {
+            float tmp = 1.f;
+            ui_instance->write( ui_instance->controller, SAMPLER_LOWPASS, sizeof(float), 0, (const void*) &tmp);
+          }
+        }
+        redraw();
+      }
+      
+      if ( x > 324 && y > 341 && x < 462 && y < 424 ) // Highpass
+      {
+        if ( event->button == 1 && event->type == Gdk::BUTTON_PRESS ) // set cutoff
+        {
+          highpass = (event->x - 324) / 138.f;
+          cout << "highpass graph click at " << x << endl;
+          ui_instance->write( ui_instance->controller, SAMPLER_HIGHPASS, sizeof(float), 0, (const void*) &highpass);
+        }
+        else if ( event->type == Gdk::BUTTON_PRESS ) // turn off / on
+        {
+          highpassActive = !highpassActive;
+          cout << "HigpassActive = " << highpassActive << endl;
+          if ( highpassActive )
+            ui_instance->write( ui_instance->controller, SAMPLER_HIGHPASS, sizeof(float), 0, (const void*) &highpass);
+          else
+          {
+            float tmp = 0.f;
+            ui_instance->write( ui_instance->controller, SAMPLER_HIGHPASS, sizeof(float), 0, (const void*) &tmp);
+          }
+        }
+        redraw();
+      }
+      
       if ( x > 508 && y > 199 && x < 646 && y < 281 ) // REVERB
       {
-        reverbTime = (event->x - 508) / 138.f;
-        reverbAmp  = 1 - (event->y - 199) / 82.f;
-        cout << "reverb graph click at " << x << " " << y << endl;
-        ui_instance->write( ui_instance->controller, SAMPLER_REVERB_SIZE, sizeof(float), 0, (const void*) &reverbTime);
-        ui_instance->write( ui_instance->controller, SAMPLER_REVERB_WET , sizeof(float), 0, (const void*) &reverbAmp );
+        
+        
+        if ( event->button == 1 && event->type == Gdk::BUTTON_PRESS )
+        {
+          reverbTime = (event->x - 508) / 138.f;
+          reverbAmp  = 1 - (event->y - 199) / 82.f;
+          
+          cout << "reverb graph click at " << x << " " << y << endl;
+          ui_instance->write( ui_instance->controller, SAMPLER_REVERB_SIZE, sizeof(float), 0, (const void*) &reverbTime);
+          ui_instance->write( ui_instance->controller, SAMPLER_REVERB_WET , sizeof(float), 0, (const void*) &reverbAmp );
+        }
+        else if ( event->type == Gdk::BUTTON_PRESS )
+        {
+          reverbActive = !reverbActive;
+          cout << "reverbActive = " << reverbActive << endl;
+          if ( reverbActive )
+          {
+            ui_instance->write( ui_instance->controller, SAMPLER_REVERB_SIZE, sizeof(float), 0, (const void*) &reverbTime);
+            ui_instance->write( ui_instance->controller, SAMPLER_REVERB_WET , sizeof(float), 0, (const void*) &reverbAmp );
+          }
+          else
+          {
+            float tmp = 0.f;
+            ui_instance->write( ui_instance->controller, SAMPLER_REVERB_WET , sizeof(float), 0, (const void*) &tmp );
+          }
+        }
         redraw();
       }
       

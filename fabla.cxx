@@ -8,7 +8,7 @@
 
 // include faust stuff
 #include "../dsp/cpp_ui.h"
-#include "../dsp/reverb/reverb.cpp"
+#include "../dsp/fabla/fabla.cpp"
 
 /**
    Print an error message to the host log if available, or stderr otherwise.
@@ -245,11 +245,21 @@ connect_port(LV2_Handle instance,
       break;
     case SAMPLER_REVERB_SIZE:
       self->reverb_size = (float*)data;
-      self->faust_reverb_size = self->reverbUI->getFloatPointer("---FreeverbRoomSize");
+      self->faust_reverb_size = self->faustUI->getFloatPointer("---fabla-FreeverbRoomSize");
       break;
     case SAMPLER_REVERB_WET:
       self->reverb_wet = (float*)data;
-      self->faust_reverb_wet  = self->reverbUI->getFloatPointer("---FreeverbWet");
+      self->faust_reverb_wet  = self->faustUI->getFloatPointer("---fabla-FreeverbWet");
+      break;
+    case SAMPLER_HIGHPASS:
+      self->highpass = (float*)data;
+      self->faust_highpass = self->faustUI->getFloatPointer("---fablahipcutoff");
+      *self->faust_highpass = 10; 
+      break;
+    case SAMPLER_LOWPASS:
+      self->lowpass = (float*)data;
+      self->faust_lowpass  = self->faustUI->getFloatPointer("---fablalopcutoff");
+      *self->faust_highpass = 10000;
       break;
     case SAMPLER_OUT_L:
       self->output_port_L = (float*)data;
@@ -309,10 +319,10 @@ instantiate(const LV2_Descriptor*     descriptor,
     
     // Set up the Faust DSP units
     char* nullArray[0];
-    self->reverbUI = new CppUI(0, nullArray);
-    self->reverbDSP = new ReverbDSP();
-    self->reverbDSP->buildUserInterface(self->reverbUI);
-    self->reverbDSP->init(rate);
+    self->faustUI = new CppUI(0, nullArray);
+    self->faustDSP = new FablaDSP();
+    self->faustDSP->buildUserInterface(self->faustUI);
+    self->faustDSP->init(rate);
     
     return (LV2_Handle)self;
   }
@@ -397,6 +407,9 @@ run(LV2_Handle instance,
   *self->faust_reverb_wet     = *self->reverb_wet;
   *self->faust_reverb_size    = *self->reverb_size;
   
+  *self->faust_highpass =  10 + (*self->highpass *  4000);
+  *self->faust_lowpass  = 100 + (*self->lowpass  * 12000);
+  
   float outL, outR;
   
   // nframes
@@ -429,7 +442,7 @@ run(LV2_Handle instance,
     buf[0] = &tmp;
     buf[1] = &outL;
     buf[2] = &outR;
-    self->reverbDSP->compute( 1, &buf[0], &buf[1] );
+    self->faustDSP->compute( 1, &buf[0], &buf[1] );
     
     // write output
     output_L[i] = outL * (*self->master_vol);

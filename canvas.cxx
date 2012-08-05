@@ -414,8 +414,7 @@ void Canvas::drawRemove(Cairo::RefPtr<Cairo::Context> cr)
       int xSize = 138;
       int ySize = 175 / 2 - 5;
       
-      bool active = true;
-      float highpass = 0.0;
+      bool active = highpassActive;
       float cutoff = 0.2 + ((1-highpass)*0.7f);
       
       // draw "frequency guides"
@@ -471,8 +470,8 @@ void Canvas::drawRemove(Cairo::RefPtr<Cairo::Context> cr)
       int xSize = 138;
       int ySize = 175 / 2 - 5;
       
-      bool active = true;
-      float lowpass = 1.0;
+      
+      bool active = lowpassActive;
       float cutoff = 0.2 + (lowpass*0.7f);
       
       // draw "frequency guides"
@@ -552,7 +551,7 @@ void Canvas::drawEffect(Cairo::RefPtr<Cairo::Context> cr)
   {
       int ySize = 175 / 2 - 5;
       
-      bool active = true;
+      bool active = echoActive;
       float highpass = 0.0;
       float cutoff = 0.2 + ((1-highpass)*0.7f);
       
@@ -603,7 +602,7 @@ void Canvas::drawEffect(Cairo::RefPtr<Cairo::Context> cr)
       int y = 330 + border - 235 + 93;
       int ySize = 175 / 2 - 5;
       
-      bool active = true;
+      bool active = reverbActive;
       float lowpass = 1.0;
       float cutoff = 0.2 + (lowpass*0.7f);
       

@@ -50,7 +50,7 @@
 #include <gtk/gtk.h>
 
 class CppUI;
-class ReverbDSP;
+class FablaDSP;
 
 
 enum {
@@ -62,7 +62,11 @@ enum {
   
   SAMPLER_REVERB_SIZE   = 4,
   SAMPLER_REVERB_WET    = 5,
+  
   SAMPLER_MASTER_VOL    = 6,
+  
+  SAMPLER_HIGHPASS      = 7,
+  SAMPLER_LOWPASS       = 8,
 };
 
 typedef struct {
@@ -138,6 +142,12 @@ typedef struct {
   float* faust_reverb_size;
   float* faust_reverb_wet;
   
+  // remove floats
+  float* highpass;
+  float* lowpass;
+  float* faust_highpass;
+  float* faust_lowpass;
+  
   // master volume
   float* master_vol;
   
@@ -155,8 +165,8 @@ typedef struct {
   SamplePlayback playback[16];
   
   // FAUST DSP units
-  CppUI*     reverbUI;
-  ReverbDSP* reverbDSP;
+  CppUI*     faustUI;
+  FablaDSP*  faustDSP;
   
 } Fabla;
 

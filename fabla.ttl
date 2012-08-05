@@ -74,6 +74,24 @@
     lv2:default 0.7 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 7 ;
+    lv2:symbol "highpass";
+    lv2:name "Highpass Cutoff";
+    lv2:default 0.0 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 8 ;
+    lv2:symbol "lowpass";
+    lv2:name "Lowpass Cutoff";
+    lv2:default 1.0 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
   ] .
 
 <http://www.openavproductions.com/fabla/gui>
