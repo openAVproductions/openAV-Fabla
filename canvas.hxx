@@ -597,10 +597,13 @@ class Canvas : public Gtk::DrawingArea
           echoAmp  = 1 - (event->y - 105) / 82.f;
           
           cout << "ECHO graph click at " << x << " " << y << " eT: " << echoTime << " eA " << echoAmp << endl;
-          ui_instance->write( ui_instance->controller, SAMPLER_ECHO_FEEDBACK, sizeof(float), 0, (const void*) &echoAmp );
-          ui_instance->write( ui_instance->controller, SAMPLER_ECHO_TIME    , sizeof(float), 0, (const void*) &echoTime);
+          if ( echoActive )
+          {
+            ui_instance->write( ui_instance->controller, SAMPLER_ECHO_FEEDBACK, sizeof(float), 0, (const void*) &echoAmp );
+            ui_instance->write( ui_instance->controller, SAMPLER_ECHO_TIME    , sizeof(float), 0, (const void*) &echoTime);
+          }
         }
-        else if ( event->type == Gdk::BUTTON_PRESS )
+        else if ( event->type == Gdk::BUTTON_PRESS && event->button == 3 )
         {
           echoActive = !echoActive;
           cout << "echoActive = " << echoActive << endl;
@@ -628,10 +631,13 @@ class Canvas : public Gtk::DrawingArea
           reverbAmp  = 1 - (event->y - 199) / 82.f;
           
           cout << "reverb graph click at " << x << " " << y << endl;
-          ui_instance->write( ui_instance->controller, SAMPLER_REVERB_SIZE, sizeof(float), 0, (const void*) &reverbTime);
-          ui_instance->write( ui_instance->controller, SAMPLER_REVERB_WET , sizeof(float), 0, (const void*) &reverbAmp );
+          if ( reverbActive ) // avoid always write "wet" even when disabled
+          {
+            ui_instance->write( ui_instance->controller, SAMPLER_REVERB_SIZE, sizeof(float), 0, (const void*) &reverbTime);
+            ui_instance->write( ui_instance->controller, SAMPLER_REVERB_WET , sizeof(float), 0, (const void*) &reverbAmp );
+          }
         }
-        else if ( event->type == Gdk::BUTTON_PRESS )
+        else if ( event->type == Gdk::BUTTON_PRESS && event->button == 3 )
         {
           reverbActive = !reverbActive;
           cout << "reverbActive = " << reverbActive << endl;
