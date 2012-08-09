@@ -4,6 +4,8 @@
 
 #include <sndfile.h>
 
+#include <sstream>
+
 #include "lv2/lv2plug.in/ns/ext/atom/forge.h"
 #include "lv2/lv2plug.in/ns/ext/atom/util.h"
 #include "lv2/lv2plug.in/ns/ext/state/state.h"
@@ -27,22 +29,7 @@
 #define FABLA_URI__freeSample   FABLA_URI "#freeSample"
 #define FABLA_URI__sampleNumber FABLA_URI "#sampleNumber"
 
-#define FABLA_URI__sampleRestorePad1  FABLA_URI "#sampleRestorePad1"
-#define FABLA_URI__sampleRestorePad2  FABLA_URI "#sampleRestorePad2"
-#define FABLA_URI__sampleRestorePad3  FABLA_URI "#sampleRestorePad3"
-#define FABLA_URI__sampleRestorePad4  FABLA_URI "#sampleRestorePad4"
-#define FABLA_URI__sampleRestorePad5  FABLA_URI "#sampleRestorePad5"
-#define FABLA_URI__sampleRestorePad6  FABLA_URI "#sampleRestorePad6"
-#define FABLA_URI__sampleRestorePad7  FABLA_URI "#sampleRestorePad7"
-#define FABLA_URI__sampleRestorePad8  FABLA_URI "#sampleRestorePad8"
-#define FABLA_URI__sampleRestorePad9  FABLA_URI "#sampleRestorePad9"
-#define FABLA_URI__sampleRestorePad10 FABLA_URI "#sampleRestorePad10"
-#define FABLA_URI__sampleRestorePad11 FABLA_URI "#sampleRestorePad11"
-#define FABLA_URI__sampleRestorePad12 FABLA_URI "#sampleRestorePad12"
-#define FABLA_URI__sampleRestorePad13 FABLA_URI "#sampleRestorePad13"
-#define FABLA_URI__sampleRestorePad14 FABLA_URI "#sampleRestorePad14"
-#define FABLA_URI__sampleRestorePad15 FABLA_URI "#sampleRestorePad15"
-#define FABLA_URI__sampleRestorePad16 FABLA_URI "#sampleRestorePad16"
+#define FABLA_URI__sampleRestorePad  FABLA_URI "#sampleRestorePad"
 
 // GMutex:
 // for loading / freeing samples, and GUI drawing. It will *never* block
@@ -88,22 +75,7 @@ typedef struct {
 	LV2_URID patch_Set;
 	LV2_URID patch_body;
   
-  LV2_URID sampleRestorePad1;
-  LV2_URID sampleRestorePad2;
-  LV2_URID sampleRestorePad3;
-  LV2_URID sampleRestorePad4;
-  LV2_URID sampleRestorePad5;
-  LV2_URID sampleRestorePad6;
-  LV2_URID sampleRestorePad7;
-  LV2_URID sampleRestorePad8;
-  LV2_URID sampleRestorePad9;
-  LV2_URID sampleRestorePad10;
-  LV2_URID sampleRestorePad11;
-  LV2_URID sampleRestorePad12;
-  LV2_URID sampleRestorePad13;
-  LV2_URID sampleRestorePad14;
-  LV2_URID sampleRestorePad15;
-  LV2_URID sampleRestorePad16;
+  LV2_URID sampleRestorePad[16];
 } FablaURIs;
 
 
@@ -196,22 +168,13 @@ map_sampler_uris(LV2_URID_Map* map, FablaURIs* uris)
 	uris->patch_Set          = map->map(map->handle, LV2_PATCH__Set);
 	uris->patch_body         = map->map(map->handle, LV2_PATCH__body);
   
-	uris->sampleRestorePad1         = map->map(map->handle, FABLA_URI__sampleRestorePad1 );
-	uris->sampleRestorePad2         = map->map(map->handle, FABLA_URI__sampleRestorePad2 );
-	uris->sampleRestorePad3         = map->map(map->handle, FABLA_URI__sampleRestorePad3 );
-	uris->sampleRestorePad4         = map->map(map->handle, FABLA_URI__sampleRestorePad4 );
-	uris->sampleRestorePad5         = map->map(map->handle, FABLA_URI__sampleRestorePad5 );
-	uris->sampleRestorePad6         = map->map(map->handle, FABLA_URI__sampleRestorePad6 );
-	uris->sampleRestorePad7         = map->map(map->handle, FABLA_URI__sampleRestorePad7 );
-	uris->sampleRestorePad8         = map->map(map->handle, FABLA_URI__sampleRestorePad8 );
-	uris->sampleRestorePad9         = map->map(map->handle, FABLA_URI__sampleRestorePad9 );
-	uris->sampleRestorePad10        = map->map(map->handle, FABLA_URI__sampleRestorePad10);
-	uris->sampleRestorePad11        = map->map(map->handle, FABLA_URI__sampleRestorePad11);
-	uris->sampleRestorePad12        = map->map(map->handle, FABLA_URI__sampleRestorePad12);
-	uris->sampleRestorePad13        = map->map(map->handle, FABLA_URI__sampleRestorePad13);
-	uris->sampleRestorePad14        = map->map(map->handle, FABLA_URI__sampleRestorePad14);
-	uris->sampleRestorePad15        = map->map(map->handle, FABLA_URI__sampleRestorePad15);
-	uris->sampleRestorePad16        = map->map(map->handle, FABLA_URI__sampleRestorePad16);
+  // Sample restore URI's  per pad 
+  for ( int i = 0; i < 16; i++ )
+  {
+    std::stringstream s;
+    s << FABLA_URI__sampleRestorePad << i;
+    uris->sampleRestorePad[i] = map->map(map->handle, s.str().c_str() );
+  }
 }
 
 static inline bool
