@@ -523,10 +523,17 @@ restore(LV2_Handle                  instance,
       }
       SampleMessage* message = load_sample(self, i, path);
       self->sample[i] = message->sample;
+      
+      // Send a notification to UI that we're using a new sample
+      lv2_atom_forge_frame_time(&self->forge, 0); // 0 = frame offset
+      write_set_file(&self->forge, &self->uris,
+                     i,
+                     self->sample[i]->path,
+                     self->sample[i]->path_len);
     }
   }
   
-  return LV2_STATE_SUCCESS;
+   return LV2_STATE_SUCCESS;
 }
 
 static const void*
