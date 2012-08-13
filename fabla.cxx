@@ -10,6 +10,8 @@
 #include "../dsp/cpp_ui.h"
 #include "../dsp/fabla/fabla.cpp"
 
+#define DEBUG
+
 /**
    Print an error message to the host log if available, or stderr otherwise.
 */
@@ -99,7 +101,8 @@ load_sample(Fabla* self, int sampleNum, const char* path)
 static void
 free_sample(Fabla* self, Sample* sample)
 {
-  if (sample) {
+  if (sample)
+  {
     print(self, self->uris.log_Trace, "Freeing %s\n", sample->path);
     free(sample->path);
     free(sample->data);
@@ -354,7 +357,6 @@ run(LV2_Handle instance,
 {
   Fabla*     self        = (Fabla*)instance;
   FablaURIs* uris        = &self->uris;
-  sf_count_t   start_frame = 0;
   sf_count_t   pos         = 0;
   float*       output_L    = self->output_port_L;
   float*       output_R    = self->output_port_R;
@@ -380,7 +382,6 @@ run(LV2_Handle instance,
       {
         if ( data[1] >= 36 ) // note
         {
-          start_frame = ev->time.frames;
           self->playback[data[1]-36].frame = 0;
           self->playback[data[1]-36].play  = true;
           self->playback[data[1]-36].volume= (data[2] / 127.f);
@@ -425,7 +426,7 @@ run(LV2_Handle instance,
   float outL, outR;
   
   // nframes
-  for (int i = 0; i < sample_count; i++)
+  for (unsigned int i = 0; i < sample_count; i++)
   {
     float tmp = 1e-15;  // DC offset: float denormals
     
@@ -510,11 +511,16 @@ restore(LV2_Handle                  instance,
   for ( int i = 0; i < 16; i++ )
   {
     const void* value = retrieve( handle, self->uris.sampleRestorePad[i], &size, &type, &valflags);
-    if (value) {
+    if (value)
+    {
       const char* path = (const char*)value;
+      #ifdef DEBUG 
       print(self, self->uris.log_Trace, "Restoring file %s\n", path);
-      if ( self->sample[i] ) {
-        free_sample(self, self->sample[i] ); }
+      #endif
+      if ( self->sample[i] )
+      {
+        free_sample(self, self->sample[i] );
+      }
       SampleMessage* message = load_sample(self, i, path);
       self->sample[i] = message->sample;
     }
