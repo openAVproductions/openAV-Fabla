@@ -201,9 +201,10 @@ port_event(LV2UI_Handle handle,
       if (!file_uri)
       {
         // play event
-        fprintf(stderr, "Unknown message sent to UI.\n");
+        fprintf(stderr, "play command?\n");
         
-        
+        const LV2_Atom_Int* pad = read_play_sample(&ui->uris, obj);
+        ui->canvas->padState[pad->body] = Canvas::PAD_PLAYING;
         
         return;
       }

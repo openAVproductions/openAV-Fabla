@@ -231,10 +231,11 @@ write_play_sample(LV2_Atom_Forge*    forge,
 	LV2_Atom_Forge_Frame set_frame;
 	LV2_Atom* set = (LV2_Atom*)lv2_atom_forge_blank(
 		forge, &set_frame, 1, uris->playSample);
-
+  
+  
 	lv2_atom_forge_property_head(forge, uris->playSample, 0);
 	LV2_Atom_Forge_Frame body_frame;
-	lv2_atom_forge_blank(forge, &body_frame, 1, 0);
+	lv2_atom_forge_blank(forge, &body_frame, 2, 0);
   
 	lv2_atom_forge_property_head(forge, uris->eg_sampleNumber, 0);
 	lv2_atom_forge_int(forge, sampleNum);
@@ -306,6 +307,35 @@ read_set_file_sample_number(const FablaURIs*     uris,
 	/* Get body of message. */
 	const LV2_Atom_Object* body = NULL;
 	lv2_atom_object_get(obj, uris->patch_body, &body, 0);
+	if (!body) {
+		fprintf(stderr, "Malformed set message has no body.\n");
+		return NULL;
+	}
+	if (!is_object_type(uris, body->atom.type)) {
+		fprintf(stderr, "Malformed set message has non-object body.\n");
+		return NULL;
+	}
+
+	/* Get file path from body. */
+	const LV2_Atom_Int* padNum = 0;
+	lv2_atom_object_get(body, uris->eg_sampleNumber, &padNum, 0);
+
+	return padNum;
+}
+
+
+static inline const LV2_Atom_Int*
+read_play_sample(const FablaURIs*     uris,
+              const LV2_Atom_Object* obj)
+{
+	if (obj->body.otype != uris->playSample) {
+		fprintf(stderr, "Ignoring unknown message type %d\n", obj->body.otype);
+		return NULL;
+	}
+
+	/* Get body of message. */
+	const LV2_Atom_Object* body = NULL;
+	lv2_atom_object_get(obj, uris->playSample, &body, 0);
 	if (!body) {
 		fprintf(stderr, "Malformed set message has no body.\n");
 		return NULL;
