@@ -200,7 +200,11 @@ port_event(LV2UI_Handle handle,
       
       if (!file_uri)
       {
+        // play event
         fprintf(stderr, "Unknown message sent to UI.\n");
+        
+        
+        
         return;
       }
 
@@ -217,9 +221,35 @@ port_event(LV2UI_Handle handle,
       fprintf(stderr, "Unknown message type.\n");
     }
   }
+  else if ( format == ui->uris.playSample )
+  {
+    fprintf(stderr, "playSample recieved in UI.\n");
+  }
+  else if ( format == ui->uris.eg_file )
+  {
+    fprintf(stderr, "UI port event, type = eg_file\n");
+  }
+  else if ( format == 0 )
+  {
+    float value = *((float*)buffer);
+    fprintf(stderr, "Port number %i : value %f\n", port_index, value );
+    
+    switch ( port_index )
+    {
+      case SAMPLER_REVERB_SIZE:  ui->canvas->reverbTime  = value; break;
+      case SAMPLER_REVERB_WET:   ui->canvas->reverbAmp   = value; break;
+      case SAMPLER_MASTER_VOL:   ui->canvas->volume      = value; break;
+      case SAMPLER_HIGHPASS:     ui->canvas->highpass    = value; break;
+      case SAMPLER_LOWPASS:      ui->canvas->lowpass     = value; break;
+      case SAMPLER_ECHO_TIME:    ui->canvas->echoTime    = value; break;
+      case SAMPLER_ECHO_FEEDBACK:ui->canvas->echoAmp     = value; break;
+    }
+    ui->canvas->redraw();
+    
+  }
   else
   {
-    fprintf(stderr, "Unknown format.\n");
+    fprintf(stderr, "Unknown format %i\n", format);
   }
 }
 

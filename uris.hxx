@@ -28,6 +28,7 @@
 #define FABLA_URI__applySample  FABLA_URI "#applySample"
 #define FABLA_URI__freeSample   FABLA_URI "#freeSample"
 #define FABLA_URI__sampleNumber FABLA_URI "#sampleNumber"
+#define FABLA_URI__playSample   FABLA_URI "#playSample"
 
 #define FABLA_URI__sampleRestorePad  FABLA_URI "#sampleRestorePad"
 
@@ -74,6 +75,7 @@ typedef struct {
 	LV2_URID midi_Event;
 	LV2_URID patch_Set;
 	LV2_URID patch_body;
+	LV2_URID playSample;
   
   LV2_URID sampleRestorePad[16];
 } FablaURIs;
@@ -167,6 +169,7 @@ map_sampler_uris(LV2_URID_Map* map, FablaURIs* uris)
 	uris->midi_Event         = map->map(map->handle, LV2_MIDI__MidiEvent);
 	uris->patch_Set          = map->map(map->handle, LV2_PATCH__Set);
 	uris->patch_body         = map->map(map->handle, LV2_PATCH__body);
+	uris->playSample         = map->map(map->handle, FABLA_URI__playSample);
   
   // Sample restore URI's  per pad 
   for ( int i = 0; i < 16; i++ )
@@ -210,6 +213,28 @@ write_set_file(LV2_Atom_Forge*    forge,
 
 	lv2_atom_forge_property_head(forge, uris->eg_file, 0);
 	lv2_atom_forge_path(forge, filename, filename_len);
+  
+	lv2_atom_forge_property_head(forge, uris->eg_sampleNumber, 0);
+	lv2_atom_forge_int(forge, sampleNum);
+
+	lv2_atom_forge_pop(forge, &body_frame);
+	lv2_atom_forge_pop(forge, &set_frame);
+
+	return set;
+}
+
+static inline LV2_Atom*
+write_play_sample(LV2_Atom_Forge*    forge,
+               const FablaURIs*   uris,
+               int                sampleNum )
+{
+	LV2_Atom_Forge_Frame set_frame;
+	LV2_Atom* set = (LV2_Atom*)lv2_atom_forge_blank(
+		forge, &set_frame, 1, uris->playSample);
+
+	lv2_atom_forge_property_head(forge, uris->playSample, 0);
+	LV2_Atom_Forge_Frame body_frame;
+	lv2_atom_forge_blank(forge, &body_frame, 1, 0);
   
 	lv2_atom_forge_property_head(forge, uris->eg_sampleNumber, 0);
 	lv2_atom_forge_int(forge, sampleNum);

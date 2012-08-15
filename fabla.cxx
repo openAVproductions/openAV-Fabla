@@ -55,8 +55,7 @@ load_sample(Fabla* self, int sampleNum, const char* path)
 {
   const size_t path_len  = strlen(path);
 
-  print(self, self->uris.log_Error,
-        "Loading sample %s to pad number %i\n", path, sampleNum);
+  print(self, self->uris.log_Error, "Loading sample %s to pad number %i\n", path, sampleNum);
 
   SampleMessage* sampleMessage  = (SampleMessage*)malloc(sizeof(SampleMessage));
   Sample* const  sample  = (Sample*)malloc(sizeof(Sample));
@@ -64,8 +63,7 @@ load_sample(Fabla* self, int sampleNum, const char* path)
   SNDFILE* const sndfile = sf_open(path, SFM_READ, info);
 
   if (!sndfile || !info->frames || (info->channels != 2)) {
-    print(self, self->uris.log_Error,
-          "Stereo sample '%s'\n", path);
+    //print(self, self->uris.log_Error, "Stereo sample '%s'\n", path);
   }
   else if (!sndfile || !info->frames || (info->channels != 1)) {
     print(self, self->uris.log_Error,
@@ -386,6 +384,12 @@ run(LV2_Handle instance,
           self->playback[data[1]-36].play  = true;
           self->playback[data[1]-36].volume= (data[2] / 127.f);
         }
+        
+        // update UI that a note has occured
+        lv2_atom_forge_frame_time(&self->forge, 0);
+        write_play_sample( &self->forge, &self->uris, data[1] );
+        
+        
       }
     }
     else if (is_object_type(uris, ev->body.type) )
@@ -414,11 +418,11 @@ run(LV2_Handle instance,
   }
   
   // copy the effect port values to FAUST variables
-  *self->faust_reverb_wet     = *self->reverb_wet;
-  *self->faust_reverb_size    = *self->reverb_size;
+  *self->faust_reverb_wet     = 1e-15 + *self->reverb_wet;
+  *self->faust_reverb_size    = 1e-15 + *self->reverb_size;
   
-  *self->faust_echo_feedback  = *self->echo_feedback * 90;
-  *self->faust_echo_time      = *self->echo_time * 990;
+  *self->faust_echo_feedback  = 1e-15 + *self->echo_feedback * 90;
+  *self->faust_echo_time      = 1e-15 + *self->echo_time * 990;
   
   *self->faust_highpass =  10 + (*self->highpass *  4000);
   *self->faust_lowpass  = 100 + (*self->lowpass  * 12000);
@@ -514,9 +518,9 @@ restore(LV2_Handle                  instance,
     if (value)
     {
       const char* path = (const char*)value;
-      #ifdef DEBUG 
-      print(self, self->uris.log_Trace, "Restoring file %s\n", path);
-      #endif
+      //#ifdef DEBUG 
+      print(self, self->uris.log_Error, "Restoring file %s\n", path);
+      //#endif
       if ( self->sample[i] )
       {
         free_sample(self, self->sample[i] );
@@ -530,6 +534,8 @@ restore(LV2_Handle                  instance,
                      i,
                      self->sample[i]->path,
                      self->sample[i]->path_len);
+      
+      print(self, self->uris.log_Error, "Self path %s\n", self->sample[i]->path);
     }
   }
   
