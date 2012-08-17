@@ -373,8 +373,6 @@ run(LV2_Handle instance,
   /* Read incoming events */
   LV2_ATOM_SEQUENCE_FOREACH(self->control_port, ev)
   {
-    print(self, self->uris.log_Error, "Fabla DSP processing Atom\n");
-    
     self->frame_offset = ev->time.frames;
     
     if (ev->body.type == uris->midi_Event) // MIDI event on Atom port
@@ -393,16 +391,17 @@ run(LV2_Handle instance,
         lv2_atom_forge_frame_time(&self->forge, 0);
         
         print(self, self->uris.log_Error,
-              "writing PLAY sample %d\n", data[1]);
+              "writing PLAY sample %d\n", data[1]-36);
         
-        write_play_sample( &self->forge, &self->uris, data[1] );
+        write_play_sample( &self->forge, &self->uris, data[1]-36 );
       }
       else if ( (data[0] & 0xF0) == 0x80 )
       {
         print(self, self->uris.log_Error,
-              "writing STOP sample %d\n", data[1]);
+              "writing STOP sample %d\n", data[1]-36);
         
-        write_stop_sample( &self->forge, &self->uris, data[1] );
+        lv2_atom_forge_frame_time(&self->forge, 0);
+        write_stop_sample( &self->forge, &self->uris, data[1]-36 );
       }
     }
     else if (is_object_type(uris, ev->body.type) )

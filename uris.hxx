@@ -201,7 +201,7 @@ is_object_type(const FablaURIs* uris, LV2_URID type)
  */
 static inline LV2_Atom*
 write_set_file(LV2_Atom_Forge*    forge,
-               const FablaURIs* uris,
+               const FablaURIs*   uris,
                int                sampleNum,
                const char*        filename,
                const size_t       filename_len)
@@ -227,76 +227,47 @@ write_set_file(LV2_Atom_Forge*    forge,
 }
 
 static inline LV2_Atom*
-write_play_sample(LV2_Atom_Forge*    forge,
+write_play_sample(LV2_Atom_Forge* forge,
                const FablaURIs*   uris,
                int                sampleNum )
 {
-  // example write custom Atom message
-  /*
-     // Write object header
-   LV2_Atom_Forge_Frame frame;
-   lv2_atom_forge_resource(forge, &frame, 1, eg_Cat);
-
-   // Write property: eg:name = "Hobbes"
-   lv2_atom_forge_property_head(forge, eg_name, 0);
-   lv2_atom_forge_string(forge, "Hobbes", strlen("Hobbes"));
-
-   // Finish object
-   lv2_atom_forge_pop(forge, &frame);
-  */
+  LV2_Atom_Forge_Frame set_frame;
+  LV2_Atom* set = (LV2_Atom*)lv2_atom_forge_blank(forge, &set_frame, 1, uris->playSample);
   
-  /*
-   LV2_Atom_Forge_Frame frame;
-   lv2_atom_forge_resource(forge, &frame, 1, uris->playSample);
-
-   lv2_atom_forge_property_head(forge, uris->eg_sampleNumber, 0);
-   lv2_atom_forge_string(forge, "Hobbes", strlen("Hobbes"));
-
-   // Finish object
-   lv2_atom_forge_pop(forge, &frame);
-  */
+  lv2_atom_forge_property_head(forge, uris->playSample, 0);
+  LV2_Atom_Forge_Frame body_frame;
+  lv2_atom_forge_blank(forge, &body_frame, 2, 0);
   
+  lv2_atom_forge_property_head(forge, uris->eg_sampleNumber, 0);
+  lv2_atom_forge_int(forge, sampleNum);
   
+  lv2_atom_forge_pop(forge, &body_frame);
+  lv2_atom_forge_pop(forge, &set_frame);
   
-	LV2_Atom_Forge_Frame set_frame;
-	LV2_Atom* set = (LV2_Atom*)lv2_atom_forge_blank(
-		forge, &set_frame, 1, uris->playSample);
-  
-  
-	lv2_atom_forge_property_head(forge, uris->playSample, 0);
-	LV2_Atom_Forge_Frame body_frame;
-	lv2_atom_forge_blank(forge, &body_frame, 2, 0);
-  
-	lv2_atom_forge_property_head(forge, uris->eg_sampleNumber, 0);
-	
-
-	lv2_atom_forge_pop(forge, &body_frame);
-	lv2_atom_forge_pop(forge, &set_frame);
-
-	return set;
+  return set;
 }
 
 static inline LV2_Atom*
-write_stop_sample(LV2_Atom_Forge*    forge,
+write_stop_sample(LV2_Atom_Forge* forge,
                const FablaURIs*   uris,
                int                sampleNum )
 {
-	LV2_Atom_Forge_Frame set_frame;
-	LV2_Atom* set = (LV2_Atom*)lv2_atom_forge_blank(
-		forge, &set_frame, 1, uris->stopSample);
+  LV2_Atom_Forge_Frame set_frame;
+  LV2_Atom* set = (LV2_Atom*)lv2_atom_forge_blank(forge, &set_frame, 1, uris->stopSample);
   
+  lv2_atom_forge_property_head(forge, uris->stopSample, 0);
+  LV2_Atom_Forge_Frame body_frame;
+  lv2_atom_forge_blank(forge, &body_frame, 2, 0);
   
-	lv2_atom_forge_property_head(forge, uris->stopSample, 0);
-	LV2_Atom_Forge_Frame body_frame;
-	lv2_atom_forge_blank(forge, &body_frame, 2, 0);
+  lv2_atom_forge_property_head(forge, uris->eg_sampleNumber, 0);
+  lv2_atom_forge_int(forge, sampleNum);
   
-	lv2_atom_forge_property_head(forge, uris->eg_sampleNumber, 0);
-	lv2_atom_forge_int(forge, sampleNum);
-
-	lv2_atom_forge_pop(forge, &body_frame);
-	lv2_atom_forge_pop(forge, &set_frame);
-
-	return set;
+  lv2_atom_forge_pop(forge, &body_frame);
+  lv2_atom_forge_pop(forge, &set_frame);
+  
+  fprintf(stderr, "write_stop_sample = %i\n", sampleNum);
+  
+  return set;
 }
 
 /**
@@ -430,7 +401,9 @@ read_stop_sample(const FablaURIs*     uris,
 	/* Get int from body. */
 	const LV2_Atom_Int* padNum = 0;
 	lv2_atom_object_get(body, uris->eg_sampleNumber, &padNum, 0);
-
+  
+  fprintf(stderr, "padnum in Uri.hxx read_stop() = %i\n", padNum);
+  
 	return padNum;
 }
 

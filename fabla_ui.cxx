@@ -184,7 +184,7 @@ port_event(LV2UI_Handle handle,
 {
   FablaUI* ui = (FablaUI*)handle;
   
-  fprintf(stderr, "UI port_Event\n");
+  //fprintf(stderr, "UI port_Event\n");
   
   if (format == ui->uris.atom_eventTransfer)
   {
@@ -195,10 +195,10 @@ port_event(LV2UI_Handle handle,
     if (atom->type == ui->uris.atom_Blank)
     {
       LV2_Atom_Object* obj      = (LV2_Atom_Object*)atom;
-      const LV2_Atom*  file_uri = read_set_file(&ui->uris, obj);
-      const LV2_Atom_Int* sampleNum = read_set_file_sample_number(&ui->uris, obj);
       
-      if (!file_uri)
+      //fprintf(stderr, "atom_object->atom->type  %i\n", obj->atom.type );
+      
+      if ( obj->body.otype == ui->uris.playSample )
       {
         // play event
         fprintf(stderr, "play or stop command\n");
@@ -208,39 +208,75 @@ port_event(LV2UI_Handle handle,
         if ( padAtom )
         {
           int pad = padAtom->body;
-          if ( pad < 36 || pad > 36 + 16 )
+          if ( pad >= 0 && pad < 16 )
           {
-            fprintf(stderr, "pad out of bounds!" );
+            ui->canvas->padState[pad] = Canvas::PAD_PLAYING;
+            ui->canvas->redraw();
           }
           else
           {
-            ui->canvas->padState[pad-36] = Canvas::PAD_PLAYING;
-            ui->canvas->queue_draw();
+            fprintf(stderr, "pad out of bounds!" );
           }
         }
         return;
       }
-
-      int pad = sampleNum->body;
-      const char* uri = (const char*)LV2_ATOM_BODY(file_uri);
       
-      cout << " File path " << uri << "  on pad " << pad << endl;
-      ui->canvas->sampleNames[pad] = uri;
-      ui->canvas->padState[pad] = Canvas::PAD_LOADED;
-      ui->canvas->redraw();
+      else if ( obj->body.otype == ui->uris.stopSample )
+      {
+        fprintf(stderr, "Stop sample atom recieved!" );
+        const LV2_Atom_Int* padAtom = read_stop_sample(&ui->uris, obj);
+        
+        if ( padAtom )
+        {
+          int pad = padAtom->body;
+          if (  pad >= 0 && pad < 16 )
+          {
+            fprintf(stderr, "writing LOAODED to pad!" );
+            ui->canvas->padState[pad] = Canvas::PAD_LOADED;
+            ui->canvas->redraw();
+          }
+          else
+          {
+            fprintf(stderr, "pad out of bounds!" );
+          }
+        }
+        return;
+      }
+      
+      else if ( obj->body.otype == ui->uris.patch_Set )
+      {
+        const LV2_Atom*  file_uri = read_set_file(&ui->uris, obj);
+        
+        if (!file_uri)
+        {
+          fprintf(stderr, "file URI not valid!" );
+        }
+        
+        const LV2_Atom_Int* sampleNum = read_set_file_sample_number(&ui->uris, obj);
+        if ( sampleNum )
+        {
+          int pad = sampleNum->body;
+          const char* uri = (const char*)LV2_ATOM_BODY(file_uri);
+          
+          if ( pad >= 0 && pad < 16 )
+          {
+            cout << " File path " << uri << "  on pad " << pad << endl;
+            ui->canvas->sampleNames[pad] = uri;
+            ui->canvas->padState[pad] = Canvas::PAD_LOADED;
+            ui->canvas->redraw();
+          }
+          else
+          {
+            fprintf(stderr, "out of bounds pad, on loading!" );
+          }
+        }
+      }
+      
     }
     else
     {
       fprintf(stderr, "Unknown message type.\n");
     }
-  }
-  else if ( format == ui->uris.playSample )
-  {
-    fprintf(stderr, "playSample recieved in UI.\n");
-  }
-  else if ( format == ui->uris.eg_file )
-  {
-    fprintf(stderr, "UI port event, type = eg_file\n");
   }
   else if ( format == 0 )
   {
