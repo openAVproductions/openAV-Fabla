@@ -345,7 +345,7 @@ read_play_sample(const FablaURIs*     uris,
 		return NULL;
 	}
 
-	/* Get file path from body. */
+	/* Get int from body. */
 	const LV2_Atom_Int* padNum = 0;
 	lv2_atom_object_get(body, uris->eg_sampleNumber, &padNum, 0);
 

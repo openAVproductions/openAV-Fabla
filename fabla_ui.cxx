@@ -71,7 +71,7 @@ on_load_clicked(void* handle, int padNum)
   uint8_t obj_buf[OBJ_BUF_SIZE];
   lv2_atom_forge_set_buffer(&ui->forge, obj_buf, OBJ_BUF_SIZE);
   
-  cout << "UI writing padnum " << padNum << endl;
+  cout << "UI writing work to DSP now on pad " << padNum << endl;
   
   LV2_Atom* msg = write_set_file(&ui->forge, &ui->uris, padNum,
                                  filename, strlen(filename));
@@ -203,9 +203,20 @@ port_event(LV2UI_Handle handle,
         // play event
         fprintf(stderr, "play command?\n");
         
-        const LV2_Atom_Int* pad = read_play_sample(&ui->uris, obj);
-        ui->canvas->padState[pad->body] = Canvas::PAD_PLAYING;
+        const LV2_Atom_Int* padAtom = read_play_sample(&ui->uris, obj);
         
+        if ( padAtom )
+        {
+          int pad = padAtom->body;
+          if ( pad < 36 || pad > 36 + 16 )
+          {
+            fprintf(stderr, "pad out of bounds!" );
+          }
+          else
+          {
+            ui->canvas->padState[pad-36] = Canvas::PAD_PLAYING;
+          }
+        }
         return;
       }
 

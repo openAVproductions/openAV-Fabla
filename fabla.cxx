@@ -125,6 +125,8 @@ work(LV2_Handle                  instance,
   Fabla*  self = (Fabla*)instance;
   LV2_Atom* atom = (LV2_Atom*)data;
   
+  print(self, self->uris.log_Error, "Fabla: Work() now\n" );
+  
   if (atom->type == self->uris.eg_freeSample)
   {
     g_mutex_lock( &self->sampleMutex );
@@ -371,6 +373,8 @@ run(LV2_Handle instance,
   /* Read incoming events */
   LV2_ATOM_SEQUENCE_FOREACH(self->control_port, ev)
   {
+    print(self, self->uris.log_Error, "Fabla DSP processing Atom\n");
+    
     self->frame_offset = ev->time.frames;
     
     if (ev->body.type == uris->midi_Event) // MIDI event on Atom port
@@ -387,6 +391,10 @@ run(LV2_Handle instance,
         
         // update UI that a note has occured
         lv2_atom_forge_frame_time(&self->forge, 0);
+        
+        print(self, self->uris.log_Error,
+              "writing play sample %d\n", data[1]);
+        
         write_play_sample( &self->forge, &self->uris, data[1] );
         
         
@@ -399,7 +407,7 @@ run(LV2_Handle instance,
       if (obj->body.otype == uris->patch_Set)
       {
         /* Received a set message, send it to the worker. */
-        print(self, self->uris.log_Error, "Queueing set message\n");
+        print(self, self->uris.log_Error, "Fabla: \"patch set\" Queuing work now\n" );
         self->schedule->schedule_work(self->schedule->handle,
                                       lv2_atom_total_size(&ev->body),
                                       &ev->body);
@@ -418,16 +426,17 @@ run(LV2_Handle instance,
   }
   
   // copy the effect port values to FAUST variables
-  *self->faust_reverb_wet     = 1e-15 + *self->reverb_wet;
-  *self->faust_reverb_size    = 1e-15 + *self->reverb_size;
+  *self->faust_reverb_wet     = 1e-10 + *self->reverb_wet;
+  *self->faust_reverb_size    = 1e-10 + *self->reverb_size;
   
-  *self->faust_echo_feedback  = 1e-15 + *self->echo_feedback * 90;
-  *self->faust_echo_time      = 1e-15 + *self->echo_time * 990;
+  *self->faust_echo_feedback  = 1e-10 + *self->echo_feedback * 90;
+  *self->faust_echo_time      = 1e-10 + *self->echo_time * 990;
   
   *self->faust_highpass =  10 + (*self->highpass *  4000);
   *self->faust_lowpass  = 100 + (*self->lowpass  * 12000);
   
-  float outL, outR;
+  float outL = 1e-10;
+  float outR = 1e-10;
   
   // nframes
   for (unsigned int i = 0; i < sample_count; i++)
@@ -459,11 +468,11 @@ run(LV2_Handle instance,
     buf[0] = &tmp;
     buf[1] = &outL;
     buf[2] = &outR;
-    self->faustDSP->compute( 1, &buf[0], &buf[1] );
+    //self->faustDSP->compute( 1, &buf[0], &buf[1] );
     
     // write output
-    output_L[i] = outL * (*self->master_vol);
-    output_R[i] = outR * (*self->master_vol);
+    output_L[i] = tmp * (*self->master_vol);
+    output_R[i] = tmp * (*self->master_vol);
   }
   
 }
