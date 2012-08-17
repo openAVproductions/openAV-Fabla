@@ -215,6 +215,7 @@ port_event(LV2UI_Handle handle,
           else
           {
             ui->canvas->padState[pad-36] = Canvas::PAD_PLAYING;
+            ui->canvas->queue_draw();
           }
         }
         return;
