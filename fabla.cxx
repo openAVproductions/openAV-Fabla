@@ -393,11 +393,16 @@ run(LV2_Handle instance,
         lv2_atom_forge_frame_time(&self->forge, 0);
         
         print(self, self->uris.log_Error,
-              "writing play sample %d\n", data[1]);
+              "writing PLAY sample %d\n", data[1]);
         
         write_play_sample( &self->forge, &self->uris, data[1] );
+      }
+      else if ( (data[0] & 0xF0) == 0x80 )
+      {
+        print(self, self->uris.log_Error,
+              "writing STOP sample %d\n", data[1]);
         
-        
+        write_stop_sample( &self->forge, &self->uris, data[1] );
       }
     }
     else if (is_object_type(uris, ev->body.type) )

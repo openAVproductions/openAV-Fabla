@@ -201,7 +201,7 @@ port_event(LV2UI_Handle handle,
       if (!file_uri)
       {
         // play event
-        fprintf(stderr, "play command?\n");
+        fprintf(stderr, "play or stop command\n");
         
         const LV2_Atom_Int* padAtom = read_play_sample(&ui->uris, obj);
         
