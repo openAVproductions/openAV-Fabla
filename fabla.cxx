@@ -129,9 +129,10 @@ work(LV2_Handle                  instance,
   
   if (atom->type == self->uris.eg_freeSample)
   {
+    print(self, self->uris.log_Error, "Fabla: Work() freeSample, before mutex\n" );
     g_mutex_lock( &self->sampleMutex );
     {
-      print(self, self->uris.log_Error, "Freeing sample now\n" );
+      print(self, self->uris.log_Error, "Freeing sample: Mutex locked!\n" );
       // lock mutex, then work with sample, as GUI might be drawing it!
       SampleMessage* msg = (SampleMessage*)data;
       free_sample(self, msg->sample);
@@ -140,25 +141,58 @@ work(LV2_Handle                  instance,
   }
   else
   {
+    print(self, self->uris.log_Error, "Fabla Work()  LoadSample type message\n" );
     /* Handle set message (load sample). */
     LV2_Atom_Object* obj = (LV2_Atom_Object*)data;
-
+    
+    print(self, self->uris.log_Error, "Fabla Work()  LV2_Atom_Object atom type %i, body.otype %i \n", obj->atom.type, obj->body.otype );
+    
     /* Get file path from message */
     const LV2_Atom_Int* sampleNum = read_set_file_sample_number(&self->uris, obj);
-    const LV2_Atom* file_path = read_set_file(&self->uris, obj);
     
-    if (!file_path) {
-      return LV2_WORKER_ERR_UNKNOWN;
+    if ( !sampleNum )
+    {
+      print(self, self->uris.log_Error, "Fabla Work()  LoadSample Sample number not found in Atom\n" );
+    }
+    else
+    {
+      print(self, self->uris.log_Error, "Fabla Work()  LoadSample on sampleNumber %i\n", sampleNum->body );
     }
     
-    int padNum = sampleNum->body;
+    /*
+    const LV2_Atom* file_path = read_set_file(&self->uris, obj);
+    
+    
+    string path;
+    if (!file_path) {
+      print(self, self->uris.log_Error, "Fabla Work()  LoadSample FILE PATH NOT VALID, replacing with kick.wav\n" );
+      
+      path = "/root/openav/content/kit/kick_low.wav";
+      
+      attempting to fix the PATH INVALID error, manual hard code file path for testing.
+      not done yet, hence this compiler wrecking comment. ;)
+      
+      //return LV2_WORKER_ERR_UNKNOWN;
+    
+    }
+    */
+    
+    int padNum = 0; //  sampleNum->body;
     
     /* Load sample. */
-    SampleMessage* sampleMessage = load_sample(self, padNum, (const char*)LV2_ATOM_BODY(file_path) );
+    SampleMessage* sampleMessage;
+    //if ( file_path )
+    //  sampleMessage = load_sample(self, padNum, (const char*)LV2_ATOM_BODY(file_path) );
+    
+    sampleMessage = load_sample(self, padNum, "/root/openav/content/kit/pwoom.wav" );
     
     if (sampleMessage) {
       /* Loaded sample, send it to run() to be applied. */
       respond(handle, sizeof(SampleMessage), &sampleMessage);
+    }
+    else
+    {
+      print(self, self->uris.log_Error, "Fabla Work(), sampleMessage not valid, check load_sample code\n" );
     }
   }
 
@@ -380,20 +414,20 @@ run(LV2_Handle instance,
       uint8_t* const data = (uint8_t* const)(ev + 1);
       if ( (data[0] & 0xF0) == 0x90 ) // event & channel
       {
-        if ( data[1] >= 36 ) // note
+        if ( data[1] >= 36 && data[1] < 36 + 16 ) // note bounds
         {
           self->playback[data[1]-36].frame = 0;
           self->playback[data[1]-36].play  = true;
           self->playback[data[1]-36].volume= (data[2] / 127.f);
+          
+          // update UI that a note has occured
+          lv2_atom_forge_frame_time(&self->forge, 0);
+          
+          print(self, self->uris.log_Error,
+                "writing PLAY sample %d\n", data[1]-36);
+          
+          write_play_sample( &self->forge, &self->uris, data[1]-36 );
         }
-        
-        // update UI that a note has occured
-        lv2_atom_forge_frame_time(&self->forge, 0);
-        
-        print(self, self->uris.log_Error,
-              "writing PLAY sample %d\n", data[1]-36);
-        
-        write_play_sample( &self->forge, &self->uris, data[1]-36 );
       }
       else if ( (data[0] & 0xF0) == 0x80 )
       {
@@ -408,19 +442,13 @@ run(LV2_Handle instance,
     {
       const LV2_Atom_Object* obj = (LV2_Atom_Object*)&ev->body;
       
-      if (obj->body.otype == uris->patch_Set)
-      {
         /* Received a set message, send it to the worker. */
         print(self, self->uris.log_Error, "Fabla: \"patch set\" Queuing work now\n" );
         self->schedule->schedule_work(self->schedule->handle,
                                       lv2_atom_total_size(&ev->body),
                                       &ev->body);
-      }
-      else
-      {
-        print(self, self->uris.log_Trace,
-              "Unknown object type %d\n", obj->body.otype);
-      }
+
+        //print(self, self->uris.log_Trace, "Unknown object type %d\n", obj->body.otype);
     }
     else
     {
@@ -465,6 +493,7 @@ run(LV2_Handle instance,
           self->playback[p].frame = 0;
         }
       }
+
     } // pads
     
     // compute faust units
@@ -473,6 +502,8 @@ run(LV2_Handle instance,
     buf[1] = &outL;
     buf[2] = &outR;
     //self->faustDSP->compute( 1, &buf[0], &buf[1] );
+    
+    
     
     // write output
     output_L[i] = tmp * (*self->master_vol);

@@ -5,6 +5,7 @@
 #include <sndfile.h>
 
 #include <sstream>
+#include <iostream>
 
 #include "lv2/lv2plug.in/ns/ext/atom/forge.h"
 #include "lv2/lv2plug.in/ns/ext/atom/util.h"
@@ -213,7 +214,9 @@ write_set_file(LV2_Atom_Forge*    forge,
 	lv2_atom_forge_property_head(forge, uris->patch_body, 0);
 	LV2_Atom_Forge_Frame body_frame;
 	lv2_atom_forge_blank(forge, &body_frame, 2, 0);
-
+  
+  std::cout << "Writing filename " << filename << " to Atom -> DSP now!" << std::endl;
+  
 	lv2_atom_forge_property_head(forge, uris->eg_file, 0);
 	lv2_atom_forge_path(forge, filename, filename_len);
   
@@ -307,13 +310,6 @@ read_set_file(const FablaURIs*     uris,
 		fprintf(stderr, "Ignored set message with no file PATH.\n");
 		return NULL;
 	}
-  
-	const LV2_Atom* sampleNum = NULL;
-	lv2_atom_object_get(body, uris->eg_sampleNumber, &sampleNum, 0);
-	if (!sampleNum) {
-		fprintf(stderr, "Ignored set message with no sample num.\n");
-		return NULL;
-	}
 
 	return file_path;
 }
@@ -402,7 +398,7 @@ read_stop_sample(const FablaURIs*     uris,
 	const LV2_Atom_Int* padNum = 0;
 	lv2_atom_object_get(body, uris->eg_sampleNumber, &padNum, 0);
   
-  fprintf(stderr, "padnum in Uri.hxx read_stop() = %i\n", padNum);
+  fprintf(stderr, "padnum in Uri.hxx read_stop() = %i\n", padNum->body);
   
 	return padNum;
 }
