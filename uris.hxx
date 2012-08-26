@@ -207,26 +207,35 @@ write_set_file(LV2_Atom_Forge*    forge,
                const char*        filename,
                const size_t       filename_len)
 {
-	LV2_Atom_Forge_Frame set_frame;
-	LV2_Atom* set = (LV2_Atom*)lv2_atom_forge_blank(
-		forge, &set_frame, 1, uris->patch_Set);
-
-	lv2_atom_forge_property_head(forge, uris->patch_body, 0);
-	LV2_Atom_Forge_Frame body_frame;
-	lv2_atom_forge_blank(forge, &body_frame, 2, 0);
-  
   std::cout << "Writing filename " << filename << " to Atom -> DSP now!" << std::endl;
   
-	lv2_atom_forge_property_head(forge, uris->eg_file, 0);
-	lv2_atom_forge_path(forge, filename, filename_len);
+  assert( forge );
+  assert( uris );
+  assert( filename );
   
-	lv2_atom_forge_property_head(forge, uris->eg_sampleNumber, 0);
-	lv2_atom_forge_int(forge, sampleNum);
+  std::cout << "Asserts passed, writing message" << std::endl;
+  
+  LV2_Atom_Forge_Frame set_frame;
+  LV2_Atom* set = (LV2_Atom*)lv2_atom_forge_blank(
+    forge, &set_frame, 1, uris->patch_Set);
+  
+  lv2_atom_forge_property_head(forge, uris->patch_body, 0);
+  LV2_Atom_Forge_Frame body_frame;
+  lv2_atom_forge_blank(forge, &body_frame, 2, 0);
+  
+  
+  lv2_atom_forge_property_head(forge, uris->eg_file, 0);
+  lv2_atom_forge_path(forge, filename, filename_len);
 
-	lv2_atom_forge_pop(forge, &body_frame);
-	lv2_atom_forge_pop(forge, &set_frame);
-
-	return set;
+  lv2_atom_forge_property_head(forge, uris->eg_sampleNumber, 0);
+  lv2_atom_forge_int(forge, sampleNum);
+  
+  lv2_atom_forge_pop(forge, &body_frame);
+  lv2_atom_forge_pop(forge, &set_frame);
+  
+  std::cout << "Writing filename " << filename << " to Atom -> DSP  DONE!" << std::endl;
+  
+  return set;
 }
 
 static inline LV2_Atom*

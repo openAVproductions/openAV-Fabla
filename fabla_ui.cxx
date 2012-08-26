@@ -75,10 +75,17 @@ on_load_clicked(void* handle, int padNum)
   
   LV2_Atom* msg = write_set_file(&ui->forge, &ui->uris, padNum,
                                  filename, strlen(filename));
-
-  ui->write(ui->controller, SAMPLER_CONTROL, lv2_atom_total_size(msg),
-            ui->uris.atom_eventTransfer,
-            msg);
+  
+  if ( msg )
+  {
+    ui->write(ui->controller, SAMPLER_CONTROL, lv2_atom_total_size(msg),
+              ui->uris.atom_eventTransfer,
+              msg);
+  }
+  else
+  {
+    cout << __FILE__ << __LINE__ << " write_set_file() returned 0! " << endl;
+  }
 }
 
 static GtkWidget* make_gui(FablaUI *self) {

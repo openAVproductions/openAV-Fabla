@@ -61,19 +61,26 @@ load_sample(Fabla* self, int sampleNum, const char* path)
   Sample* const  sample  = (Sample*)malloc(sizeof(Sample));
   SF_INFO* const info    = &sample->info;
   SNDFILE* const sndfile = sf_open(path, SFM_READ, info);
-
-  if (!sndfile || !info->frames || (info->channels != 2)) {
-    //print(self, self->uris.log_Error, "Stereo sample '%s'\n", path);
-  }
-  else if (!sndfile || !info->frames || (info->channels != 1)) {
-    print(self, self->uris.log_Error,
-          "Failed to open sample '%s'.\n", path);
+  
+  if (!sndfile || !info->frames)
+  {
+    print(self, self->uris.log_Error, "Failed to open sample '%s'\n", path);
     free(sample);
     return NULL;
   }
-
+  
+  
+  print(self, self->uris.log_Error, "Allocating memory for sample   info->frames = %i\n", info->frames);
+  
   /* Read data */
-  float* const data = (float*)malloc(sizeof(float) * info->frames);
+  float* data = 0;
+  
+  // if mono or stereo then load
+  if ( info->channels == 1 || info->channels == 2 )
+  {
+    data = (float*)malloc(sizeof(float) * info->frames);
+  }
+  
   if (!data)
   {
     print(self, self->uris.log_Error,
@@ -159,32 +166,21 @@ work(LV2_Handle                  instance,
       print(self, self->uris.log_Error, "Fabla Work()  LoadSample on sampleNumber %i\n", sampleNum->body );
     }
     
-    /*
     const LV2_Atom* file_path = read_set_file(&self->uris, obj);
     
     
     string path;
     if (!file_path) {
       print(self, self->uris.log_Error, "Fabla Work()  LoadSample FILE PATH NOT VALID, replacing with kick.wav\n" );
-      
-      path = "/root/openav/content/kit/kick_low.wav";
-      
-      attempting to fix the PATH INVALID error, manual hard code file path for testing.
-      not done yet, hence this compiler wrecking comment. ;)
-      
-      //return LV2_WORKER_ERR_UNKNOWN;
-    
+      return LV2_WORKER_ERR_UNKNOWN;
     }
-    */
     
-    int padNum = 0; //  sampleNum->body;
+    int padNum = sampleNum->body;
     
     /* Load sample. */
     SampleMessage* sampleMessage;
-    //if ( file_path )
-    //  sampleMessage = load_sample(self, padNum, (const char*)LV2_ATOM_BODY(file_path) );
-    
-    sampleMessage = load_sample(self, padNum, "/root/openav/content/kit/pwoom.wav" );
+    if ( file_path )
+      sampleMessage = load_sample(self, padNum, (const char*)LV2_ATOM_BODY(file_path) );
     
     if (sampleMessage) {
       /* Loaded sample, send it to run() to be applied. */
@@ -407,6 +403,9 @@ run(LV2_Handle instance,
   /* Read incoming events */
   LV2_ATOM_SEQUENCE_FOREACH(self->control_port, ev)
   {
+    print(self, self->uris.log_Error,
+                "fabla recieved atom\n");
+    
     self->frame_offset = ev->time.frames;
     
     if (ev->body.type == uris->midi_Event) // MIDI event on Atom port
@@ -570,16 +569,23 @@ restore(LV2_Handle                  instance,
         free_sample(self, self->sample[i] );
       }
       SampleMessage* message = load_sample(self, i, path);
-      self->sample[i] = message->sample;
+      if ( message )
+      {
+        self->sample[i] = message->sample;
+        
+        // Send a notification to UI that we're using a new sample
+        lv2_atom_forge_frame_time(&self->forge, 0); // 0 = frame offset
+        write_set_file(&self->forge, &self->uris,
+                       i,
+                       self->sample[i]->path,
+                       self->sample[i]->path_len);
       
-      // Send a notification to UI that we're using a new sample
-      lv2_atom_forge_frame_time(&self->forge, 0); // 0 = frame offset
-      write_set_file(&self->forge, &self->uris,
-                     i,
-                     self->sample[i]->path,
-                     self->sample[i]->path_len);
-      
-      print(self, self->uris.log_Error, "Self path %s\n", self->sample[i]->path);
+        print(self, self->uris.log_Error, "Loaded sample %s successfully\n", self->sample[i]->path);
+      }
+      else
+      {
+        print(self, self->uris.log_Error, "Error loading sample\n");
+      }
     }
   }
   
