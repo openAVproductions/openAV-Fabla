@@ -483,8 +483,25 @@ run(LV2_Handle instance,
         // add sample
         if ( self->playback[p].frame < self->sample[p]->info.frames )
         {
-          tmp += self->sample[p]->data[self->playback[p].frame++] // sample value
-                  * self->playback[p].volume;                     // master volume
+          tmp +=   self->sample[p]->data[self->playback[p].frame++] // sample value 
+                 * self->playback[p].volume;                        // master volume
+          
+          // Envelope, 1000 samples
+          if ( self->playback[p].frame < 1000 )
+          {
+            // Attack
+            float a = self->playback[p].frame / 1000.f;
+            tmp *= a;
+            std::cout << "attack " << a << endl;
+          }
+          else if ( self->playback[p].frame + 1000 > self->sample[p]->info.frames )
+          {
+            // Release
+            int rFrame = self->sample[p]->info.frames - self->playback[p].frame;
+            float r = rFrame / 1000.f;
+            tmp *= r;
+            std::cout << "release  " << r << endl;
+          }
         }
         else // stop sample
         {
