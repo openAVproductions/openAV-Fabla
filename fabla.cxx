@@ -492,7 +492,7 @@ run(LV2_Handle instance,
             // Attack
             float a = self->playback[p].frame / 1000.f;
             tmp *= a;
-            std::cout << "attack " << a << endl;
+            //std::cout << "attack " << a << endl;
           }
           else if ( self->playback[p].frame + 1000 > self->sample[p]->info.frames )
           {
@@ -500,7 +500,7 @@ run(LV2_Handle instance,
             int rFrame = self->sample[p]->info.frames - self->playback[p].frame;
             float r = rFrame / 1000.f;
             tmp *= r;
-            std::cout << "release  " << r << endl;
+            //std::cout << "release  " << r << endl;
           }
         }
         else // stop sample
