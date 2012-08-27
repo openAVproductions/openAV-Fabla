@@ -70,7 +70,7 @@ load_sample(Fabla* self, int sampleNum, const char* path)
   }
   
   
-  print(self, self->uris.log_Error, "Allocating memory for sample   info->frames = %i\n", info->frames);
+  //print(self, self->uris.log_Error, "Allocating memory for sample   info->frames = %i\n", info->frames);
   
   /* Read data */
   float* data = 0;
@@ -83,8 +83,7 @@ load_sample(Fabla* self, int sampleNum, const char* path)
   
   if (!data)
   {
-    print(self, self->uris.log_Error,
-          "Failed to allocate memory for sample.\n");
+    print(self, self->uris.log_Error, "Failed to allocate memory for sample.\n");
     return NULL;
   }
   sf_seek(sndfile, 0ul, SEEK_SET);
@@ -132,14 +131,13 @@ work(LV2_Handle                  instance,
   Fabla*  self = (Fabla*)instance;
   LV2_Atom* atom = (LV2_Atom*)data;
   
-  print(self, self->uris.log_Error, "Fabla: Work() now\n" );
+  //print(self, self->uris.log_Error, "Fabla: Work() now\n" );
   
   if (atom->type == self->uris.eg_freeSample)
   {
-    print(self, self->uris.log_Error, "Fabla: Work() freeSample, before mutex\n" );
     g_mutex_lock( &self->sampleMutex );
     {
-      print(self, self->uris.log_Error, "Freeing sample: Mutex locked!\n" );
+      //print(self, self->uris.log_Error, "Freeing sample: Mutex locked!\n" );
       // lock mutex, then work with sample, as GUI might be drawing it!
       SampleMessage* msg = (SampleMessage*)data;
       free_sample(self, msg->sample);
@@ -148,11 +146,11 @@ work(LV2_Handle                  instance,
   }
   else
   {
-    print(self, self->uris.log_Error, "Fabla Work()  LoadSample type message\n" );
+    //print(self, self->uris.log_Error, "Fabla Work()  LoadSample type message\n" );
     /* Handle set message (load sample). */
     LV2_Atom_Object* obj = (LV2_Atom_Object*)data;
     
-    print(self, self->uris.log_Error, "Fabla Work()  LV2_Atom_Object atom type %i, body.otype %i \n", obj->atom.type, obj->body.otype );
+    //print(self, self->uris.log_Error, "Fabla Work()  LV2_Atom_Object atom type %i, body.otype %i \n", obj->atom.type, obj->body.otype );
     
     /* Get file path from message */
     const LV2_Atom_Int* sampleNum = read_set_file_sample_number(&self->uris, obj);
@@ -163,7 +161,7 @@ work(LV2_Handle                  instance,
     }
     else
     {
-      print(self, self->uris.log_Error, "Fabla Work()  LoadSample on sampleNumber %i\n", sampleNum->body );
+      //print(self, self->uris.log_Error, "Fabla Work()  LoadSample on sampleNumber %i\n", sampleNum->body );
     }
     
     const LV2_Atom* file_path = read_set_file(&self->uris, obj);
@@ -216,7 +214,6 @@ work_response(LV2_Handle  instance,
   // lock the Sample array mutex, so GUI can't draw while we update contents
   g_mutex_lock( &self->sampleMutex );
   {
-    
     // Get details from the message
     SampleMessage* message =  *(SampleMessage**)data;
     sampleNum = message->sampleNum;
@@ -403,8 +400,7 @@ run(LV2_Handle instance,
   /* Read incoming events */
   LV2_ATOM_SEQUENCE_FOREACH(self->control_port, ev)
   {
-    print(self, self->uris.log_Error,
-                "fabla recieved atom\n");
+    //print(self, self->uris.log_Error,"fabla recieved atom\n");
     
     self->frame_offset = ev->time.frames;
     
@@ -422,16 +418,14 @@ run(LV2_Handle instance,
           // update UI that a note has occured
           lv2_atom_forge_frame_time(&self->forge, 0);
           
-          print(self, self->uris.log_Error,
-                "writing PLAY sample %d\n", data[1]-36);
+          //print(self, self->uris.log_Error, "writing PLAY sample %d\n", data[1]-36);
           
           write_play_sample( &self->forge, &self->uris, data[1]-36 );
         }
       }
       else if ( (data[0] & 0xF0) == 0x80 )
       {
-        print(self, self->uris.log_Error,
-              "writing STOP sample %d\n", data[1]-36);
+        //print(self, self->uris.log_Error, "writing STOP sample %d\n", data[1]-36);
         
         lv2_atom_forge_frame_time(&self->forge, 0);
         write_stop_sample( &self->forge, &self->uris, data[1]-36 );
@@ -442,7 +436,7 @@ run(LV2_Handle instance,
       const LV2_Atom_Object* obj = (LV2_Atom_Object*)&ev->body;
       
         /* Received a set message, send it to the worker. */
-        print(self, self->uris.log_Error, "Fabla: \"patch set\" Queuing work now\n" );
+        //print(self, self->uris.log_Error, "Fabla: \"patch set\" Queuing work now\n" );
         self->schedule->schedule_work(self->schedule->handle,
                                       lv2_atom_total_size(&ev->body),
                                       &ev->body);
@@ -451,8 +445,7 @@ run(LV2_Handle instance,
     }
     else
     {
-      print(self, self->uris.log_Trace,
-            "Unknown event type %d\n", ev->body.type);
+      //print(self, self->uris.log_Trace, "Unknown event type %d\n", ev->body.type);
     }
   }
   
