@@ -450,8 +450,8 @@ run(LV2_Handle instance,
   }
   
   // copy the effect port values to FAUST variables
-  *self->faust_reverb_wet     = 1e-10 + *self->reverb_wet;
-  *self->faust_reverb_size    = 1e-10 + *self->reverb_size;
+  //*self->faust_reverb_wet     = 1e-10 + *self->reverb_wet;
+  //*self->faust_reverb_size    = 1e-10 + *self->reverb_size;
   
   *self->faust_echo_feedback  = 1e-10 + *self->echo_feedback * 90;
   *self->faust_echo_time      = 1e-10 + *self->echo_time * 990;
@@ -465,7 +465,7 @@ run(LV2_Handle instance,
   // nframes
   for (unsigned int i = 0; i < sample_count; i++)
   {
-    float tmp = 1e-15;  // DC offset: float denormals
+    float tmp = 1e-10;  // DC offset: float denormals
     
     // pads
     for ( int p = 0; p < 16; p++ )
@@ -477,7 +477,7 @@ run(LV2_Handle instance,
         if ( self->playback[p].frame < self->sample[p]->info.frames )
         {
           tmp +=   self->sample[p]->data[self->playback[p].frame++] // sample value 
-                 * self->playback[p].volume;                        // master volume
+                 * self->playback[p].volume;                        // volume
           
           // Envelope, 1000 samples
           if ( self->playback[p].frame < 1000 )
@@ -507,19 +507,23 @@ run(LV2_Handle instance,
     
     // compute faust units
     float* buf[3];
+    
     buf[0] = &tmp;
     buf[1] = &outL;
     buf[2] = &outR;
-    //self->faustDSP->compute( 1, &buf[0], &buf[1] );
     
     
+    
+    // make FAUST process
+    self->faustDSP->compute( 1, &buf[0], &buf[1] );
     
     // write output
-    output_L[i] = tmp * (*self->master_vol);
-    output_R[i] = tmp * (*self->master_vol);
+    output_L[i] = *buf[1] * (*self->master_vol);
+    output_R[i] = *buf[2] * (*self->master_vol);
   }
   
 }
+
 
 static LV2_State_Status
 save(LV2_Handle                instance,
