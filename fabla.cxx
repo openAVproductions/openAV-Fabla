@@ -275,11 +275,13 @@ connect_port(LV2_Handle instance,
       break;
     case SAMPLER_REVERB_SIZE:
       self->reverb_size = (float*)data;
-      self->faust_reverb_size = self->faustUI->getFloatPointer("---fabla-FreeverbRoomSize");
+      self->faust_reverb_size = self->faustUI->getFloatPointer("---fabla-Zita_Rev1-Decay Times in Bands (see tooltips)Mid RT60");
+      std::cout << "faust rever size pointer = " << self->faust_reverb_size << "  value = " << *self->faust_reverb_size << endl;
       break;
     case SAMPLER_REVERB_WET:
       self->reverb_wet = (float*)data;
-      self->faust_reverb_wet  = self->faustUI->getFloatPointer("---fabla-FreeverbWet");
+      self->faust_reverb_wet  = self->faustUI->getFloatPointer("---fabla-Zita_Rev1-OutputDry/Wet Mix");
+      std::cout << "faust rever wet pointer = " << self->faust_reverb_wet << "  value = " << *self->faust_reverb_wet << endl;
       break;
     case SAMPLER_HIGHPASS:
       self->highpass = (float*)data;
@@ -362,6 +364,28 @@ instantiate(const LV2_Descriptor*     descriptor,
     self->faustDSP = new FablaDSP();
     self->faustDSP->buildUserInterface(self->faustUI);
     self->faustDSP->init(rate);
+    
+    // setup defaults for reverb
+    float* tmp = self->faustUI->getFloatPointer("---fabla-Zita_Rev1-InputIn Delay");
+    *tmp = 0.f;
+    tmp = self->faustUI->getFloatPointer("---fabla-Zita_Rev1-Decay Times in Bands (see tooltips)LF X");
+    *tmp = 400.f;
+    tmp = self->faustUI->getFloatPointer("---fabla-Zita_Rev1-Decay Times in Bands (see tooltips)Low RT60");
+    *tmp = 2.5f;
+    tmp = self->faustUI->getFloatPointer("---fabla-Zita_Rev1-Decay Times in Bands (see tooltips)Mid RT60");
+    *tmp = 4.5f;
+    tmp = self->faustUI->getFloatPointer("---fabla-Zita_Rev1-Decay Times in Bands (see tooltips)HF Damping");
+    *tmp = 6000.f;
+    tmp = self->faustUI->getFloatPointer("---fabla-Zita_Rev1-RM Peaking Equalizer 1Eq1 Freq");
+    *tmp = 315.f;
+    tmp = self->faustUI->getFloatPointer("---fabla-Zita_Rev1-RM Peaking Equalizer 1Eq1 Level");
+    *tmp = 0.f;
+    tmp = self->faustUI->getFloatPointer("---fabla-Zita_Rev1-RM Peaking Equalizer 2Eq2 Freq");
+    *tmp = 630.f;
+    tmp = self->faustUI->getFloatPointer("---fabla-Zita_Rev1-RM Peaking Equalizer 2Eq2 Level");
+    *tmp = 0.f;
+    tmp = self->faustUI->getFloatPointer("---fabla-Zita_Rev1-OutputLevel");
+    *tmp = 0.f;
     
     return (LV2_Handle)self;
   }
@@ -450,8 +474,9 @@ run(LV2_Handle instance,
   }
   
   // copy the effect port values to FAUST variables
-  //*self->faust_reverb_wet     = 1e-10 + *self->reverb_wet;
-  //*self->faust_reverb_size    = 1e-10 + *self->reverb_size;
+  
+  *self->faust_reverb_wet     = ((*self->reverb_wet) * 2)-1;
+  *self->faust_reverb_size    = 2 + ((*self->reverb_size) * 4 );
   
   *self->faust_echo_feedback  = 1e-10 + *self->echo_feedback * 90;
   *self->faust_echo_time      = 1e-10 + *self->echo_time * 990;

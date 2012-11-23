@@ -130,6 +130,9 @@ void Canvas::drawWaveform(Cairo::RefPtr<Cairo::Context> cr)
 
 void Canvas::drawPads(Cairo::RefPtr<Cairo::Context> cr)
 {
+  
+  return;
+  
   cr->save();
   
   int border = 10;
