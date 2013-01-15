@@ -11,8 +11,6 @@ using namespace std;
 
 #include "canvas.hxx"
 
-#include "instance-access.h"
-
 #define FABLA_UI_URI "http://www.openavproductions.com/fabla/gui"
 
 struct MidiEvent
@@ -88,8 +86,8 @@ on_load_clicked(void* handle, int padNum)
   }
 }
 
-static GtkWidget* make_gui(FablaUI *self) {
-    
+static GtkWidget* make_gui(FablaUI *self)
+{
     Gtk::Main::init_gtkmm_internals(); // for QT hosts
     
     // Return a pointer to a gtk widget containing our GUI

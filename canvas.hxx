@@ -50,7 +50,6 @@ class Canvas : public Gtk::DrawingArea
     FablaUI* ui_instance;
     
     Fabla* dspInstance;
-    bool  haveInstanceAccess;
     
     int selectedSample;
     std::string sampleNames[16];

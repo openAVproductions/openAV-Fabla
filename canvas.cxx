@@ -30,8 +30,9 @@ void Canvas::drawWaveform(Cairo::RefPtr<Cairo::Context> cr)
   setColour( cr, COLOUR_GREY_4 );
   cr->fill();
   
+  
   // check for instance access
-  if ( !haveInstanceAccess )
+  if ( true )
   {
     cr->move_to( x + 7.5, y + 84 + 20 );
     setColour( cr, COLOUR_GREY_1 );
