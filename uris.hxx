@@ -107,7 +107,6 @@ typedef struct {
   LV2_Atom_Forge forge;
 
   /* Sample */
-  GMutex sampleMutex; // never gets locked in the RT thread
   Sample* sample[16];
 
   /* Ports */

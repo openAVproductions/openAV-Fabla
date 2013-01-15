@@ -135,14 +135,15 @@ work(LV2_Handle                  instance,
   
   if (atom->type == self->uris.eg_freeSample)
   {
-    g_mutex_lock( &self->sampleMutex );
+    // FIXME: MUTEX
+    //g_mutex_lock( &self->sampleMutex );
     {
       //print(self, self->uris.log_Error, "Freeing sample: Mutex locked!\n" );
       // lock mutex, then work with sample, as GUI might be drawing it!
       SampleMessage* msg = (SampleMessage*)data;
       free_sample(self, msg->sample);
     }
-    g_mutex_unlock( &self->sampleMutex );
+    //g_mutex_unlock( &self->sampleMutex );
   }
   else
   {
@@ -212,7 +213,8 @@ work_response(LV2_Handle  instance,
   Sample* freeOldSample = 0;
   
   // lock the Sample array mutex, so GUI can't draw while we update contents
-  g_mutex_lock( &self->sampleMutex );
+  // FIXME: MUTEX
+  //g_mutex_lock( &self->sampleMutex );
   {
     // Get details from the message
     SampleMessage* message =  *(SampleMessage**)data;
@@ -236,7 +238,7 @@ work_response(LV2_Handle  instance,
                    self->sample[sampleNum]->path,
                    self->sample[sampleNum]->path_len);
   }
-  g_mutex_unlock( &self->sampleMutex );
+  //g_mutex_unlock( &self->sampleMutex );
   
   
   
@@ -328,8 +330,6 @@ instantiate(const LV2_Descriptor*     descriptor,
     return NULL;
   }
   memset(self, 0, sizeof(Fabla));
-  
-  g_mutex_init( &self->sampleMutex );
   
   /* Get host features */
   for (int i = 0; features[i]; ++i) {

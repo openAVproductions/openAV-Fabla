@@ -71,7 +71,8 @@ void Canvas::drawWaveform(Cairo::RefPtr<Cairo::Context> cr)
   // We use a mutex that's in the DSP part to serialize access to the
   // sample data, as it can be loaded / freed using the Worker thread in
   // DSP.
-  g_mutex_lock( &dspInstance->sampleMutex );
+  // FIXME: MUTEX
+  //g_mutex_lock( &dspInstance->sampleMutex );
   {
     // gather data on the sample were drawing:
     
@@ -84,7 +85,7 @@ void Canvas::drawWaveform(Cairo::RefPtr<Cairo::Context> cr)
       if ( sampleFrames == 0 || current == 0 )
       {
         cout << "Warning, GUI attempted drawing sample with 0 frames!" << endl;
-        g_mutex_unlock( &dspInstance->sampleMutex );
+        //g_mutex_unlock( &dspInstance->sampleMutex );
         return;
       }
       
@@ -109,7 +110,7 @@ void Canvas::drawWaveform(Cairo::RefPtr<Cairo::Context> cr)
       cr->stroke();
     }
   }
-  g_mutex_unlock( &dspInstance->sampleMutex );
+  //g_mutex_unlock( &dspInstance->sampleMutex );
   
   
   if ( sampleNames[selectedSample].compare("") )
