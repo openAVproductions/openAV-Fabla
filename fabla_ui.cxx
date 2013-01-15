@@ -129,13 +129,7 @@ instantiate(const LV2UI_Descriptor*   descriptor,
   
   for(int i = 0; features[i]; i++)
   {
-    if (!strcmp(features[i]->URI, LV2_INSTANCE_ACCESS_URI ))
-    {
-      cout << "Found feature instance access!" << endl;
-      dspInstance = (Fabla*)features[i]->data;
-      haveInstanceAccess = true;
-    }
-    else if (!strcmp(features[i]->URI, LV2_URID__map))
+    if (!strcmp(features[i]->URI, LV2_URID__map))
     {
       cout << "Found feature URID map!" << endl;
       ui->map = (LV2_URID_Map*)features[i]->data;

@@ -206,13 +206,13 @@ write_set_file(LV2_Atom_Forge*    forge,
                const char*        filename,
                const size_t       filename_len)
 {
-  std::cout << "Writing filename " << filename << " to Atom -> DSP now!" << std::endl;
+  //std::cout << "Writing filename " << filename << " to Atom -> DSP now!" << std::endl;
   
   assert( forge );
   assert( uris );
   assert( filename );
   
-  std::cout << "Asserts passed, writing message" << std::endl;
+  //std::cout << "Asserts passed, writing message" << std::endl;
   
   LV2_Atom_Forge_Frame set_frame;
   LV2_Atom* set = (LV2_Atom*)lv2_atom_forge_blank(
@@ -232,7 +232,7 @@ write_set_file(LV2_Atom_Forge*    forge,
   lv2_atom_forge_pop(forge, &body_frame);
   lv2_atom_forge_pop(forge, &set_frame);
   
-  std::cout << "Writing filename " << filename << " to Atom -> DSP  DONE!" << std::endl;
+  //std::cout << "Writing filename " << filename << " to Atom -> DSP  DONE!" << std::endl;
   
   return set;
 }
@@ -276,7 +276,7 @@ write_stop_sample(LV2_Atom_Forge* forge,
   lv2_atom_forge_pop(forge, &body_frame);
   lv2_atom_forge_pop(forge, &set_frame);
   
-  fprintf(stderr, "write_stop_sample = %i\n", sampleNum);
+  //fprintf(stderr, "write_stop_sample = %i\n", sampleNum);
   
   return set;
 }
