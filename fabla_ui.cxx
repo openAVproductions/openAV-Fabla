@@ -29,7 +29,7 @@ on_play_clicked(void* handle, int padNum)
   midiEvent.atom.type = ui->uris.midi_Event;
   midiEvent.atom.size = sizeof(char) * 4;
   midiEvent.buf[0] = 144;
-  midiEvent.buf[1] = 36+padNum;
+  midiEvent.buf[1] = padNum;
   midiEvent.buf[2] = 127;
   
   // now write the LV2_Atom to the atom port:
@@ -52,7 +52,13 @@ on_load_clicked(void* handle, int padNum)
     GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
     GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
     NULL);
-
+  
+  // set the dialog as "modal": ie in front of: Ardour does this to plugins
+  // automatically, and hence if its not done, the load dialog will pop up behind
+  // the plugin UI. This is not desired, as it means dragging the filechooser before use
+  gtk_window_set_modal( GTK_WINDOW ( dialog ), true );
+  
+  
   /* Run the dialog, and return if it is cancelled. */
   if (gtk_dialog_run(GTK_DIALOG(dialog)) != GTK_RESPONSE_ACCEPT) {
     gtk_widget_destroy(dialog);
@@ -159,10 +165,10 @@ instantiate(const LV2UI_Descriptor*   descriptor,
   *widget = (LV2UI_Widget)make_gui(ui);
   
   // instance access
-  ui->canvas->haveInstanceAccess = haveInstanceAccess;
+  //ui->canvas->haveInstanceAccess = haveInstanceAccess;
   
   // dsp instance to canvas
-  ui->canvas->dspInstance = (Fabla*)dspInstance;
+  //ui->canvas->dspInstance = (Fabla*)dspInstance;
   
   return ui;
 }
@@ -200,16 +206,16 @@ port_event(LV2UI_Handle handle,
       if ( obj->body.otype == ui->uris.playSample )
       {
         // play event
-        fprintf(stderr, "play or stop command\n");
+        //fprintf(stderr, "play or stop command\n");
         
         const LV2_Atom_Int* padAtom = read_play_sample(&ui->uris, obj);
         
         if ( padAtom )
         {
           int pad = padAtom->body;
-          if ( pad >= 0 && pad < 16 )
+          if ( pad >= 36 && pad < 36+16 )
           {
-            ui->canvas->padState[pad] = Canvas::PAD_PLAYING;
+            ui->canvas->padState[pad-36] = Canvas::PAD_PLAYING;
             ui->canvas->redraw();
           }
           else
@@ -230,7 +236,7 @@ port_event(LV2UI_Handle handle,
           int pad = padAtom->body;
           if (  pad >= 0 && pad < 16 )
           {
-            fprintf(stderr, "writing LOAODED to pad!" );
+            //fprintf(stderr, "writing LOAODED to pad!" );
             ui->canvas->padState[pad] = Canvas::PAD_LOADED;
             ui->canvas->redraw();
           }

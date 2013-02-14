@@ -166,11 +166,8 @@ work(LV2_Handle                  instance,
     }
     
     const LV2_Atom* file_path = read_set_file(&self->uris, obj);
-    
-    
-    string path;
     if (!file_path) {
-      print(self, self->uris.log_Error, "Fabla Work()  LoadSample FILE PATH NOT VALID, replacing with kick.wav\n" );
+      print(self, self->uris.log_Error, "Fabla Work()  LoadSample FILE PATH NOT VALID\n" );
       return LV2_WORKER_ERR_UNKNOWN;
     }
     
@@ -182,7 +179,10 @@ work(LV2_Handle                  instance,
       sampleMessage = load_sample(self, padNum, (const char*)LV2_ATOM_BODY(file_path) );
     
     if (sampleMessage) {
-      /* Loaded sample, send it to run() to be applied. */
+      // here we send the SampleMessage to the GUI too, so it can show the waveform
+      
+      
+      // Loaded sample, send it to run() to be applied
       respond(handle, sizeof(SampleMessage), &sampleMessage);
     }
     else
@@ -412,7 +412,7 @@ run(LV2_Handle instance,
   float*       output_L    = self->output_port_L;
   float*       output_R    = self->output_port_R;
   
-  /* Set up forge to write directly to notify output port. */
+  // Set up forge to write directly to notify output port
   const uint32_t notify_capacity = self->notify_port->atom.size;
   lv2_atom_forge_set_buffer(&self->forge,
                             (uint8_t*)self->notify_port,
