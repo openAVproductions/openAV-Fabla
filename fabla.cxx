@@ -236,7 +236,9 @@ work_response(LV2_Handle  instance,
     write_set_file(&self->forge, &self->uris,
                    sampleNum,
                    self->sample[sampleNum]->path,
-                   self->sample[sampleNum]->path_len);
+                   self->sample[sampleNum]->path_len,
+                   message->sample->data,
+                   message->sample->info.frames);
   }
   //g_mutex_unlock( &self->sampleMutex );
   
@@ -617,7 +619,9 @@ restore(LV2_Handle                  instance,
         write_set_file(&self->forge, &self->uris,
                        i,
                        self->sample[i]->path,
-                       self->sample[i]->path_len);
+                       self->sample[i]->path_len,
+                       message->sample->data,
+                       message->sample->info.frames);
       
         print(self, self->uris.log_Error, "Loaded sample %s successfully\n", self->sample[i]->path);
       }

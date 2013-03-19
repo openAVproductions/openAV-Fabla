@@ -29,6 +29,8 @@
 #define FABLA_URI__applySample  FABLA_URI "#applySample"
 #define FABLA_URI__freeSample   FABLA_URI "#freeSample"
 #define FABLA_URI__sampleNumber FABLA_URI "#sampleNumber"
+#define FABLA_URI__sampleData   FABLA_URI "#sampleData"
+
 #define FABLA_URI__playSample   FABLA_URI "#playSample"
 #define FABLA_URI__stopSample   FABLA_URI "#stopSample"
 
@@ -67,11 +69,13 @@ typedef struct {
 	LV2_URID atom_Path;
 	LV2_URID atom_Resource;
 	LV2_URID atom_Sequence;
+	LV2_URID atom_Vector;
 	LV2_URID atom_eventTransfer;
 	LV2_URID eg_applySample;
 	LV2_URID eg_file;
 	LV2_URID eg_freeSample;
   LV2_URID eg_sampleNumber;
+  LV2_URID eg_sampleData;
 	LV2_URID log_Error;
 	LV2_URID log_Trace;
 	LV2_URID midi_Event;
@@ -90,6 +94,11 @@ typedef struct {
   char*   path;      /**< Path of file */
   size_t  path_len;  /**< Length of path */
 } Sample;
+
+typedef struct {
+  size_t len;
+  float* sample;
+} UiSample;
 
 typedef struct {
   sf_count_t frame;
@@ -161,6 +170,7 @@ map_sampler_uris(LV2_URID_Map* map, FablaURIs* uris)
 	uris->atom_Path          = map->map(map->handle, LV2_ATOM__Path);
 	uris->atom_Resource      = map->map(map->handle, LV2_ATOM__Resource);
 	uris->atom_Sequence      = map->map(map->handle, LV2_ATOM__Sequence);
+	uris->atom_Vector        = map->map(map->handle, LV2_ATOM__Vector);
 	uris->atom_eventTransfer = map->map(map->handle, LV2_ATOM__eventTransfer);
 	uris->eg_applySample     = map->map(map->handle, FABLA_URI__applySample);
 	uris->eg_file            = map->map(map->handle, FABLA_URI__file);
@@ -199,12 +209,15 @@ is_object_type(const FablaURIs* uris, LV2_URID type)
  *     ] ;
  * ]
  */
+
 static inline LV2_Atom*
 write_set_file(LV2_Atom_Forge*    forge,
                const FablaURIs*   uris,
                int                sampleNum,
                const char*        filename,
-               const size_t       filename_len)
+               const size_t       filename_len,
+               float*             sampleData,
+               const size_t       sampleDataLen)
 {
   //std::cout << "Writing filename " << filename << " to Atom -> DSP now!" << std::endl;
   
@@ -222,12 +235,21 @@ write_set_file(LV2_Atom_Forge*    forge,
   LV2_Atom_Forge_Frame body_frame;
   lv2_atom_forge_blank(forge, &body_frame, 2, 0);
   
-  
   lv2_atom_forge_property_head(forge, uris->eg_file, 0);
   lv2_atom_forge_path(forge, filename, filename_len);
 
   lv2_atom_forge_property_head(forge, uris->eg_sampleNumber, 0);
   lv2_atom_forge_int(forge, sampleNum);
+  
+  std::cout << "Writing vector with " << sampleDataLen << " samples " << std::endl;
+  
+  lv2_atom_forge_property_head(forge, uris->eg_sampleData, 0);
+  lv2_atom_forge_vector(forge,
+                        sizeof(float), // child size
+                        uris->atom_Vector, // child URID
+                        sampleDataLen,
+                        sampleData );
+  
   
   lv2_atom_forge_pop(forge, &body_frame);
   lv2_atom_forge_pop(forge, &set_frame);
@@ -241,6 +263,27 @@ static inline LV2_Atom*
 write_play_sample(LV2_Atom_Forge* forge,
                const FablaURIs*   uris,
                int                sampleNum )
+{
+  LV2_Atom_Forge_Frame set_frame;
+  LV2_Atom* set = (LV2_Atom*)lv2_atom_forge_blank(forge, &set_frame, 1, uris->playSample);
+  
+  lv2_atom_forge_property_head(forge, uris->playSample, 0);
+  LV2_Atom_Forge_Frame body_frame;
+  lv2_atom_forge_blank(forge, &body_frame, 2, 0);
+  
+  lv2_atom_forge_property_head(forge, uris->eg_sampleNumber, 0);
+  lv2_atom_forge_int(forge, sampleNum);
+  
+  lv2_atom_forge_pop(forge, &body_frame);
+  lv2_atom_forge_pop(forge, &set_frame);
+  
+  return set;
+}
+
+static inline LV2_Atom*
+write_sample_to_ui(LV2_Atom_Forge* forge,
+                   const FablaURIs*   uris,
+                   int                sampleNum )
 {
   LV2_Atom_Forge_Frame set_frame;
   LV2_Atom* set = (LV2_Atom*)lv2_atom_forge_blank(forge, &set_frame, 1, uris->playSample);
@@ -347,8 +390,41 @@ read_set_file_sample_number(const FablaURIs*     uris,
 	/* Get file path from body. */
 	const LV2_Atom_Int* padNum = 0;
 	lv2_atom_object_get(body, uris->eg_sampleNumber, &padNum, 0);
-
+  
 	return padNum;
+}
+
+static inline const UiSample*
+read_set_file_sample_data(const FablaURIs*     uris,
+              const LV2_Atom_Object* obj)
+{
+	if (obj->body.otype != uris->patch_Set) {
+		fprintf(stderr, "UiSample Ignoring unknown message type %d\n", obj->body.otype);
+		return NULL;
+	}
+
+	/* Get body of message. */
+	const LV2_Atom_Object* body = NULL;
+	lv2_atom_object_get(obj, uris->patch_body, &body, 0);
+	if (!body) {
+		fprintf(stderr, "UiSample Malformed set message has no body.\n");
+		return NULL;
+	}
+	if (!is_object_type(uris, body->atom.type)) {
+		fprintf(stderr, "UiSample Malformed set message has non-object body.\n");
+		return NULL;
+	}
+  
+  
+  
+	/* Get file path from body. */
+	const LV2_Atom_Vector* vector = 0;
+	lv2_atom_object_get(body, uris->eg_sampleData, &vector, 0);
+  
+  //UiSample* uiSample = (UiSample*)malloc(sizeof(UiSample);
+  //uiSample->data = vector->body;
+  
+	return 0;
 }
 
 

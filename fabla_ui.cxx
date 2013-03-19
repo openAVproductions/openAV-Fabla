@@ -78,7 +78,7 @@ on_load_clicked(void* handle, int padNum)
   cout << "UI writing work to DSP now on pad " << padNum << endl;
   
   LV2_Atom* msg = write_set_file(&ui->forge, &ui->uris, padNum,
-                                 filename, strlen(filename));
+                                 filename, strlen(filename), 0, 0);
   
   if ( msg )
   {
