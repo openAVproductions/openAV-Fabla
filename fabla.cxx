@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
+#include <string>
 
 #include "uris.hxx"
 
@@ -11,6 +12,38 @@
 #include "../dsp/fabla/fabla.cpp"
 
 #define DEBUG
+
+#ifdef __SSE__
+/* On Intel set FZ (Flush to Zero) and DAZ (Denormals Are Zero)
+   flags to avoid costly denormals */
+#ifdef __SSE3__
+#include <pmmintrin.h>
+void avoidDenormals()
+{
+#ifdef DEBUG
+  std::cout << "Denormals: FZ DAZ using SSE3" << std::endl;
+#endif
+  _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
+  _MM_SET_DENORMALS_ZERO_MODE(_MM_DENORMALS_ZERO_ON);
+}
+#else
+#include <xmmintrin.h>
+void avoidDenormals()
+{
+#ifdef DEBUG
+  std::cout << "Denormals: FZ" << std::endl;
+#endif
+  _MM_SET_FLUSH_ZERO_MODE(_MM_FLUSH_ZERO_ON);
+}
+#endif //__SSE3__
+
+#else
+void avoidDenormals()
+{
+  std::cout << "Denormals: Warning! No protection" << std::endl;
+}
+#endif //__SSE__
+
 
 /**
    Print an error message to the host log if available, or stderr otherwise.
@@ -332,6 +365,9 @@ instantiate(const LV2_Descriptor*     descriptor,
     return NULL;
   }
   memset(self, 0, sizeof(Fabla));
+  
+  // make sure denormals get nuked to zero
+  avoidDenormals();
   
   /* Get host features */
   for (int i = 0; features[i]; ++i) {
