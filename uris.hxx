@@ -241,15 +241,18 @@ write_set_file(LV2_Atom_Forge*    forge,
   lv2_atom_forge_property_head(forge, uris->eg_sampleNumber, 0);
   lv2_atom_forge_int(forge, sampleNum);
   
-  std::cout << "Writing vector with " << sampleDataLen << " samples " << std::endl;
-  
-  lv2_atom_forge_property_head(forge, uris->eg_sampleData, 0);
-  lv2_atom_forge_vector(forge,
-                        sizeof(float), // child size
-                        uris->atom_Vector, // child URID
-                        sampleDataLen,
-                        sampleData );
-  
+  // for writing data from DSP -> UI only
+  if ( sampleData && sampleDataLen )
+  {
+    std::cout << "Writing vector with " << sampleDataLen << " samples " << std::endl;
+    
+    lv2_atom_forge_property_head(forge, uris->eg_sampleData, 0);
+    lv2_atom_forge_vector(forge,
+                          sizeof(float), // child size
+                          uris->atom_Vector, // child URID
+                          sampleDataLen,
+                          sampleData );
+  }
   
   lv2_atom_forge_pop(forge, &body_frame);
   lv2_atom_forge_pop(forge, &set_frame);

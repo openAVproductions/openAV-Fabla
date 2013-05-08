@@ -34,9 +34,16 @@ void Canvas::drawWaveform(Cairo::RefPtr<Cairo::Context> cr)
   // check for instance access
   if ( true )
   {
+    cr->move_to( x, y );
+    cr->line_to( x + xSize, y + ySize );
+    cr->move_to( x + xSize, y );
+    cr->line_to( x, y + ySize );
+    setColour(cr, COLOUR_GREY_1, 0.4);
+    cr->stroke();
+    
     cr->move_to( x + 7.5, y + 84 + 20 );
     setColour( cr, COLOUR_GREY_1 );
-    cr->show_text( "No Instance Access" );
+    cr->show_text( "Waveform: Work in progress..." );
     
     // outline
     cr->rectangle( x-2, y, xSize+4, ySize );

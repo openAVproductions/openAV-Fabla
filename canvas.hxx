@@ -108,7 +108,7 @@ class Canvas : public Gtk::DrawingArea
       // master
       volume = 0.707;
       limiter = 0.f;
-      
+      masterClicked = false;
       
       selectedSample = 0;
       
@@ -158,7 +158,7 @@ class Canvas : public Gtk::DrawingArea
     }
     
   protected:
-    
+    bool masterClicked;
     int width, height;
     
     int clickPlaySample;
@@ -501,7 +501,7 @@ class Canvas : public Gtk::DrawingArea
     {
       int x = event->x;
       int y = event->y;
-      std::cout << x << " " << y << endl;
+      //std::cout << x << " " << y << endl;
       
       if ( x > 509 && y > 448 && x < 544 && y < 464 ) // LOAD BUTTON
       {
@@ -654,13 +654,17 @@ class Canvas : public Gtk::DrawingArea
         redraw();
       }
       
-      if ( x > 588 && y > 340 && x < 644 && y < 518 ) // master vol
+      if ( x > 588 && y > 340 && x < 644 && y < 518 && event->type == Gdk::BUTTON_PRESS ) // master vol
       {
+        masterClicked = true;
         volume = 1 - (event->y - 340) / 178.f;
         ui_instance->write( ui_instance->controller, SAMPLER_MASTER_VOL , sizeof(float), 0, (const void*) &volume );
         redraw();
       }
-
+      else if (event->type == Gdk::BUTTON_RELEASE)
+      {
+        masterClicked = false;
+      }
       
       if ( x > 35 && y > 280 && x < 290 && y < 528 ) // PADS
       {
@@ -699,11 +703,30 @@ class Canvas : public Gtk::DrawingArea
         }
       }
       
+      
       return true;
     }
     
     bool on_mouse_move(GdkEventMotion* event)
     {
+      int x = event->x;
+      int y = event->y;
+      
+      if ( masterClicked ) // MASTER
+      {
+        float tmp = 1 - (event->y - 340) / 178.f;
+        
+        if ( tmp > 1 ) tmp = 1.0f;
+        if ( tmp < 0 ) tmp = 0.0f;
+        
+        volume = tmp;
+        
+        ui_instance->write( ui_instance->controller, SAMPLER_MASTER_VOL , sizeof(float), 0, (const void*) &volume );
+        redraw();
+      }
+      
+      
+      
       /*
       // if mouse moves over "openavproductions.com", show "link" cursor
       if ( event->x > 623 && event->y > 20 && event->y < 70 )
@@ -719,6 +742,9 @@ class Canvas : public Gtk::DrawingArea
         ref_window = get_window();
         ref_window->set_cursor();
       }
+      
+      
+      
       
       // when a click occurs, float* target is set to that location,
       // here we just work with target

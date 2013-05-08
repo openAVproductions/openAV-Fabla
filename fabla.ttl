@@ -10,6 +10,7 @@
 <http://www.openavproductions.com/fabla>
   a lv2:Plugin ;
   doap:name "Fabla" ;
+  doap:maintainer <http://www.openavproductions.com/> ;
   lv2:requiredFeature urid:map ,
     work:schedule ;
   lv2:optionalFeature lv2:hardRTCapable ;
