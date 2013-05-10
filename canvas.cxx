@@ -75,51 +75,38 @@ void Canvas::drawWaveform(Cairo::RefPtr<Cairo::Context> cr)
     cr->unset_dash();
   }
   
-  // draw the waveform here, using dspInstance to get the sample data.
-  // We use a mutex that's in the DSP part to serialize access to the
-  // sample data, as it can be loaded / freed using the Worker thread in
-  // DSP.
-  // FIXME: MUTEX
-  //g_mutex_lock( &dspInstance->sampleMutex );
+  if ( dspInstance->sample[selectedSample] )
   {
-    // gather data on the sample were drawing:
     
-    if ( dspInstance->sample[selectedSample] )
+    long   sampleFrames = dspInstance->sample[selectedSample]->info.frames;
+    float* current = dspInstance->sample[selectedSample]->data;
+    
+    if ( sampleFrames == 0 || current == 0 )
     {
-      
-      long   sampleFrames = dspInstance->sample[selectedSample]->info.frames;
-      float* current = dspInstance->sample[selectedSample]->data;
-      
-      if ( sampleFrames == 0 || current == 0 )
-      {
-        cout << "Warning, GUI attempted drawing sample with 0 frames!" << endl;
-        //g_mutex_unlock( &dspInstance->sampleMutex );
-        return;
-      }
-      
-      // draw the number of lines that is equal the number of pixels available
-      // horizontally. 237 is the pixels horizontally
-      int sampleIncrement = sampleFrames / 237;
-      
-      cr->move_to(x      , y+ySize*0.5);
-      cr->line_to(x+xSize, y+ySize*0.5);
-      cr->set_line_width(0.8);
-      setColour( cr, COLOUR_GREY_1 );
-      cr->stroke();
-      
-      cr->move_to(x      , y+ySize*0.5);
-      for (long i = 0; i < sampleFrames; i += sampleIncrement )
-      {
-        cr->line_to( x + xSize * ( float(i) / sampleFrames), y + ySize * 0.5 + (*current) * ySize * 0.4 );
-        current += sampleIncrement;
-      }
-      
-      setColour( cr, COLOUR_ORANGE_1, 1 );
-      cr->stroke();
+      cout << "Warning, GUI attempted drawing sample with 0 frames!" << endl;
+      return;
     }
+    
+    // draw the number of lines that is equal the number of pixels available
+    // horizontally. 237 is the pixels horizontally
+    int sampleIncrement = sampleFrames / 237;
+    
+    cr->move_to(x      , y+ySize*0.5);
+    cr->line_to(x+xSize, y+ySize*0.5);
+    cr->set_line_width(0.8);
+    setColour( cr, COLOUR_GREY_1 );
+    cr->stroke();
+    
+    cr->move_to(x      , y+ySize*0.5);
+    for (long i = 0; i < sampleFrames; i += sampleIncrement )
+    {
+      cr->line_to( x + xSize * ( float(i) / sampleFrames), y + ySize * 0.5 + (*current) * ySize * 0.4 );
+      current += sampleIncrement;
+    }
+    
+    setColour( cr, COLOUR_ORANGE_1, 1 );
+    cr->stroke();
   }
-  //g_mutex_unlock( &dspInstance->sampleMutex );
-  
   
   if ( sampleNames[selectedSample].compare("") )
   {
