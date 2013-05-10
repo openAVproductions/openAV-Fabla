@@ -245,9 +245,6 @@ work_response(LV2_Handle  instance,
   
   Sample* freeOldSample = 0;
   
-  // lock the Sample array mutex, so GUI can't draw while we update contents
-  // FIXME: MUTEX
-  //g_mutex_lock( &self->sampleMutex );
   {
     // Get details from the message
     SampleMessage* message =  *(SampleMessage**)data;
@@ -273,19 +270,10 @@ work_response(LV2_Handle  instance,
                    message->sample->data,
                    message->sample->info.frames);
   }
-  //g_mutex_unlock( &self->sampleMutex );
   
-  
-  
-  // now check if we currently have a sample loaded on this pad:
-  // we have the pad number from the load message earlier, and we've just
-  // *UNLOCKED* the mutex: In freewheeling the worker thread gets called
-  // immidiatly, so we have to ensure its unlocked before getting locked
-  // again, since the GMutex is *NOT* defined to be a recursive mutex
   if ( freeOldSample )
   {
     // send worker to free the current sample, 
-      
     SampleMessage msg = { { sizeof(Sample*), self->uris.eg_freeSample },
                         sampleNum,
                         freeOldSample };

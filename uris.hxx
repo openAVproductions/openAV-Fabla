@@ -237,7 +237,7 @@ write_set_file(LV2_Atom_Forge*    forge,
   
   lv2_atom_forge_property_head(forge, uris->eg_file, 0);
   lv2_atom_forge_path(forge, filename, filename_len);
-
+  
   lv2_atom_forge_property_head(forge, uris->eg_sampleNumber, 0);
   lv2_atom_forge_int(forge, sampleNum);
   
@@ -259,7 +259,7 @@ write_set_file(LV2_Atom_Forge*    forge,
   lv2_atom_forge_pop(forge, &body_frame);
   lv2_atom_forge_pop(forge, &set_frame);
   
-  std::cout << "Written filename " << filename << " to Atom -> DSP  DONE!" << std::endl;
+  std::cout << "Writing filename " << filename << " to Atom -> DSP  DONE!" << std::endl;
   
   return set;
 }
