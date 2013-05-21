@@ -12,15 +12,3 @@
   a ui:GtkUI ;
   ui:binary <fabla_gui@LIB_EXT@> ;
   rdfs:seeAlso <fabla.ttl> .
-
-<http://www.openavproductions.com/fabla/preset#minimal>
-  a             pset:Preset ;
-  rdfs:label    "Minimal" ;
-  lv2:appliesTo <http://www.openavproductions.com/fabla>;
-  rdfs:seeAlso  <fablapresets.ttl> .
-
-<http://www.openavproductions.com/fabla/preset#maximal>
-  a             pset:Preset ;
-  rdfs:label    "Drum N Bass" ;
-  lv2:appliesTo <http://www.openavproductions.com/fabla>;
-  rdfs:seeAlso  <fablapresets.ttl> .

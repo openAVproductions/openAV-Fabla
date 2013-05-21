@@ -36,7 +36,7 @@
 #ifndef __faustconsole__
 #define __faustconsole__
 
-#include "GUI.h"
+#include "faust/GUI.h"
 
 #include <stdlib.h>
 #include <stdio.h>

@@ -13,6 +13,66 @@
 using namespace std;
 
 
+void Canvas::loadImages()
+{
+  
+  // Load big header image
+  //stride = Cairo::ImageSurface::format_stride_for_width (Cairo::FORMAT_RGB24, width);
+  //data = malloc (stride * height);
+  
+  //headerImage= Cairo::ImageSurface::create (data, format, width, height);
+  //headerImage= Cairo::ImageSurface::create_from_png ("/usr/lib/lv2/fabla.lv2/header.png");
+  
+  
+  //cairo_set_source_surface(cr, imageSurf, x, y);
+  //imagePointer = Gdk::Pixbuf::create_from_file ("/usr/lib/lv2/fabla.lv2/header.png");
+  
+  /*
+  // Detect transparent colors for loaded image
+  Cairo::Format format = Cairo::FORMAT_RGB24;
+  if (imagePointer->get_has_alpha())
+  {
+      format = Cairo::FORMAT_ARGB32;
+  }
+  // Create a new ImageSurface
+  imageSurfacePointer = Cairo::ImageSurface::create  (format, imagePointer->get_width(), imagePointer->get_height());
+  // Create the new Context for the ImageSurface
+  Cairo::RefPtr< Cairo::Context > imageContextPointer = Cairo::Context::create (imageSurfacePointer);
+  // Draw the image on the new Context
+  Gdk::Cairo::set_source_pixbuf (imageContextPointer, imagePointer, 0.0, 0.0);
+  imageContextPointer->paint();
+  */
+  
+  //cairo_set_source_surface(cr, imageSurf, x, y);
+  //cairo_paint(cr);
+  
+  // PAD images
+  padPlayPixbuf  = Gdk::Pixbuf::create_from_file ("/usr/lib/lv2/fabla.lv2/padplay.png" );
+  padLoadPixbuf  = Gdk::Pixbuf::create_from_file ("/usr/lib/lv2/fabla.lv2/padload.png");
+  padEmptyPixbuf = Gdk::Pixbuf::create_from_file ("/usr/lib/lv2/fabla.lv2/padempty.png");
+  padSelectPixbuf= Gdk::Pixbuf::create_from_file ("/usr/lib/lv2/fabla.lv2/padselect.png");
+  
+  padPlayImageSurface  = Cairo::ImageSurface::create  ( Cairo::FORMAT_ARGB32, padPlayPixbuf->get_width(), padPlayPixbuf->get_height()  );
+  padLoadImageSurface  = Cairo::ImageSurface::create  ( Cairo::FORMAT_ARGB32, padLoadPixbuf->get_width(), padLoadPixbuf->get_height()  );
+  padEmptyImageSurface = Cairo::ImageSurface::create  ( Cairo::FORMAT_ARGB32, padEmptyPixbuf->get_width(),padEmptyPixbuf->get_height() );
+  padSelectImageSurface= Cairo::ImageSurface::create  ( Cairo::FORMAT_ARGB32,padSelectPixbuf->get_width(),padSelectPixbuf->get_height());
+  
+  Cairo::RefPtr< Cairo::Context > padPlayContext  = Cairo::Context::create (padPlayImageSurface );
+  Cairo::RefPtr< Cairo::Context > padLoadContext  = Cairo::Context::create (padLoadImageSurface );
+  Cairo::RefPtr< Cairo::Context > padEmptyContext = Cairo::Context::create (padEmptyImageSurface);
+  Cairo::RefPtr< Cairo::Context > padSelectContext= Cairo::Context::create (padSelectImageSurface);
+  
+  Gdk::Cairo::set_source_pixbuf (padPlayContext , padPlayPixbuf , 0.0, 0.0);
+  Gdk::Cairo::set_source_pixbuf (padLoadContext , padLoadPixbuf , 0.0, 0.0);
+  Gdk::Cairo::set_source_pixbuf (padEmptyContext, padEmptyPixbuf, 0.0, 0.0);
+  Gdk::Cairo::set_source_pixbuf (padSelectContext,padSelectPixbuf,0.0, 0.0);
+  
+  padPlayContext->paint();
+  padLoadContext->paint();
+  padEmptyContext->paint();
+  padSelectContext->paint();
+}
+
 void Canvas::drawWaveform(Cairo::RefPtr<Cairo::Context> cr)
 {
   cr->save();
