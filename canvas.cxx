@@ -56,6 +56,7 @@ void Canvas::loadImages()
   catch(Glib::FileError& e)
   {
     cout << "Error loading graphics" << endl;
+    return;
   }
   
   padPlayImageSurface  = Cairo::ImageSurface::create  ( Cairo::FORMAT_ARGB32, padPlayPixbuf->get_width(), padPlayPixbuf->get_height()  );
@@ -193,6 +194,13 @@ void Canvas::drawWaveform(Cairo::RefPtr<Cairo::Context> cr)
 void Canvas::drawPads(Cairo::RefPtr<Cairo::Context> cr)
 {
   cr->save();
+  
+  if ( not padPlayPixbuf ||
+       not padLoadPixbuf ||
+       not padEmptyPixbuf )
+  {
+    return;
+  }
   
   int border = 10;
   int x =  36;
