@@ -8,8 +8,8 @@
 #include "uris.hxx"
 
 // include faust stuff
-#include "../dsp/cpp_ui.h"
-#include "../dsp/fabla/fabla.cpp"
+#include "cpp_ui.h"
+#include "fabla.cpp"
 
 #define DEBUG
 
@@ -168,15 +168,10 @@ work(LV2_Handle                  instance,
   
   if (atom->type == self->uris.eg_freeSample)
   {
-    // FIXME: MUTEX
-    //g_mutex_lock( &self->sampleMutex );
     {
-      //print(self, self->uris.log_Error, "Freeing sample: Mutex locked!\n" );
-      // lock mutex, then work with sample, as GUI might be drawing it!
       SampleMessage* msg = (SampleMessage*)data;
       free_sample(self, msg->sample);
     }
-    //g_mutex_unlock( &self->sampleMutex );
   }
   else
   {
@@ -261,14 +256,16 @@ work_response(LV2_Handle  instance,
     // stops the sample from playing just after being loaded
     self->playback[sampleNum].frame = message->sample->info.frames + 1;
     
+    /*
     // Send a notification that we're using a new sample
     lv2_atom_forge_frame_time(&self->forge, self->frame_offset);
-    write_set_file(&self->forge, &self->uris,
+    write_set_file_with_data(&self->forge, &self->uris,
                    sampleNum,
                    self->sample[sampleNum]->path,
                    self->sample[sampleNum]->path_len,
                    message->sample->data,
                    message->sample->info.frames);
+    */
   }
   
   if ( freeOldSample )
@@ -301,12 +298,12 @@ connect_port(LV2_Handle instance,
     case SAMPLER_REVERB_SIZE:
       self->reverb_size = (float*)data;
       self->faust_reverb_size = self->faustUI->getFloatPointer("---fabla-Zita_Rev1-Decay Times in Bands (see tooltips)Mid RT60");
-      std::cout << "faust rever size pointer = " << self->faust_reverb_size << "  value = " << *self->faust_reverb_size << endl;
+      //std::cout << "faust rever size pointer = " << self->faust_reverb_size << "  value = " << *self->faust_reverb_size << endl;
       break;
     case SAMPLER_REVERB_WET:
       self->reverb_wet = (float*)data;
       self->faust_reverb_wet  = self->faustUI->getFloatPointer("---fabla-Zita_Rev1-OutputDry/Wet Mix");
-      std::cout << "faust rever wet pointer = " << self->faust_reverb_wet << "  value = " << *self->faust_reverb_wet << endl;
+      //std::cout << "faust rever wet pointer = " << self->faust_reverb_wet << "  value = " << *self->faust_reverb_wet << endl;
       break;
     case SAMPLER_HIGHPASS:
       self->highpass = (float*)data;
@@ -468,7 +465,8 @@ run(LV2_Handle instance,
           // update UI that a note has occured
           lv2_atom_forge_frame_time(&self->forge, 0);
           
-          //print(self, self->uris.log_Error, "writing PLAY sample %d\n", data[1]-36);
+          cout << "Writing play sample " << data[1] - 36 << endl;
+          print(self, self->uris.log_Error, "writing PLAY sample %d\n", data[1]-36);
           
           write_play_sample( &self->forge, &self->uris, data[1]-36 );
         }
@@ -640,7 +638,7 @@ restore(LV2_Handle                  instance,
         
         // Send a notification to UI that we're using a new sample
         lv2_atom_forge_frame_time(&self->forge, 0); // 0 = frame offset
-        write_set_file(&self->forge, &self->uris,
+        write_set_file_with_data(&self->forge, &self->uris,
                        i,
                        self->sample[i]->path,
                        self->sample[i]->path_len,

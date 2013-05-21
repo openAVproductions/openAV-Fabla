@@ -36,11 +36,6 @@
 
 #define FABLA_URI__sampleRestorePad  FABLA_URI "#sampleRestorePad"
 
-// GMutex:
-// for loading / freeing samples, and GUI drawing. It will *never* block
-// the RT thread, don't worry :)
-#include <gtk/gtk.h>
-
 class CppUI;
 class FablaDSP;
 
@@ -215,11 +210,46 @@ write_set_file(LV2_Atom_Forge*    forge,
                const FablaURIs*   uris,
                int                sampleNum,
                const char*        filename,
+               const size_t       filename_len)
+{
+  std::cout << "Writing filename " << filename << " to Atom -> DSP now!" << std::endl;
+  
+  assert( forge );
+  assert( uris );
+  assert( filename );
+  
+  LV2_Atom_Forge_Frame set_frame;
+  LV2_Atom* set = (LV2_Atom*)lv2_atom_forge_blank(
+    forge, &set_frame, 1, uris->patch_Set);
+  
+  lv2_atom_forge_property_head(forge, uris->patch_body, 0);
+  LV2_Atom_Forge_Frame body_frame;
+  lv2_atom_forge_blank(forge, &body_frame, 2, 0);
+  
+  lv2_atom_forge_property_head(forge, uris->eg_file, 0);
+  lv2_atom_forge_path(forge, filename, filename_len);
+  
+  lv2_atom_forge_property_head(forge, uris->eg_sampleNumber, 0);
+  lv2_atom_forge_int(forge, sampleNum);
+  
+  lv2_atom_forge_pop(forge, &body_frame);
+  lv2_atom_forge_pop(forge, &set_frame);
+  
+  std::cout << "Writing filename " << filename << " to Atom -> DSP  DONE!" << std::endl;
+  
+  return set;
+}
+
+static inline LV2_Atom*
+write_set_file_with_data(LV2_Atom_Forge*    forge,
+               const FablaURIs*   uris,
+               int                sampleNum,
+               const char*        filename,
                const size_t       filename_len,
                float*             sampleData,
                const size_t       sampleDataLen)
 {
-  std::cout << "Writing filename " << filename << " to Atom -> DSP now!" << std::endl;
+  std::cout << "Writing filename " << filename << " to Atom -> UI now!" << std::endl;
   
   assert( forge );
   assert( uris );
@@ -259,7 +289,7 @@ write_set_file(LV2_Atom_Forge*    forge,
   lv2_atom_forge_pop(forge, &body_frame);
   lv2_atom_forge_pop(forge, &set_frame);
   
-  std::cout << "Writing filename " << filename << " to Atom -> DSP  DONE!" << std::endl;
+  std::cout << "Writing filename " << filename << " to Atom -> UI  DONE!" << std::endl;
   
   return set;
 }

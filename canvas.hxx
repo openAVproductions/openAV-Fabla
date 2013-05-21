@@ -13,6 +13,9 @@
 
 #include "uris.hxx"
 
+// image
+#include "header.h"
+
 #include "lv2/lv2plug.in/ns/extensions/ui/ui.h"
 
 #include "lv2/lv2plug.in/ns/ext/atom/atom.h"
@@ -176,6 +179,7 @@ class Canvas : public Gtk::DrawingArea
     Cairo::RefPtr< Cairo::ImageSurface > padLoadImageSurface;
     Cairo::RefPtr< Cairo::ImageSurface > padEmptyImageSurface;
     Cairo::RefPtr< Cairo::ImageSurface > padSelectImageSurface;
+    Cairo::RefPtr< Cairo::ImageSurface > headerImage;
     
     enum Colour {
       COLOUR_ORANGE_1 = 0,
@@ -202,29 +206,19 @@ class Canvas : public Gtk::DrawingArea
     
     void loadImages()
     {
-      // Load big header image
-      try {
-        imagePointer = Gdk::Pixbuf::create_from_file ("/usr/lib/lv2/fabla.lv2/header.png");
-        headerLoaded = true;
-      }
-      catch(Glib::FileError& e)
-      {
-        headerLoaded = false;
-      }
       
-      if ( !headerLoaded ) // if not in /usr/lib/lv2, try local
-      {
-        try {
-          imagePointer = Gdk::Pixbuf::create_from_file ("/usr/local/lib/lv2/fabla.lv2/header.png");
-          headerLoaded = true;
-        }
-        catch(Glib::FileError& e)
-        {
-          cout << "Fabla: Header image could not be loaded! Continuing..." << e.what() << endl;
-          headerLoaded = false;
-          return;
-        }
-      }
+      // Load big header image
+      //stride = Cairo::ImageSurface::format_stride_for_width (Cairo::FORMAT_RGB24, width);
+      //data = malloc (stride * height);
+      
+      //headerImage= Cairo::ImageSurface::create (data, format, width, height);
+      //headerImage= Cairo::ImageSurface::create_from_png ("/usr/lib/lv2/fabla.lv2/header.png");
+      
+      
+      //cairo_set_source_surface(cr, imageSurf, x, y);
+      //imagePointer = Gdk::Pixbuf::create_from_file ("/usr/lib/lv2/fabla.lv2/header.png");
+      
+      /*
       // Detect transparent colors for loaded image
       Cairo::Format format = Cairo::FORMAT_RGB24;
       if (imagePointer->get_has_alpha())
@@ -238,7 +232,10 @@ class Canvas : public Gtk::DrawingArea
       // Draw the image on the new Context
       Gdk::Cairo::set_source_pixbuf (imageContextPointer, imagePointer, 0.0, 0.0);
       imageContextPointer->paint();
+      */
       
+      //cairo_set_source_surface(cr, imageSurf, x, y);
+      //cairo_paint(cr);
       
       // PAD images
       padPlayPixbuf  = Gdk::Pixbuf::create_from_file ("/usr/lib/lv2/fabla.lv2/padplay.png" );
@@ -265,8 +262,6 @@ class Canvas : public Gtk::DrawingArea
       padLoadContext->paint();
       padEmptyContext->paint();
       padSelectContext->paint();
-      
-      headerLoaded = true;
     }
     
     bool on_expose_event			(GdkEventExpose* event)
@@ -290,6 +285,7 @@ class Canvas : public Gtk::DrawingArea
         cr->set_source_rgb(0.0,0.0,0.0);
         cr->fill();
         
+        /*
         if ( headerLoaded )
         {
           cr->save();
@@ -302,6 +298,7 @@ class Canvas : public Gtk::DrawingArea
           
           cr->restore();
         }
+        */
         
         // loop draw the bottom 5 backgrounds
         int drawX = 33;

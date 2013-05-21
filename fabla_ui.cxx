@@ -78,7 +78,7 @@ on_load_clicked(void* handle, int padNum)
   cout << "UI writing work to DSP now on pad " << padNum << endl;
   
   LV2_Atom* msg = write_set_file(&ui->forge, &ui->uris, padNum,
-                                 filename, strlen(filename), 0, 0);
+                                 filename, strlen(filename) );
   
   if ( msg )
   {
@@ -206,17 +206,17 @@ port_event(LV2UI_Handle handle,
       if ( obj->body.otype == ui->uris.playSample )
       {
         // play event
-        //fprintf(stderr, "play or stop command\n");
+        //fprintf(stderr, "play command\n");
         
         const LV2_Atom_Int* padAtom = read_play_sample(&ui->uris, obj);
         
         if ( padAtom )
         {
           int pad = padAtom->body;
-          if ( pad >= 36 && pad < 36+16 )
+          if ( pad >= 0 && pad < 16 )
           {
-            ui->canvas->padState[pad-36] = Canvas::PAD_PLAYING;
-            ui->canvas->redraw();
+            ui->canvas->padState[pad] = Canvas::PAD_PLAYING;
+            ui->canvas->queue_draw();
           }
           else
           {
