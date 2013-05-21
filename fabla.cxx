@@ -8,7 +8,7 @@
 #include "uris.hxx"
 
 // include faust stuff
-#include "cpp_ui.h"
+#include "faust/cpp_ui.h"
 #include "fabla.cpp"
 
 #define DEBUG

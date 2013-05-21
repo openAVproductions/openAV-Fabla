@@ -14,8 +14,9 @@ def configure(conf):
   conf.load('compiler_c')
   conf.load('compiler_cxx')
   
-  conf.env.CFLAGS = ['-I/usr/lib/faust/','-I/usr/lib/faust/gui','-Wall','-fPIC','-O3','-ffast-math']
-  conf.env.CXXFLAGS = ['-I/usr/lib/faust/','-I/usr/lib/faust/gui','-Wall','-fPIC','-O3','-ffast-math']
+  #'-I/usr/lib/faust/','-I/usr/lib/faust/gui'
+  conf.env.CFLAGS = ['-Wall','-fPIC','-O3','-ffast-math']
+  conf.env.CXXFLAGS = ['-Wall','-fPIC','-O3','-ffast-math']
     
   conf.env.append_value('CXXFLAGS', ['-g', '-Wall']) #'-O2'
   
