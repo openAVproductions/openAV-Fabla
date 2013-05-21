@@ -50,9 +50,9 @@ template <> 	 inline int faustpower<1>(int x) 		{ return x; }
 #include <math.h>
 #include <iostream>
 
-#include "gui/cpp_ui.h"
-#include "misc.h"
-#include "audio/dsp.h"
+#include "faust/cpp_ui.h"
+#include "faust/misc.h"
+#include "faust/dsp.h"
 
 using namespace std;
 

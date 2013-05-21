@@ -77,5 +77,9 @@ def build(bld):
             includes     = includes)
   
   # install files
-  #bld.install_files('${PREFIX}/lib/lv2/fabla.lv2/', './.build/fabla.lv2')
+  bld.install_files('${PREFIX}/lib/lv2/fabla.lv2/', 'planning/padload.png')
+  bld.install_files('${PREFIX}/lib/lv2/fabla.lv2/', 'planning/padempty.png')
+  bld.install_files('${PREFIX}/lib/lv2/fabla.lv2/', 'planning/padplay.png')
+  bld.install_files('${PREFIX}/lib/lv2/fabla.lv2/', 'planning/padselect.png')
+  bld.install_files('${PREFIX}/lib/lv2/fabla.lv2/', 'planning/header.png')
 
