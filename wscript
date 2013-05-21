@@ -36,7 +36,7 @@ def build(bld):
   bld(features     = 'subst',
       source       = 'manifest.ttl.in',
       target       = '%s/%s' % (bundle, 'manifest.ttl'),
-      install_path = '${LV2DIR}/%s' % bundle,
+      install_path = '${PREFIX}/lib/lv2/fabla.lv2',
       LIB_EXT      = bld.env['pluginlib_EXT'])
   
   # Copy other data files to build bundle (build/fabla.lv2)
@@ -44,7 +44,7 @@ def build(bld):
       bld(features     = 'subst',
           source       = i,
           target       = '%s/%s' % (bundle, i),
-          install_path = '${LV2DIR}/%s' % bundle,
+          install_path = '${PREFIX}/lib/lv2/fabla.lv2',
           LIB_EXT      = bld.env['pluginlib_EXT'])
 
   # Create a build environment that builds module-style library names
@@ -62,7 +62,7 @@ def build(bld):
             source       = 'fabla.cxx',
             name         = 'fabla',
             target       = '%s/fabla' % bundle,
-            install_path = '${LV2DIR}/%s' % bundle,
+            install_path = '${PREFIX}/lib/lv2/fabla.lv2',
             uselib       = 'LV2CORE SNDFILE',
             includes     = includes)
   
@@ -72,10 +72,10 @@ def build(bld):
             source       = 'canvas.cxx fabla_ui.cxx',
             name         = 'fabla_ui',
             target       = '%s/fabla_gui' % bundle,
-            install_path = '${LV2DIR}/%s' % bundle,
+            install_path = '${PREFIX}/lib/lv2/fabla.lv2',
             uselib       = 'LV2CORE GTKMM',
             includes     = includes)
   
   # install files
-  bld.install_files('${PREFIX}/lib/lv2/fabla.lv2/', 'fablapresets.ttl')
+  #bld.install_files('${PREFIX}/lib/lv2/fabla.lv2/', './.build/fabla.lv2')
 

@@ -46,11 +46,17 @@ void Canvas::loadImages()
   //cairo_set_source_surface(cr, imageSurf, x, y);
   //cairo_paint(cr);
   
+  try {
   // PAD images
-  padPlayPixbuf  = Gdk::Pixbuf::create_from_file ("/usr/lib/lv2/fabla.lv2/padplay.png" );
-  padLoadPixbuf  = Gdk::Pixbuf::create_from_file ("/usr/lib/lv2/fabla.lv2/padload.png");
-  padEmptyPixbuf = Gdk::Pixbuf::create_from_file ("/usr/lib/lv2/fabla.lv2/padempty.png");
-  padSelectPixbuf= Gdk::Pixbuf::create_from_file ("/usr/lib/lv2/fabla.lv2/padselect.png");
+    padPlayPixbuf  = Gdk::Pixbuf::create_from_file ("/usr/lib/lv2/fabla.lv2/padplay.png" );
+    padLoadPixbuf  = Gdk::Pixbuf::create_from_file ("/usr/lib/lv2/fabla.lv2/padload.png");
+    padEmptyPixbuf = Gdk::Pixbuf::create_from_file ("/usr/lib/lv2/fabla.lv2/padempty.png");
+    padSelectPixbuf= Gdk::Pixbuf::create_from_file ("/usr/lib/lv2/fabla.lv2/padselect.png");
+  }
+  catch(Glib::FileError& e)
+  {
+    cout << "Error loading graphics" << endl;
+  }
   
   padPlayImageSurface  = Cairo::ImageSurface::create  ( Cairo::FORMAT_ARGB32, padPlayPixbuf->get_width(), padPlayPixbuf->get_height()  );
   padLoadImageSurface  = Cairo::ImageSurface::create  ( Cairo::FORMAT_ARGB32, padLoadPixbuf->get_width(), padLoadPixbuf->get_height()  );
