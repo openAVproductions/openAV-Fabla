@@ -5,3 +5,5 @@ build/
 .lock*
 
 planning/*
+/gui/fabla.h
+/gui/fabla.cxx

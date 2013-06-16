@@ -465,8 +465,8 @@ run(LV2_Handle instance,
           // update UI that a note has occured
           lv2_atom_forge_frame_time(&self->forge, 0);
           
-          cout << "Writing play sample " << data[1] - 36 << endl;
-          print(self, self->uris.log_Error, "writing PLAY sample %d\n", data[1]-36);
+          //cout << "Writing play sample " << data[1] - 36 << endl;
+          //print(self, self->uris.log_Error, "writing PLAY sample %d\n", data[1]-36);
           
           write_play_sample( &self->forge, &self->uris, data[1]-36 );
         }

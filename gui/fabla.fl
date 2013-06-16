@@ -1,0 +1,478 @@
+# data file for the Fltk User Interface Designer (fluid)
+version 1.0300 
+header_name {.h} 
+code_name {.cxx}
+class FablaUI {open
+} {
+  Function {FablaUI()} {open
+  } {
+    code {setupUI();
+w->show();} {}
+  }
+  Function {FablaUI(void* xParentWindow)} {open
+  } {
+    code {setupUI();
+
+// embed drawn stuff into LV2 host provided area  
+fl_embed( w, (Window)xParentWindow );} {}
+  }
+  Function {setupUI()} {open
+  } {
+    code {// In case FLTK hasn't set up yet
+fl_open_display();} {}
+    Fl_Window w {
+      label Fabla open
+      xywh {297 184 850 490} type Double color 56 selection_color 0 labelcolor 88
+      code0 {\#include "avtk.h"}
+      code1 {using namespace Avtk;}
+      code2 {\#include <FL/x.H>} visible
+    } {
+      Fl_Box {} {
+        label {Mod LFO}
+        xywh {179 41 159 215} box UP_BOX
+        class Background
+      }
+      Fl_Box {} {
+        label {Mod Adsr}
+        xywh {179 265 159 215} box UP_BOX
+        class Background
+      }
+      Fl_Box {} {
+        label Filter
+        xywh {347 41 159 215} box UP_BOX
+        class Background
+      }
+      Fl_Box filtergraph {
+        callback {float tmp = o->value();
+filterFreq->value(tmp);
+writeFunction(controller, FILTER_FREQ, sizeof(float), 0, (const void*) &tmp);}
+        xywh {352 66 150 84} box UP_BOX
+        code0 {filtergraph->value(1.f);}
+        class Filtergraph
+      }
+      Fl_Box lfo {
+        xywh {184 66 150 84} box UP_BOX
+        class LFO
+      }
+      Fl_Box lfoAdsr {
+        xywh {183 290 150 84} box UP_BOX
+        class ADSR
+      }
+      Fl_Box {} {
+        label Master
+        xywh {515 41 159 215} box UP_BOX
+        class Background
+      }
+      Fl_Box {} {
+        label Effects
+        xywh {517 265 159 215} box UP_BOX
+        class Background
+      }
+      Fl_Box reverb {
+        label Reverb
+        callback {float tmp = o->getActive();
+writeFunction(controller, REVERB_ENABLE, sizeof(float), 0, (const void*) &tmp);
+printf("enabled %f", tmp );}
+        xywh {522 290 150 84} box UP_BOX labeltype NO_LABEL
+        class Reverb
+      }
+      Fl_Box compressor {
+        label Compressor
+        xywh {521 66 97 84} box UP_BOX
+        class Compressor
+      }
+      Fl_Box {} {
+        xywh {184 155 150 98} box BORDER_BOX
+      }
+      Fl_Box {} {
+        xywh {184 379 150 98} box BORDER_BOX selection_color 55
+      }
+      Fl_Box {} {
+        xywh {520 155 97 97} box BORDER_BOX
+      }
+      Fl_Box masterVol {
+        label Vol
+        callback {float tmp = o->value();
+//cout << "writing value " << tmp << endl;
+writeFunction(controller,  MASTER_VOL, sizeof(float), 0, (const void*) &tmp);}
+        xywh {622 66 48 186} box UP_BOX
+        code0 {\#include "../dsp/ports.h"}
+        class Volume
+      }
+      Fl_Box {} {
+        xywh {351 155 150 98} box BORDER_BOX
+      }
+      Fl_Box {} {
+        xywh {521 379 150 98} box BORDER_BOX
+      }
+      Fl_Box lfoModAmp {
+        label Amp
+        callback {float tmp = o->value();
+lfo->value( tmp );
+writeFunction(controller, LFO_MOD_AMP, sizeof(float), 0, (const void*) &tmp);}
+        xywh {201 168 30 30} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box lfoModSpeed {
+        label Rate
+        callback {float tmp = o->value();
+lfo->modulation( tmp );
+writeFunction(controller, LFO_MOD_SPEED, sizeof(float), 0, (const void*) &tmp);}
+        xywh {244 169 30 30} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box {} {
+        label Sync
+        xywh {286 169 30 30} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box {} {
+        label 1
+        xywh {201 209 30 30} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box {} {
+        label 2
+        xywh {244 209 30 30} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box {} {
+        label 3
+        xywh {287 210 30 30} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box filterFreq {
+        label Freq
+        callback {float tmp = o->value();
+filtergraph->value(tmp);
+writeFunction(controller, FILTER_FREQ, sizeof(float), 0, (const void*) &tmp);}
+        xywh {373 166 30 28} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        code0 {filterFreq->value(1.f);}
+        class Dial
+      }
+      Fl_Box {} {
+        label {dB/O}
+        xywh {414 166 30 28} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box {} {
+        label Reso
+        xywh {455 166 30 28} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box {} {
+        label 1
+        xywh {373 202 30 28} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box {} {
+        label 2
+        xywh {414 202 30 28} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box {} {
+        label 3
+        xywh {455 202 30 28} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box {} {
+        label Att
+        callback {lfoAdsr->attack(o->value());}
+        tooltip Attack xywh {190 394 30 30} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48 when 3
+        class Dial
+      }
+      Fl_Box lfoDecay {
+        label Dec
+        callback {lfoAdsr->decay(o->value());}
+        tooltip Decay xywh {226 394 30 30} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box reverbSize {
+        label Size
+        callback {float tmp = o->value();
+reverb->size( tmp );
+writeFunction(controller, REVERB_SIZE, sizeof(float), 0, (const void*) &tmp);}
+        xywh {540 393 30 28} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box reverbDamp {
+        label Damp
+        callback {float tmp = o->value();
+reverb->damping( tmp );
+writeFunction(controller, REVERB_DAMPING, sizeof(float), 0, (const void*) &tmp);}
+        xywh {581 393 30 28} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box reverbWet {
+        label Wet
+        callback {float tmp = o->value();
+reverb->wet( tmp );
+writeFunction(controller, REVERB_WET, sizeof(float), 0, (const void*) &tmp);}
+        xywh {622 393 30 28} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box {} {
+        label 1
+        xywh {540 429 30 28} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box {} {
+        label 2
+        xywh {581 429 30 28} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box {} {
+        label 3
+        xywh {622 429 30 28} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box lfoSustain {
+        label Sus
+        callback {lfoAdsr->sustain(o->value());}
+        tooltip Sustain xywh {263 394 30 30} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box lfoRelease {
+        label Rel
+        callback {lfoAdsr->release(o->value());}
+        tooltip Release xywh {299 394 30 30} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box {} {
+        label A
+        xywh {189 435 30 30} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box {} {
+        label R
+        xywh {226 435 30 30} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box {} {
+        label S
+        xywh {263 435 30 30} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box {} {
+        label Key
+        xywh {299 435 30 30} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box {} {
+        label {Filter Adsr}
+        xywh {347 265 159 215} box UP_BOX
+        class Background
+      }
+      Fl_Box filterAdsr {
+        xywh {351 290 150 84} box UP_BOX
+        class ADSR
+      }
+      Fl_Box {} {
+        xywh {352 379 150 98} box BORDER_BOX
+      }
+      Fl_Box {} {
+        label Att
+        callback {filterAdsr->attack(o->value());}
+        tooltip Attack xywh {358 394 30 30} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48 when 3
+        class Dial
+      }
+      Fl_Box filterDecay {
+        label Dec
+        callback {filterAdsr->decay(o->value());}
+        tooltip Decay xywh {394 394 30 30} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box filterSustain {
+        label Sus
+        callback {filterAdsr->sustain(o->value());}
+        tooltip Sustain xywh {430 394 30 30} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box filterRelease {
+        label Rel
+        callback {filterAdsr->release(o->value());}
+        tooltip Release xywh {465 394 30 30} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box {} {
+        label A
+        xywh {358 435 30 30} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box {} {
+        label R
+        xywh {394 435 30 30} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box {} {
+        label S
+        xywh {430 435 30 30} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box {} {
+        label Key
+        xywh {465 435 30 30} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box {} {
+        label Ratio
+        callback {compressor->ratio( o->value() );}
+        tooltip Sustain xywh {532 170 30 30} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box {} {
+        label Thres
+        callback {compressor->threshold( o->value() );}
+        tooltip Release xywh {575 170 30 30} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box {} {
+        label Attack
+        xywh {532 211 30 30} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box {} {
+        label Release
+        xywh {575 211 30 30} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box {} {
+        label {Freq LFO}
+        xywh {10 41 159 215} box UP_BOX
+        class Background
+      }
+      Fl_Box {} {
+        label {Amp Adsr}
+        xywh {10 265 159 215} box UP_BOX
+        class Background
+      }
+      Fl_Box freqLfo {
+        xywh {15 66 150 84} box UP_BOX
+        class LFO
+      }
+      Fl_Box pitchLfoAdsr {
+        xywh {14 290 150 84} box UP_BOX
+        class ADSR
+      }
+      Fl_Box {} {
+        xywh {15 155 150 98} box BORDER_BOX
+      }
+      Fl_Box {} {
+        xywh {15 379 150 98} box BORDER_BOX
+      }
+      Fl_Box lfoFreqAmp {
+        label Amp
+        callback {float tmp = o->value();
+freqLfo->value( tmp );
+writeFunction(controller, LFO_FREQ_AMP, sizeof(float), 0, (const void*) &tmp);}
+        xywh {32 168 30 28} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box lfoFreqSpeed {
+        label Rate
+        callback {float tmp = o->value();
+freqLfo->modulation( tmp );
+writeFunction(controller, LFO_FREQ_SPEED, sizeof(float), 0, (const void*) &tmp);}
+        xywh {73 168 30 28} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box {} {
+        label Sync
+        xywh {114 168 30 28} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box {} {
+        label 1
+        xywh {32 204 30 28} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box {} {
+        label 2
+        xywh {73 204 30 28} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box {} {
+        label 3
+        xywh {114 204 30 28} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box {} {
+        label Att
+        callback {pitchLfoAdsr->attack(o->value());}
+        tooltip Attack xywh {21 394 30 30} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48 when 3
+        class Dial
+      }
+      Fl_Box pitchLfoAdsrDecay {
+        label Dec
+        callback {pitchLfoAdsr->decay(o->value());}
+        tooltip Decay xywh {57 394 30 30} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box pitchLfoAdsrSustain {
+        label Sus
+        callback {pitchLfoAdsr->sustain(o->value());}
+        tooltip Sustain xywh {94 394 30 30} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box pitchLfoAdsrRelease {
+        label Rel
+        callback {pitchLfoAdsr->release(o->value());}
+        tooltip Release xywh {130 394 30 30} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box {} {
+        label A
+        xywh {20 435 30 30} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box {} {
+        label R
+        xywh {57 435 30 30} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box {} {
+        label S
+        xywh {94 435 30 30} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box {} {
+        label Key
+        xywh {130 435 30 30} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        class Dial
+      }
+      Fl_Box image {
+        label {header image} selected
+        xywh {0 0 850 36} box UP_BOX
+        code0 {\#include "header.c"}
+        code1 {image->setPixbuf(header.pixel_data,4);}
+        class Image
+      }
+    }
+    code {// setup initial state of UI here
+lfoDecay->value(0.5);
+lfoSustain->value(0.5);
+lfoRelease->value(0.5);
+
+pitchLfoAdsrDecay->value(0.5);
+pitchLfoAdsrSustain->value(0.5);
+pitchLfoAdsrRelease->value(0.5);
+
+filterDecay->value(0.5);
+filterSustain->value(0.5);
+filterRelease->value(0.5);
+
+reverbSize->value(0.5);
+reverbDamp->value(0.5);
+reverbWet->value(0.5);} {}
+  }
+  decl {LV2UI_Controller controller;} {public local
+  }
+  decl {LV2UI_Write_Function writeFunction} {public local
+  }
+  Function {idle()} {open
+  } {
+    code {// takes care of handling events
+Fl::check();
+Fl::flush();} {}
+  }
+} 
