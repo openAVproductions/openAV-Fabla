@@ -13,7 +13,7 @@
 #include "../dsp/ports.h"
 
 // this is our custom widget include
-#include "fabla_ui.h"
+#include "fabla.h"
 
 // core spec include
 #include "lv2/lv2plug.in/ns/lv2core/lv2.h"
