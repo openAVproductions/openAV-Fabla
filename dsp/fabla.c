@@ -9,16 +9,9 @@
 #include "voice.hxx"
 #include "denormals.hxx"
 
-#include <sndfile.h>
-
 #define NVOICES 16
 
-typedef struct {
-  SF_INFO info;      // Info about sample from sndfile
-  float*  data;      // Sample data in float
-  char*   path;      // Path of file
-  size_t  path_len;  // Length of path
-} Sample;
+static const char* default_sample = "click.wav";
 
 typedef struct {
         LV2_Atom atom;
@@ -69,7 +62,7 @@ static Sample* load_sample(FABLA_DSP* self, const char* path)
   
   lv2_log_trace(&self->logger, "Loading sample %s\n", path);
   
-  Sample* const  sample  = (Sample*)malloc(sizeof(Sample));
+  Sample* sample = new Sample();
   SF_INFO* const info    = &sample->info;
   SNDFILE* const sndfile = sf_open(path, SFM_READ, info);
   
@@ -77,6 +70,10 @@ static Sample* load_sample(FABLA_DSP* self, const char* path)
     lv2_log_error(&self->logger, "Failed to open sample '%s'\n", path);
     free(sample);
     return NULL;
+  }
+  else
+  {
+    lv2_log_error(&self->logger, "Sample has '%i' samples\n", info->frames);
   }
   
   // Read data
@@ -94,6 +91,8 @@ static Sample* load_sample(FABLA_DSP* self, const char* path)
   sample->path     = (char*)malloc(path_len + 1);
   sample->path_len = path_len;
   memcpy(sample->path, path, path_len + 1);
+  
+  lv2_log_error(&self->logger, "Loaded sample:\n\t %i samples\n\tdata = %i", info->frames, sample->data);
   
   return sample;
 }
@@ -138,6 +137,8 @@ instantiate(const LV2_Descriptor*     descriptor,
     }
   }
   
+  
+  
   // allocate voices
   for(int i = 0; i < NVOICES; i++)
     self->voice[i] = new Voice(rate);
@@ -147,6 +148,20 @@ instantiate(const LV2_Descriptor*     descriptor,
   
   // then init the forge to write Atoms
   lv2_atom_forge_init(&self->forge, self->map);
+  
+  // Load the default sample file
+  const size_t path_len    = strlen(bundle_path);
+  const size_t file_len    = strlen(default_sample);
+  const size_t len         = path_len + file_len;
+  char*        sample_path = (char*)malloc(len + 1);
+  snprintf(sample_path, len + 1, "%s%s", bundle_path, default_sample);
+  
+  Sample* sample = load_sample(self, sample_path);
+  
+  for(int i = 0; i < NVOICES; i++)
+    self->voice[i]->sample = sample;
+  
+  free(sample_path);
   
   return (LV2_Handle)self;
 }
@@ -321,8 +336,8 @@ run(LV2_Handle instance, uint32_t n_samples)
       self->voice[i]->process( 1, &accumL, &accumR );
     }
     
-    outputL[pos] = 0.f * gain;
-    outputR[pos] = 0.f * gain;
+    outputL[pos] = accumL * gain;
+    outputR[pos] = accumR * gain;
   }
 }
 
