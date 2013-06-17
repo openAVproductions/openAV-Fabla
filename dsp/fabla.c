@@ -313,6 +313,14 @@ run(LV2_Handle instance, uint32_t n_samples)
   
   for (uint32_t pos = 0; pos < n_samples; pos++)
   {
+    float accumL;
+    float accumR;
+    
+    for(int i = 0; i < NVOICES; i++ )
+    {
+      self->voice[i]->process( 1, &accumL, &accumR );
+    }
+    
     outputL[pos] = 0.f * gain;
     outputR[pos] = 0.f * gain;
   }

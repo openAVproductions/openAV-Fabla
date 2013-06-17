@@ -18,6 +18,12 @@ class Voice
     
     ADSR* adsr;
     
+    void load(long size, float* data)
+    {
+      sampleSize = size;
+      sample = data;
+    }
+    
     void play(int inNote, int vel)
     {
       playingBool = true;
@@ -37,11 +43,13 @@ class Voice
     
     
     
-    void process( int nframes, float* buffer )
+    void process( int nframes, float* bufL, float* bufR )
     {
       if( playingBool )
       {
         float accum = 0.f; 
+        
+        adsr->process(nframes);
         
         if ( adsr->finished() )
         {
@@ -57,6 +65,9 @@ class Voice
     int sr;
     int note;
     bool playingBool;
+    
+    long   sampleSize;
+    float* sample;
 };
 
 #endif // FABLA_VOICE_H
