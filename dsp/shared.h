@@ -36,9 +36,14 @@ typedef struct {
   LV2_URID patch_Set;
   LV2_URID patch_body;
   
+  // Fabla specific
   LV2_URID fabla_Play;
   LV2_URID fabla_Stop;
+  LV2_URID fabla_Load;
+  LV2_URID fabla_Unload;
+  
   LV2_URID fabla_pad;
+  LV2_URID fabla_filename;
   
 } Fabla_URIs;
 
@@ -66,7 +71,11 @@ map_uris(LV2_URID_Map* map, Fabla_URIs* uris)
   
   uris->fabla_Play         = map->map(map->handle, FABLA_URI"#Play");
   uris->fabla_Stop         = map->map(map->handle, FABLA_URI"#Stop");
+  uris->fabla_Load         = map->map(map->handle, FABLA_URI"#Load");
+  uris->fabla_Unload       = map->map(map->handle, FABLA_URI"#Unload");
+  
   uris->fabla_pad          = map->map(map->handle, FABLA_URI"#pad");
+  uris->fabla_filename     = map->map(map->handle, FABLA_URI"#filename");
 }
 
 
