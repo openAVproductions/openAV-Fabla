@@ -32,6 +32,7 @@ typedef struct {
   
   // URID map
   LV2_URID_Map* map;
+  LV2_URID_Unmap* unmap;
   
   // Worker threads
   LV2_Worker_Schedule* schedule;
@@ -132,6 +133,8 @@ instantiate(const LV2_Descriptor*     descriptor,
   for (int i = 0; features[i]; ++i) {
     if (!strcmp(features[i]->URI, LV2_URID__map)) {
       self->map = (LV2_URID_Map*)features[i]->data;
+    } else if (!strcmp(features[i]->URI, LV2_URID__unmap)) {
+      self->unmap = (LV2_URID_Unmap*)features[i]->data;
     } else if (!strcmp(features[i]->URI, LV2_WORKER__schedule)) {
       self->schedule = (LV2_Worker_Schedule*)features[i]->data;
     } else if (!strcmp(features[i]->URI, LV2_LOG__log)) {
@@ -287,6 +290,41 @@ run(LV2_Handle instance, uint32_t n_samples)
         {
           self->voice[i]->stopIfNoteEquals( int(data[1]) );
         }
+      }
+    }
+    
+    if (ev->body.type == self->uris->atom_Blank)
+    {
+      
+      const LV2_Atom_Object* obj = (LV2_Atom_Object*)&ev->body;
+      
+      const LV2_Atom_Object* body = NULL;
+      lv2_atom_object_get(obj, self->uris->fabla_Load, &body, 0);
+      if (body)
+      {
+        // Get data from body
+        const LV2_Atom_Int* padNum = 0;
+        lv2_atom_object_get( body, self->uris->fabla_pad, &padNum, 0);
+        int* p = (int*)LV2_ATOM_BODY(padNum);
+        int pad = *p;
+        
+        const LV2_Atom_String* path = 0;
+        lv2_atom_object_get( body, self->uris->fabla_filename, &path, 0);
+        const char* f = (const char*)LV2_ATOM_BODY(path);
+        lv2_log_note(&self->logger, "fabla_Load recieved %s on pad %i", f, pad );
+        
+      }
+      
+      if (obj->body.otype == self->uris->fabla_Load)
+      {
+        // work schedule here
+        lv2_log_note(&self->logger, "fabla_Load recieved\n");
+      }
+      
+      if (obj->body.otype == self->uris->atom_Blank)
+      {
+        // work schedule here
+        lv2_log_note(&self->logger, "atom_Blank recieved\n");
       }
     }
     

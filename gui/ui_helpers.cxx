@@ -40,7 +40,7 @@ void writeLoadSample(Fabla* self, int pad, const char* filename, size_t filename
   lv2_atom_forge_property_head( forge, self->uris->fabla_pad, 0);
   lv2_atom_forge_int(forge, pad);
   
-  lv2_atom_forge_property_head( forge, self->uris->fabla_pad, 0);
+  lv2_atom_forge_property_head( forge, self->uris->fabla_filename, 0);
   lv2_atom_forge_path(forge, filename, filename_len);
   
   lv2_atom_forge_pop(forge, &body_frame);
