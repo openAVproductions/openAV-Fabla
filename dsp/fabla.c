@@ -6,7 +6,24 @@
 #include "shared.h"
 #include "lv2/lv2plug.in/ns/ext/atom/forge.h"
 
+#include "voice.hxx"
 #include "denormals.hxx"
+
+#include <sndfile.h>
+
+
+typedef struct {
+  SF_INFO info;      // Info about sample from sndfile
+  float*  data;      // Sample data in float
+  char*   path;      // Path of file
+  size_t  path_len;  // Length of path
+} Sample;
+
+typedef struct {
+        LV2_Atom atom;
+        Sample*  sample;
+} SampleMessage;
+
 
 typedef struct {
   // instantiate values
@@ -40,8 +57,55 @@ typedef struct {
   float  bpm;    // Beats per minute (tempo)
   float  speed;  // Transport speed (usually 0=stop, 1=play)
   
-  //Voice* voice[NVOICES];  
+  //Voice* voice[NVOICES];
 } FABLA_DSP;
+
+
+static Sample* load_sample(FABLA_DSP* self, const char* path)
+{
+  const size_t path_len  = strlen(path);
+  
+  lv2_log_trace(&self->logger, "Loading sample %s\n", path);
+  
+  Sample* const  sample  = (Sample*)malloc(sizeof(Sample));
+  SF_INFO* const info    = &sample->info;
+  SNDFILE* const sndfile = sf_open(path, SFM_READ, info);
+  
+  if (!sndfile || !info->frames || (info->channels != 1)) {
+    lv2_log_error(&self->logger, "Failed to open sample '%s'\n", path);
+    free(sample);
+    return NULL;
+  }
+  
+  // Read data
+  float* const data = (float*)malloc(sizeof(float) * info->frames);
+  if (!data) {
+    lv2_log_error(&self->logger, "Failed to allocate memory for sample\n");
+    return NULL;
+  }
+  sf_seek(sndfile, 0ul, SEEK_SET);
+  sf_read_float(sndfile, data, info->frames);
+  sf_close(sndfile);
+  
+  // Fill sample struct and return it
+  sample->data     = data;
+  sample->path     = (char*)malloc(path_len + 1);
+  sample->path_len = path_len;
+  memcpy(sample->path, path, path_len + 1);
+  
+  return sample;
+}
+
+static void
+free_sample(FABLA_DSP* self, Sample* sample)
+{
+  if (sample) {
+    lv2_log_trace(&self->logger, "Freeing %s\n", sample->path);
+    free(sample->path);
+    free(sample->data);
+    free(sample);
+  }
+}
 
 static LV2_Handle
 instantiate(const LV2_Descriptor*     descriptor,
@@ -160,7 +224,6 @@ run(LV2_Handle instance, uint32_t n_samples)
           lv2_atom_forge_property_head(&self->forge, self->uris->fabla_pad, 0);
           lv2_atom_forge_int(&self->forge, int(data[1]) );
         }
-        
       }
       else if ( (data[0] & 0xF0) == 0x80 )
       {

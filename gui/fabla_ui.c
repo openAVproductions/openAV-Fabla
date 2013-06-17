@@ -158,7 +158,7 @@ static void port_event(LV2UI_Handle handle,
               
               if ( pad >= 0 && pad < 16 )
               {
-                printf("pad on %i\n", pad );
+                //printf("pad on %i\n", pad );
                 switch ( pad )
                 {
                   case 0:  ui->p1->play(true);  break;
@@ -194,7 +194,7 @@ static void port_event(LV2UI_Handle handle,
               
               if ( pad >= 0 && pad < 16 )
               {
-                printf("pad off %i\n", pad );
+                //printf("pad off %i\n", pad );
                 switch ( pad )
                 {
                   case 0:  ui->p1->play(false);  break;

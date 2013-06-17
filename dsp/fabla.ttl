@@ -16,7 +16,9 @@
   doap:maintainer [ foaf:name "OpenAV Productions" ] ;
   
   lv2:binary <fabla.so> ;
-  #lv2:optionalFeature epp:supportsStrictBounds ;
+  lv2:requiredFeature urid:map;
+  lv2:requiredFeature work:schedule ;
+  
   lv2:optionalFeature lv2:hardRtCapable ;
   lv2:optionalFeature ui:noUserResize ;
   
@@ -27,7 +29,6 @@
       atom:AtomPort ;
     atom:bufferType atom:Sequence ;
     atom:supports time:Position ;
-    #atom:supports <http://lv2plug.in/ns/ext/patch#Message> ;
     atom:supports <http://lv2plug.in/ns/ext/midi#MidiEvent> ;
     lv2:index 0 ;
     lv2:symbol "control" ;
@@ -36,7 +37,6 @@
     a lv2:OutputPort ,
       atom:AtomPort ;
     atom:bufferType atom:Sequence ;
-    #atom:supports <http://lv2plug.in/ns/ext/patch#Message> ;
     lv2:index 1 ;
     lv2:symbol "notify" ;
     lv2:name "Notify"

@@ -2,7 +2,7 @@
 CC=g++
 INCLUDES=-I../avtk/ -I/usr/include/cairomm-1.0 -I/usr/lib/cairomm-1.0/include -I/usr/include/sigc++-2.0 -I/usr/lib/sigc++-2.0/include -I/usr/include/ntk -I/usr/include/cairo -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/libpng15
 CFLAGS=-g -c -Wall
-LDFLAGS=-lntk -lcairomm-1.0 -lcairo -z nodelete
+LDFLAGS=-lntk -lcairomm-1.0 -lcairo -lsndfile -z nodelete
 
 UISOURCES=gui/fabla.cxx gui/fabla_ui.c
 UIOBJECTS=$(UISOURCES:.cpp=.o)
@@ -20,7 +20,6 @@ all: folder ui dsp
 
 genUI:
 	cd gui; ntk-fluid -c fabla.fl
-
 
 folder:
 	mkdir -p fabla.lv2/
