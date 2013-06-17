@@ -102,9 +102,8 @@ static void port_event(LV2UI_Handle handle,
     
     switch ( port_index )
     {
-      /*
       case MASTER_VOL: ui->masterVol->value( v );         break;
-      
+      /*
       case OSC_1_MOD: ui->osc1->X( v );                   break;
       case OSC_1_VOL: ui->osc1->Y( v );                   break;
           
