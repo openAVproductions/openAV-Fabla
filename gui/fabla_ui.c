@@ -145,157 +145,80 @@ static void port_event(LV2UI_Handle handle,
             // Get body
             LV2_Atom_Object* obj = (LV2_Atom_Object*)atom;
             const LV2_Atom_Object* body = NULL;
+            
+            
+            // NOTE ON
             lv2_atom_object_get(obj, self->uris->fabla_Play, &body, 0);
-            if (!body) {
-              fprintf(stderr, "Malformed set message has no body.\n");
-              return;
-            }
-            
-            // Get int from body
-            const LV2_Atom_Int* padNum = 0;
-            lv2_atom_object_get( body, self->uris->fabla_pad, &padNum, 0);
-            int* p = (int*)LV2_ATOM_BODY(padNum);
-            int pad = *p;
-            
-            if ( pad >= 36 && pad < 36 + 16 )
-            {
-              printf("pad %i\n", pad );
-            }
-            
-            /*
-            LV2_ATOM_OBJECT_FOREACH(obj, i)
-            {
+            if (body) {
+              // Get int from body
+              const LV2_Atom_Int* padNum = 0;
+              lv2_atom_object_get( body, self->uris->fabla_pad, &padNum, 0);
+              int* p = (int*)LV2_ATOM_BODY(padNum);
+              int pad = *p - 36;
               
-              void* a = LV2_ATOM_BODY( &i->value );
-              int* p = (int*)a;
-              
-              printf("uris:\n %s\n %i\n",
-                self->unmap->unmap( self->unmap->handle, i->key ),
-                *p );
-            }
-            */
-
-            /*
-            if (obj->body.otype != self->uris->fabla_pad) {
-              printf("uris:\n %s\n %s\n %s\n",
-                self->unmap->unmap( self->unmap->handle, obj->body.otype ),
-                self->unmap->unmap( self->unmap->handle, self->uris->fabla_Play ),
-                self->unmap->unmap( self->unmap->handle, self->uris->fabla_pad ) );
-              
-              return;
-            }
-            
-            const LV2_Atom* pad = NULL;
-            lv2_atom_object_get( obj, self->uris->fabla_pad, &pad, 0);
-            
-            if ( !pad ) {
-              fprintf(stderr, "Malformed message has no pad number\n");
-              return;
-            }
-            
-            int p = *((int*)LV2_ATOM_BODY(atom));
-            printf("value = %i\n", p);
-            */
-            
-            /*
-            const LV2_Atom_Int* padNum = 0;
-            lv2_atom_object_get( (LV2_Atom_Object*)atom, self->uris->fabla_pad, &padNum, 0);
-            printf("value = %i\n", *padNum);
-            */
-          }
-          
-          /*
-          int k; float v;
-          if (get_cc_key_value(&ui->uris, (LV2_Atom_Object*)atom, &k, &v)) {
-            return;
-          }
-          */
-          
-          /*
-          if ( true )
-          {
-            // get the object representing the rest of the data
-            const LV2_Atom_Object* obj = (LV2_Atom_Object*)&buffer;
-            
-            printf("checking body.otype = %i, URI = %i\n", obj->body.otype, self->uris->fabla_Play);
-            
-            printf("uris:\n %s, %s\n",
-              self->unmap->unmap( self->unmap->handle, obj->body.otype ),
-              self->unmap->unmap( self->unmap->handle, self->uris->fabla_Play ) );
-            
-            // check if the type of the data is eg_name
-            if ( obj->body.otype == self->uris->atom_eventTransfer )
-            {
-              printf("body == eventTransfer\n");
-              LV2_Atom* pad = NULL;
-              lv2_atom_object_get( obj->body, self->uris->fabla_Play, &pad, 0);
-              
-              if ( pad )
+              if ( pad >= 0 && pad < 16 )
               {
-                //int* s = (int*)LV2_ATOM_BODY(p);
-                printf("int = %i\n", *((int*)pad) );
+                printf("pad on %i\n", pad );
+                switch ( pad )
+                {
+                  case 0:  ui->p1->play(true);  break;
+                  case 1:  ui->p2->play(true);  break;
+                  case 2:  ui->p3->play(true);  break;
+                  case 3:  ui->p4->play(true);  break;
+                  case 4:  ui->p5->play(true);  break;
+                  case 5:  ui->p6->play(true);  break;
+                  case 6:  ui->p7->play(true);  break;
+                  case 7:  ui->p8->play(true);  break;
+                  case 8:  ui->p9->play(true);  break;
+                  case 9:  ui->p10->play(true); break;
+                  case 10: ui->p11->play(true); break;
+                  case 11: ui->p12->play(true); break;
+                  case 12: ui->p13->play(true); break;
+                  case 13: ui->p14->play(true); break;
+                  case 14: ui->p15->play(true); break;
+                  case 15: ui->p16->play(true); break;
+                  default: break;
+                }
               }
             }
-          }
-          */
-          
-          /*
-          printf("atom == %i\n", atom);
-          
-          printf("atom->type =  %i\n", atom->type);
-          
-          if (atom->type == self->uris->atom_eventTransfer )
-          {
-            printf("eventTransfer\n");
-          }
-          if (atom->type == self->uris->atom_Blank )
-          {
-            printf("atom_Blank\n");
             
-            obj = (LV2_Atom_Object*)atom;
-            lv2_atom_object_get(obj, self->uris->fabla_pad, &pad, 0);
-          
-            //printf( "body.otype = %i\n",obj->body.otype );
-          
-            printf("pad = %i\n", *pad );
-          }
-          */
-          
-
-          
-          
-          
-          
-          /*
-          obj = (LV2_Atom_Object*)buffer;
-          printf("cast done\n");
-          if ( obj == 0 )
-          {
-            printf("obj == 0!! \n");
-          }
-          
-          printf("past == 0\n");
-          
-          if ( obj->body ) {
-            fprintf(stderr, "Ignoring unknown message type %d\n", obj->body.otype);
-          }
-          */
-          
-          
-          /*
-          if (format == self->uris->atom_eventTransfer)
-          {
-            
-            LV2_ATOM_SEQUENCE_FOREACH( (LV2_Atom_Sequence*)buffer, ev)
-            {
-              printf("event\n");
-              if (ev->body.type == self->uris->fabla_Play)
+            // NOTE Off
+            body = NULL;
+            lv2_atom_object_get(obj, self->uris->fabla_Stop, &body, 0);
+            if (body) {
+              // Get int from body
+              const LV2_Atom_Int* padNum = 0;
+              lv2_atom_object_get( body, self->uris->fabla_pad, &padNum, 0);
+              int* p = (int*)LV2_ATOM_BODY(padNum);
+              int pad = *p - 36;
+              
+              if ( pad >= 0 && pad < 16 )
               {
-                printf("fabla_Play\n");
+                printf("pad off %i\n", pad );
+                switch ( pad )
+                {
+                  case 0:  ui->p1->play(false);  break;
+                  case 1:  ui->p2->play(false);  break;
+                  case 2:  ui->p3->play(false);  break;
+                  case 3:  ui->p4->play(false);  break;
+                  case 4:  ui->p5->play(false);  break;
+                  case 5:  ui->p6->play(false);  break;
+                  case 6:  ui->p7->play(false);  break;
+                  case 7:  ui->p8->play(false);  break;
+                  case 8:  ui->p9->play(false);  break;
+                  case 9:  ui->p10->play(false); break;
+                  case 10: ui->p11->play(false); break;
+                  case 11: ui->p12->play(false); break;
+                  case 12: ui->p13->play(false); break;
+                  case 13: ui->p14->play(false); break;
+                  case 14: ui->p15->play(false); break;
+                  case 15: ui->p16->play(false); break;
+                  default: break;
+                }
               }
             }
+            
           }
-          */
         break;
       
       default: break;

@@ -146,6 +146,7 @@ run(LV2_Handle instance, uint32_t n_samples)
       {
         //lv2_log_note(&self->logger, "Note on : %d\n", data[1] );
         
+        // write an Atom to the UI signaling note on / pad press
         {
           lv2_atom_forge_frame_time(&self->forge, 0);
           
@@ -158,31 +159,23 @@ run(LV2_Handle instance, uint32_t n_samples)
           
           lv2_atom_forge_property_head(&self->forge, self->uris->fabla_pad, 0);
           lv2_atom_forge_int(&self->forge, int(data[1]) );
-          
-          //lv2_atom_forge_pop(&self->forge, &set_frame);
-          
-          
-          /*
-          LV2_Atom_Forge_Frame set_frame;
-          LV2_Atom* set = (LV2_Atom*)lv2_atom_forge_blank( &self->forge, &set_frame, 1, self->uris->fabla_Play);
-          
-          lv2_atom_forge_property_head( &self->forge, self->uris->patch_body, 0);
-          LV2_Atom_Forge_Frame body_frame;
-          lv2_atom_forge_blank(&self->forge, &body_frame, 2, 0);
-          
-          lv2_atom_forge_property_head( &self->forge, self->uris->fabla_pad, 0);
-          lv2_atom_forge_int( &self->forge, 42 ); // int(data[1])
-          
-          lv2_atom_forge_pop( &self->forge, &body_frame);
-          lv2_atom_forge_pop( &self->forge, &set_frame);
-          */
-          
         }
         
       }
       else if ( (data[0] & 0xF0) == 0x80 )
       {
         //lv2_log_note(&self->logger, "Note off: %d\n", data[1] );
+        lv2_atom_forge_frame_time(&self->forge, 0);
+        
+        LV2_Atom_Forge_Frame set_frame;
+        LV2_Atom* set = (LV2_Atom*)lv2_atom_forge_blank(&self->forge, &set_frame, 1, self->uris->atom_eventTransfer);
+        
+        lv2_atom_forge_property_head(&self->forge, self->uris->fabla_Stop, 0);
+        LV2_Atom_Forge_Frame body_frame;
+        lv2_atom_forge_blank(&self->forge, &body_frame, 2, 0);
+        
+        lv2_atom_forge_property_head(&self->forge, self->uris->fabla_pad, 0);
+        lv2_atom_forge_int(&self->forge, int(data[1]) );
       }
     }
     
