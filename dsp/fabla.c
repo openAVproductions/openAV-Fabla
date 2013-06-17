@@ -159,7 +159,7 @@ run(LV2_Handle instance, uint32_t n_samples)
           lv2_atom_forge_property_head(&self->forge, self->uris->fabla_pad, 0);
           lv2_atom_forge_int(&self->forge, int(data[1]) );
           
-          lv2_atom_forge_pop(&self->forge, &body_frame);
+          //lv2_atom_forge_pop(&self->forge, &set_frame);
           
           
           /*

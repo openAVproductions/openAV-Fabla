@@ -27,6 +27,7 @@ typedef struct {
   
   // URID map
   LV2_URID_Map* map;
+  LV2_URID_Unmap* unmap;
   Fabla_URIs* uris;
   
 } Fabla;
@@ -66,7 +67,10 @@ static LV2UI_Handle instantiate(const struct _LV2UI_Descriptor * descriptor,
         resize = (LV2UI_Resize*)features[i]->data;
       }
       else if (!strcmp(features[i]->URI, LV2_URID__map)) {
-      self->map = (LV2_URID_Map*)features[i]->data;
+        self->map = (LV2_URID_Map*)features[i]->data;
+      }
+      else if (!strcmp(features[i]->URI, LV2_URID__unmap)) {
+        self->unmap = (LV2_URID_Unmap*)features[i]->data;
       }
     }
     
@@ -115,37 +119,125 @@ static void port_event(LV2UI_Handle handle,
     
     Fl::lock();
     
+    /*
     LV2_Atom* atom = 0;
     LV2_Atom_Object* obj = 0;
     LV2_Atom_Int* pad = 0;
+    */
     
     switch ( port_index )
     {
       case MASTER_VOL: ui->masterVol->value( v );         break;
       
       case ATOM_OUT:
-          printf("atom out, buffer size = %i\n", buffer_size);
-          atom = (LV2_Atom*)buffer;
+          if (format != self->uris->atom_eventTransfer) {
+            printf("format != atom_eventTransfer\n");
+            return;
+          }
           
+          {
+            LV2_Atom* atom = (LV2_Atom*)buffer;
+            if (atom->type != self->uris->atom_Blank) {
+              printf("atom->type != atom_Blank\n");
+              return;
+            }
+            
+            // Get body
+            LV2_Atom_Object* obj = (LV2_Atom_Object*)atom;
+            const LV2_Atom_Object* body = NULL;
+            lv2_atom_object_get(obj, self->uris->fabla_Play, &body, 0);
+            if (!body) {
+              fprintf(stderr, "Malformed set message has no body.\n");
+              return;
+            }
+            
+            // Get int from body
+            const LV2_Atom_Int* padNum = 0;
+            lv2_atom_object_get( body, self->uris->fabla_pad, &padNum, 0);
+            int* p = (int*)LV2_ATOM_BODY(padNum);
+            int pad = *p;
+            
+            if ( pad >= 36 && pad < 36 + 16 )
+            {
+              printf("pad %i\n", pad );
+            }
+            
+            /*
+            LV2_ATOM_OBJECT_FOREACH(obj, i)
+            {
+              
+              void* a = LV2_ATOM_BODY( &i->value );
+              int* p = (int*)a;
+              
+              printf("uris:\n %s\n %i\n",
+                self->unmap->unmap( self->unmap->handle, i->key ),
+                *p );
+            }
+            */
+
+            /*
+            if (obj->body.otype != self->uris->fabla_pad) {
+              printf("uris:\n %s\n %s\n %s\n",
+                self->unmap->unmap( self->unmap->handle, obj->body.otype ),
+                self->unmap->unmap( self->unmap->handle, self->uris->fabla_Play ),
+                self->unmap->unmap( self->unmap->handle, self->uris->fabla_pad ) );
+              
+              return;
+            }
+            
+            const LV2_Atom* pad = NULL;
+            lv2_atom_object_get( obj, self->uris->fabla_pad, &pad, 0);
+            
+            if ( !pad ) {
+              fprintf(stderr, "Malformed message has no pad number\n");
+              return;
+            }
+            
+            int p = *((int*)LV2_ATOM_BODY(atom));
+            printf("value = %i\n", p);
+            */
+            
+            /*
+            const LV2_Atom_Int* padNum = 0;
+            lv2_atom_object_get( (LV2_Atom_Object*)atom, self->uris->fabla_pad, &padNum, 0);
+            printf("value = %i\n", *padNum);
+            */
+          }
           
+          /*
+          int k; float v;
+          if (get_cc_key_value(&ui->uris, (LV2_Atom_Object*)atom, &k, &v)) {
+            return;
+          }
+          */
           
+          /*
           if ( true )
           {
             // get the object representing the rest of the data
             const LV2_Atom_Object* obj = (LV2_Atom_Object*)&buffer;
-         
+            
+            printf("checking body.otype = %i, URI = %i\n", obj->body.otype, self->uris->fabla_Play);
+            
+            printf("uris:\n %s, %s\n",
+              self->unmap->unmap( self->unmap->handle, obj->body.otype ),
+              self->unmap->unmap( self->unmap->handle, self->uris->fabla_Play ) );
+            
             // check if the type of the data is eg_name
-            if ( obj->body.otype == self->uris->fabla_Play )
+            if ( obj->body.otype == self->uris->atom_eventTransfer )
             {
-              // get the data from the body
-              const LV2_Atom_Object* body = NULL;
-              lv2_atom_object_get(obj, self->uris->fabla_pad, &body, 0);
+              printf("body == eventTransfer\n");
+              LV2_Atom* pad = NULL;
+              lv2_atom_object_get( obj->body, self->uris->fabla_Play, &pad, 0);
               
-              // convert it to the type it is, and use it
-              int* s = (int*)LV2_ATOM_BODY(body);
-              printf("int = %i\n", s);
+              if ( pad )
+              {
+                //int* s = (int*)LV2_ATOM_BODY(p);
+                printf("int = %i\n", *((int*)pad) );
+              }
             }
           }
+          */
           
           /*
           printf("atom == %i\n", atom);
