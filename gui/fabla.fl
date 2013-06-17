@@ -22,7 +22,7 @@ fl_embed( w, (Window)xParentWindow );} {}
 fl_open_display();} {}
     Fl_Window w {
       label Fabla open
-      xywh {500 140 515 490} type Double color 56 selection_color 0 labelcolor 88
+      xywh {593 172 515 490} type Double color 56 selection_color 0 labelcolor 88
       code0 {\#include "avtk.h"}
       code1 {using namespace Avtk;}
       code2 {\#include <FL/x.H>}
@@ -55,6 +55,7 @@ fl_open_display();} {}
         xywh {453 290 48 186} box UP_BOX
         code0 {\#include "../dsp/ports.h"}
         code1 {\#include "lv2/lv2plug.in/ns/extensions/ui/ui.h"}
+        code2 {\#include "../dsp/shared.h"}
         class Volume
       }
       Fl_Box {} {
@@ -134,6 +135,7 @@ fl_open_display();} {}
         xywh {15 411 75 64} box BORDER_BOX labelcolor 52
         code0 {p1->selected(true);}
         code1 {p1->ID(0);}
+        code2 {\#include <FL/Fl_Native_File_Chooser.H>}
         class Pad
       }
       Fl_Box p10 {
@@ -245,7 +247,8 @@ fl_open_display();} {}
         class Dial
       }
     }
-    code {} {}
+    code {\#include "lv2/lv2plug.in/ns/ext/atom/forge.h"} {selected
+    }
   }
   decl {LV2UI_Controller controller;} {public local
   }
@@ -308,8 +311,50 @@ switch(selectedPad)
   } {
     code {printf("pad %i clicked, right = %i\\n", id, rclick);
 
-// write PAD PLAY message here
-// int padNum = id;} {selected
-    }
+if ( rclick )
+{
+  // pop up "load sample" dialog, write Atom event to DSP
+  
+  Fl_Native_File_Chooser fnfc;
+  fnfc.title("Load Sample");
+  fnfc.type(Fl_Native_File_Chooser::BROWSE_FILE);
+  fnfc.filter("Wav\\t*.wav");
+  fnfc.directory( getenv("HOME") );
+  
+  switch ( fnfc.show() )
+  {
+    case -1: printf("ERROR: %s\\n", fnfc.errmsg());    break;  // ERROR
+    case  1: printf("CANCEL\\n");                      break;  // CANCEL
+    default: printf("Loading directory: %s\\n", fnfc.filename());    
+    
+    // update path and load it
+    //path = fnfc.filename();
+    //browser->load( path.c_str() );
+    
+    /*
+    lv2_atom_forge_frame_time(&self->forge, 0);
+    LV2_Atom_Forge_Frame set_frame;
+    LV2_Atom* set = (LV2_Atom*)lv2_atom_forge_blank(&self->forge, &set_frame, 1, self->uris->atom_eventTransfer);
+    
+    lv2_atom_forge_property_head(&self->forge, self->uris->fabla_Stop, 0);
+    LV2_Atom_Forge_Frame body_frame;
+    lv2_atom_forge_blank(&self->forge, &body_frame, 2, 0);
+    
+    lv2_atom_forge_property_head(&self->forge, self->uris->fabla_pad, 0);
+    lv2_atom_forge_int(&self->forge, int(data[1]) );
+    */
+    
+    break;
+ }
+}
+else
+{
+  // write pad play Atom to DSP
+  
+}} {}
+  }
+  decl {Fabla_URIs* uris;} {public local
+  }
+  decl {LV2_Atom_Forge forge;} {public local
   }
 } 
