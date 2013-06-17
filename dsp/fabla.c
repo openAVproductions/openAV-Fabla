@@ -346,8 +346,8 @@ run(LV2_Handle instance, uint32_t n_samples)
       self->voice[i]->process( 1, &accumL, &accumR );
     }
     
-    outputL[pos] = accumL; // * gain;
-    outputR[pos] = accumR; // * gain;
+    outputL[pos] = accumL * gain;
+    outputR[pos] = accumR * gain;
   }
 }
 

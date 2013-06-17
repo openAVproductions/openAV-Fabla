@@ -12,6 +12,9 @@
 // this is our custom widget include
 #include "fabla.h"
 
+// fabla struct
+#include "fabla.hxx"
+
 // core spec include
 #include "lv2/lv2plug.in/ns/lv2core/lv2.h"
 
@@ -22,16 +25,6 @@
 //#include "lv2/lv2plug.in/ns/ext/atom/forge.h"
 
 using namespace std;
-
-typedef struct {
-  FablaUI* widget;
-  
-  // URID map
-  LV2_URID_Map* map;
-  LV2_URID_Unmap* unmap;
-  Fabla_URIs* uris;
-  
-} Fabla;
 
 
 static LV2UI_Handle instantiate(const struct _LV2UI_Descriptor * descriptor,
@@ -75,18 +68,13 @@ static LV2UI_Handle instantiate(const struct _LV2UI_Descriptor * descriptor,
       }
     }
     
-    
-    
+    self->write_function = write_function;
+    self->controller = controller;
     
     map_uris( self->map, self->uris );
     
     //cout << "Creating UI!" << endl;
-    self->widget = new FablaUI( parentXwindow );
-    
-    //cout << "Writing controller f(x)!" << endl;
-    
-    self->widget->controller = controller;
-    self->widget->writeFunction = write_function;
+    self->widget = new FablaUI( parentXwindow, self );
     
     if (resize) {
       //resize->ui_resize(resize->handle, self->widget->getWidth(),self->widget->getHeight());

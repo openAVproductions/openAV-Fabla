@@ -9,20 +9,22 @@ class FablaUI {open
     code {setupUI();
 w->show();} {}
   }
-  Function {FablaUI(void* xParentWindow)} {open
+  Function {FablaUI(void* xParentWindow, Fabla* f)} {open
   } {
     code {setupUI();
+
+fabla = f;
 
 // embed drawn stuff into LV2 host provided area  
 fl_embed( w, (Window)xParentWindow );} {}
   }
-  Function {setupUI()} {open selected
+  Function {setupUI()} {open
   } {
     code {// In case FLTK hasn't set up yet
 fl_open_display();} {}
     Fl_Window w {
       label Fabla open
-      xywh {487 181 515 490} type Double color 56 selection_color 0 labelcolor 88
+      xywh {538 168 515 490} type Double color 56 selection_color 0 labelcolor 88
       code0 {\#include "avtk.h"}
       code1 {using namespace Avtk;}
       code2 {\#include <FL/x.H>}
@@ -51,11 +53,12 @@ fl_open_display();} {}
         xywh {351 379 97 97} box BORDER_BOX
       }
       Fl_Box masterVol {
-        label Vol
+        label Vol selected
         xywh {453 290 48 186} box UP_BOX
         code0 {\#include "../dsp/ports.h"}
         code1 {\#include "lv2/lv2plug.in/ns/extensions/ui/ui.h"}
         code2 {\#include "../dsp/shared.h"}
+        code3 {\#include "fabla.hxx"}
         class Volume
       }
       Fl_Box {} {
@@ -250,9 +253,7 @@ fl_open_display();} {}
       }
     }
   }
-  decl {LV2UI_Controller controller;} {public local
-  }
-  decl {LV2UI_Write_Function writeFunction} {public local
+  decl {Fabla* fabla;} {public local
   }
   Function {idle()} {open
   } {
@@ -352,9 +353,5 @@ else
   // write pad play Atom to DSP
   
 }} {}
-  }
-  decl {Fabla_URIs* uris;} {public local
-  }
-  decl {//LV2_Atom_Forge forge;} {public local
   }
 } 
