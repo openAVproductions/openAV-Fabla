@@ -26,6 +26,8 @@
 
 using namespace std;
 
+extern void initForge(Fabla*);
+extern void writeLoadSample(Fabla* self, int pad, const char* filename, size_t filename_len);
 
 static LV2UI_Handle instantiate(const struct _LV2UI_Descriptor * descriptor,
                 const char * plugin_uri,
@@ -72,6 +74,8 @@ static LV2UI_Handle instantiate(const struct _LV2UI_Descriptor * descriptor,
     self->controller = controller;
     
     map_uris( self->map, self->uris );
+    
+    initForge( self );
     
     //cout << "Creating UI!" << endl;
     self->widget = new FablaUI( parentXwindow, self );

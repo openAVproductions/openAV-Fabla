@@ -1,6 +1,7 @@
 
 
 #include <string>
+#include <stdlib.h>
 
 
 #include "../dsp/ports.h"
@@ -13,11 +14,21 @@
 #include "lv2/lv2plug.in/ns/extensions/ui/ui.h"
 #include "lv2/lv2plug.in/ns/ext/atom/atom.h"
 
-
-static void writeLoadSample(Fabla* self, int pad, const char* filename, size_t filename_len) 
+void initForge(Fabla* self)
 {
-  
+  // then init the forge to write Atoms
+  self->voidForge = malloc( sizeof(LV2_Atom_Forge) );
+  lv2_atom_forge_init( (LV2_Atom_Forge*)self->voidForge, self->map);
+}
+
+void writeLoadSample(Fabla* self, int pad, const char* filename, size_t filename_len)
+{
   LV2_Atom_Forge* forge = (LV2_Atom_Forge*)self->voidForge;
+  
+  // To write messages, we set up a buffer:
+  uint8_t obj_buf[1024];
+  // Then we tell the forge to use that buffer
+  lv2_atom_forge_set_buffer( forge, obj_buf, 1024);
   
   LV2_Atom_Forge_Frame set_frame;
   LV2_Atom* set = (LV2_Atom*)lv2_atom_forge_blank( forge, &set_frame, 1, self->uris->atom_eventTransfer);
@@ -34,5 +45,12 @@ static void writeLoadSample(Fabla* self, int pad, const char* filename, size_t f
   
   lv2_atom_forge_pop(forge, &body_frame);
   lv2_atom_forge_pop(forge, &set_frame);
+  
+  printf("writing message now, filename: %s\n", filename );
+  
+  self->write_function(self->controller, ATOM_IN, lv2_atom_total_size(set),
+              self->uris->atom_eventTransfer,
+              set );
+  
   
 }

@@ -4,7 +4,7 @@ INCLUDES=-I../avtk/ -I/usr/include/cairomm-1.0 -I/usr/lib/cairomm-1.0/include -I
 CFLAGS=-g -c -Wall
 LDFLAGS=-lntk -lcairomm-1.0 -lcairo -lsndfile -z nodelete
 
-UISOURCES=gui/fabla.cxx gui/fabla_ui.c gui/ui_helpers.cxx
+UISOURCES=gui/ui_helpers.cxx gui/fabla.cxx gui/fabla_ui.c
 UIOBJECTS=$(UISOURCES:.cpp=.o)
 UI=fabla.lv2/fabla_ui.so
 
