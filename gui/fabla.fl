@@ -22,7 +22,7 @@ fl_embed( w, (Window)xParentWindow );} {}
 fl_open_display();} {}
     Fl_Window w {
       label Fabla open
-      xywh {593 172 515 490} type Double color 56 selection_color 0 labelcolor 88
+      xywh {451 181 515 490} type Double color 56 selection_color 0 labelcolor 88
       code0 {\#include "avtk.h"}
       code1 {using namespace Avtk;}
       code2 {\#include <FL/x.H>}
@@ -216,39 +216,40 @@ fl_open_display();} {}
         xywh {365 395 30 30} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
         class Dial
       }
-      Fl_Box {} {
-        label Release
-        xywh {373 210 42 40} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+      Fl_Box gain {
+        label Gain
+        xywh {374 210 42 40} box UP_BOX color 48 labelcolor 40
+        code0 {gain->drawLabel(true);}
         class Dial
       }
-      Fl_Box {} {
-        label Release
-        xywh {393 170 30 30} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+      Fl_Box d {
+        label D
+        xywh {393 170 30 30} box UP_BOX color 48 labelcolor 40
         class Dial
       }
-      Fl_Box {} {
-        label Release
-        xywh {358 170 30 30} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+      Fl_Box a {
+        label A
+        xywh {358 170 30 30} box UP_BOX color 48 labelcolor 40
         class Dial
       }
-      Fl_Box {} {
-        label Release
-        xywh {425 210 45 40} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+      Fl_Box pitch {
+        label Pitch selected
+        xywh {425 210 45 40} box UP_BOX color 48 labelcolor 40
+        code0 {pitch->drawLabel(true);}
         class Dial
       }
-      Fl_Box {} {
-        label Release
-        xywh {463 170 30 30} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+      Fl_Box r {
+        label R
+        xywh {463 170 30 30} box UP_BOX color 48 labelcolor 40
         class Dial
       }
-      Fl_Box {} {
-        label Release
-        xywh {428 170 30 30} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+      Fl_Box s {
+        label S
+        xywh {428 170 30 30} box UP_BOX color 48 labelcolor 40
         class Dial
       }
     }
-    code {\#include "lv2/lv2plug.in/ns/ext/atom/forge.h"} {selected
-    }
+    code {//\#include "lv2/lv2plug.in/ns/ext/atom/forge.h"} {}
   }
   decl {LV2UI_Controller controller;} {public local
   }
@@ -355,6 +356,6 @@ else
   }
   decl {Fabla_URIs* uris;} {public local
   }
-  decl {LV2_Atom_Forge forge;} {public local
+  decl {//LV2_Atom_Forge forge;} {public local
   }
 } 
