@@ -15,8 +15,9 @@
 static const char* default_sample = "click.wav";
 
 typedef struct {
-        LV2_Atom atom;
-        Sample*  sample;
+  LV2_Atom atom;
+  int pad;
+  Sample*  sample;
 } SampleMessage;
 
 
@@ -311,7 +312,17 @@ run(LV2_Handle instance, uint32_t n_samples)
         const LV2_Atom_String* path = 0;
         lv2_atom_object_get( body, self->uris->fabla_filename, &path, 0);
         const char* f = (const char*)LV2_ATOM_BODY(path);
-        lv2_log_note(&self->logger, "fabla_Load recieved %s on pad %i", f, pad );
+        lv2_log_note(&self->logger, "fabla_Load recieved %s on pad %i   : scheduling work now!\n", f, pad );
+        
+        // schedule work
+        SampleMessage message;
+        
+        self->schedule->schedule_work(self->schedule->handle,
+                                      lv2_atom_total_size(&ev->body),
+                                      &ev->body);
+        
+        lv2_log_note(&self->logger, "continuing...\n" );
+        
         
       }
       
@@ -390,6 +401,143 @@ run(LV2_Handle instance, uint32_t n_samples)
 }
 
 
+
+/**
+   Do work in a non-realtime thread.
+
+   This is called for every piece of work scheduled in the audio thread using
+   self->schedule->schedule_work().  A reply can be sent back to the audio
+   thread using the provided respond function.
+*/
+static LV2_Worker_Status
+work(LV2_Handle                  instance,
+     LV2_Worker_Respond_Function respond,
+     LV2_Worker_Respond_Handle   handle,
+     uint32_t                    size,
+     const void*                 data)
+{
+  printf("Fabla: Work() now\n" );
+  FABLA_DSP*  self = (FABLA_DSP*)instance;
+  LV2_Atom* atom = (LV2_Atom*)data;
+  
+  if (atom->type == self->uris->fabla_Unload)
+  {
+    {
+      SampleMessage* msg = (SampleMessage*)data;
+      free_sample(self, msg->sample);
+    }
+  }
+  else
+  {
+    printf("Fabla Work()  LoadSample type message\n" );
+    /* Handle set message (load sample). */
+    LV2_Atom_Object* obj = (LV2_Atom_Object*)data;
+    
+    printf("Fabla Work()  LV2_Atom_Object atom type %i, body.otype %i \n", obj->atom.type, obj->body.otype );
+    
+    /* Get file path from message */
+    const LV2_Atom_Int* sampleNum = 0;// FIXME read_set_file_sample_number(&self->uris, obj);
+    
+    if ( !sampleNum )
+    {
+      printf("Fabla Work()  LoadSample Sample number not found in Atom\n" );
+    }
+    else
+    {
+      //print(self, self->uris->log_Error, "Fabla Work()  LoadSample on sampleNumber %i\n", sampleNum->body );
+    }
+    
+    const LV2_Atom* file_path = 0; //fixme: take from Atom message
+    if (!file_path) {
+      printf( "Fabla Work()  LoadSample FILE PATH NOT VALID\n" );
+      return LV2_WORKER_ERR_UNKNOWN;
+    }
+    
+    int padNum = sampleNum->body;
+    
+    /* Load sample. */
+    /*
+    SampleMessage* sampleMessage;
+    if ( file_path )
+      sampleMessage = load_sample(self, padNum, (const char*)LV2_ATOM_BODY(file_path) );
+    
+    if (sampleMessage) {
+      // here we send the SampleMessage to the GUI too, so it can show the waveform
+      
+      
+      // Loaded sample, send it to run() to be applied
+      respond(handle, sizeof(SampleMessage), &sampleMessage);
+    }
+    else
+    {
+      print( "Fabla Work(), sampleMessage not valid, check load_sample code\n" );
+    }
+    */
+  }
+
+  return LV2_WORKER_SUCCESS;
+}
+
+/**
+   Handle a response from work() in the audio thread.
+
+   When running normally, this will be called by the host after run().  When
+   freewheeling, this will be called immediately at the point the work was
+   scheduled.
+*/
+static LV2_Worker_Status
+work_response(LV2_Handle  instance,
+              uint32_t    size,
+              const void* data)
+{
+  FABLA_DSP* self = (FABLA_DSP*)instance;
+  
+  int sampleNum = 0;
+  
+  Sample* freeOldSample = 0;
+  
+  {
+    // Get details from the message
+    SampleMessage* message =  *(SampleMessage**)data;
+    sampleNum = message->pad;
+    
+    // check if there's currently a sample loaded on the pad
+    // this gets used later to see if we need to de-allocate the old sample
+    freeOldSample = self->samples[sampleNum];
+    
+    // point to the new sample
+    self->samples[sampleNum] = message->sample;
+    
+    // set the "playback" of the current sample past the end by a frame:
+    // stops the sample from playing just after being loaded
+    self->samples[sampleNum]->index = message->sample->info.frames + 1;
+    
+    /*
+    // Send a notification that we're using a new sample
+    lv2_atom_forge_frame_time(&self->forge, self->frame_offset);
+    write_set_file_with_data(&self->forge, &self->uris,
+                   sampleNum,
+                   self->sample[sampleNum]->path,
+                   self->sample[sampleNum]->path_len,
+                   message->sample->data,
+                   message->sample->info.frames);
+    */
+  }
+  
+  if ( freeOldSample )
+  {
+    // send worker to free the current sample, 
+    SampleMessage msg = { { sizeof(Sample*), self->uris->fabla_Unload },
+                          sampleNum,
+                          freeOldSample };
+    
+    self->schedule->schedule_work(self->schedule->handle, sizeof(msg), &msg);
+  }
+  
+  return LV2_WORKER_SUCCESS;
+}
+
+
 static void
 deactivate(LV2_Handle instance)
 {
@@ -404,7 +552,11 @@ cleanup(LV2_Handle instance)
 const void*
 extension_data(const char* uri)
 {
-	return NULL;
+  static const LV2_Worker_Interface worker = { work, work_response, NULL };
+  if (!strcmp(uri, LV2_WORKER__interface)) {
+    return &worker;
+  }
+  return NULL;
 }
 
 static const LV2_Descriptor descriptor = {
