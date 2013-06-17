@@ -127,6 +127,27 @@ static void port_event(LV2UI_Handle handle,
           printf("atom out, buffer size = %i\n", buffer_size);
           atom = (LV2_Atom*)buffer;
           
+          
+          
+          if ( true )
+          {
+            // get the object representing the rest of the data
+            const LV2_Atom_Object* obj = (LV2_Atom_Object*)&buffer;
+         
+            // check if the type of the data is eg_name
+            if ( obj->body.otype == self->uris->fabla_Play )
+            {
+              // get the data from the body
+              const LV2_Atom_Object* body = NULL;
+              lv2_atom_object_get(obj, self->uris->fabla_pad, &body, 0);
+              
+              // convert it to the type it is, and use it
+              int* s = (int*)LV2_ATOM_BODY(body);
+              printf("int = %i\n", s);
+            }
+          }
+          
+          /*
           printf("atom == %i\n", atom);
           
           printf("atom->type =  %i\n", atom->type);
@@ -146,7 +167,7 @@ static void port_event(LV2UI_Handle handle,
           
             printf("pad = %i\n", *pad );
           }
-          
+          */
           
 
           
