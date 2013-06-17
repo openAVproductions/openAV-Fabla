@@ -11,6 +11,7 @@
 
 #include <sndfile.h>
 
+#define NVOICES 16
 
 typedef struct {
   SF_INFO info;      // Info about sample from sndfile
@@ -57,7 +58,8 @@ typedef struct {
   float  bpm;    // Beats per minute (tempo)
   float  speed;  // Transport speed (usually 0=stop, 1=play)
   
-  //Voice* voice[NVOICES];
+  Voice* voice[NVOICES];
+  
 } FABLA_DSP;
 
 
@@ -136,6 +138,10 @@ instantiate(const LV2_Descriptor*     descriptor,
     }
   }
   
+  // allocate voices
+  for(int i = 0; i < NVOICES; i++)
+    self->voice[i] = new Voice(rate);
+  
   // map all known URIs to ints
   map_uris( self->map, self->uris );
   
@@ -209,21 +215,32 @@ run(LV2_Handle instance, uint32_t n_samples)
       if ( (data[0] & 0xF0) == 0x90 ) // event & channel
       {
         //lv2_log_note(&self->logger, "Note on : %d\n", data[1] );
+        lv2_atom_forge_frame_time(&self->forge, 0);
+        LV2_Atom_Forge_Frame set_frame;
+        LV2_Atom* set = (LV2_Atom*)lv2_atom_forge_blank(&self->forge, &set_frame, 1, self->uris->atom_eventTransfer);
         
-        // write an Atom to the UI signaling note on / pad press
+        lv2_atom_forge_property_head(&self->forge, self->uris->fabla_Play, 0);
+        LV2_Atom_Forge_Frame body_frame;
+        lv2_atom_forge_blank(&self->forge, &body_frame, 2, 0);
+        
+        lv2_atom_forge_property_head(&self->forge, self->uris->fabla_pad, 0);
+        lv2_atom_forge_int(&self->forge, int(data[1]) );
+        
+        // use next available voice for the note
+        int n = int(data[1]);
+        bool alloced = false;
+        for(int i = 0; i < NVOICES; i++)
         {
-          lv2_atom_forge_frame_time(&self->forge, 0);
-          
-          LV2_Atom_Forge_Frame set_frame;
-          LV2_Atom* set = (LV2_Atom*)lv2_atom_forge_blank(&self->forge, &set_frame, 1, self->uris->atom_eventTransfer);
-          
-          lv2_atom_forge_property_head(&self->forge, self->uris->fabla_Play, 0);
-          LV2_Atom_Forge_Frame body_frame;
-          lv2_atom_forge_blank(&self->forge, &body_frame, 2, 0);
-          
-          lv2_atom_forge_property_head(&self->forge, self->uris->fabla_pad, 0);
-          lv2_atom_forge_int(&self->forge, int(data[1]) );
+          if ( !self->voice[i]->playing() )
+          {
+            self->voice[i]->play( n, int(data[2]) );
+            lv2_log_note(&self->logger, "Voice %i gets note ON %i\n", i, n );
+            alloced = true;
+            break;
+          }
         }
+        if ( !alloced )
+          lv2_log_note(&self->logger, "Note %i ON: but no voice available\n", n );
       }
       else if ( (data[0] & 0xF0) == 0x80 )
       {
@@ -239,6 +256,12 @@ run(LV2_Handle instance, uint32_t n_samples)
         
         lv2_atom_forge_property_head(&self->forge, self->uris->fabla_pad, 0);
         lv2_atom_forge_int(&self->forge, int(data[1]) );
+        
+        // release ADSR of note
+        for(int i = 0; i < NVOICES; i++)
+        {
+          self->voice[i]->stopIfNoteEquals( int(data[1]) );
+        }
       }
     }
     

@@ -13,21 +13,16 @@ class Voice
       sr = rate;
       playingBool = 0;
       
-      adsr[ADSR_FREQ]   = new ADSR( sr, 200, 200, 0.7, 300 );
-      adsr[ADSR_VOL]    = new ADSR( sr, 200, 200, 0.7, 300 );
-      adsr[ADSR_FILTER] = new ADSR( sr, 100, 100, 0.7, 500 );
+      adsr = new ADSR( sr, 200, 200, 0.7, 300 );
     }
     
-    ADSR* adsr[3];
+    ADSR* adsr;
     
     void play(int inNote, int vel)
     {
       playingBool = true;
       note = inNote;
-      
-      adsr[ADSR_FREQ]->trigger();
-      adsr[ADSR_VOL]->trigger();
-      adsr[ADSR_FILTER]->trigger();
+      adsr->trigger();
     }
     
     bool playing(){return playingBool;}
@@ -36,38 +31,29 @@ class Voice
     {
       if ( note == n )
       {
-        adsr[ADSR_VOL]->release();
-        adsr[ADSR_FILTER]->release();
+        adsr->release();
       }
     }
     
     
     
-    float process(int nframes )
+    void process( int nframes, float* buffer )
     {
       if( playingBool )
       {
-        // split here based on osc[0]->enabled() for CPU saving
         float accum = 0.f; 
         
-        if ( adsr[ADSR_VOL]->finished() )
+        if ( adsr->finished() )
         {
           // turn off voice if ADSR has finished
           playingBool = false;
         }
         
-        return accum * adsr[ADSR_VOL]->process(1);
+        //return accum * adsr->process(1);
       }
-      return 0.f;
     }
   
   private:
-    enum ADSR_ENUM {
-      ADSR_FILTER = 0,
-      ADSR_FREQ,
-      ADSR_VOL,
-    };
-    
     int sr;
     int note;
     bool playingBool;
