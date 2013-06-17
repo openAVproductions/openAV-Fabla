@@ -27,13 +27,14 @@ class Voice
     
     void play(int inNote, int vel)
     {
-      playingBool = true;
-      note = inNote;
-      adsr->trigger();
-      
-      
+      // if the voice doesn't have a sample: then don't play
       if ( sample )
       {
+        adsr->trigger();
+        
+        playingBool = true;
+        note = inNote;
+        
         sample->index = 0;
         printf("sample index = %i\n sample size = %i\n", int(sample->index), int(sample->info.frames) );
         printf("Loaded sample:\n\t %i samples\n\tdata = %i", sample->info.frames, sample->data);
@@ -47,7 +48,9 @@ class Voice
     {
       if ( note == n )
       {
+        printf("releasing note %i",n);
         adsr->release();
+        playingBool = false;
       }
     }
     
