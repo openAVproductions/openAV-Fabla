@@ -1,16 +1,13 @@
 
-
-// please see this link for details about the GUI aspect of LV2 programming
-// http://harryhaaren.blogspot.ie/2012/07/writing-lv2-guis-making-it-look-snazzy.html
-
 #include <string>
 #include <iostream>
 
-// X window ID
+// X window embedding
 #include <FL/x.H>
 
 // include the URI and global data of this plugin
 #include "../dsp/ports.h"
+#include "../dsp/shared.h"
 
 // this is our custom widget include
 #include "fabla.h"
@@ -21,10 +18,17 @@
 // GUI
 #include "lv2/lv2plug.in/ns/extensions/ui/ui.h"
 
+#include "lv2/lv2plug.in/ns/ext/atom/util.h"
+
 using namespace std;
 
 typedef struct {
   FablaUI* widget;
+  
+  // URID map
+  LV2_URID_Map* map;
+  Fabla_URIs* uris;
+  
 } Fabla;
 
 
@@ -45,6 +49,14 @@ static LV2UI_Handle instantiate(const struct _LV2UI_Descriptor * descriptor,
     
     LV2UI_Resize* resize = NULL;
     
+    Fabla* self = (Fabla*)malloc(sizeof(Fabla));
+    if (self == NULL) return NULL;
+    memset(self, 0, sizeof(Fabla));
+    
+    self->uris  = (Fabla_URIs*)malloc(sizeof(Fabla_URIs));
+    memset(self->uris, 0, sizeof(Fabla_URIs));
+    
+    
     for (int i = 0; features[i]; ++i) {
       //cout << "feature " << features[i]->URI << endl;
       if (!strcmp(features[i]->URI, LV2_UI__parent)) {
@@ -53,12 +65,15 @@ static LV2UI_Handle instantiate(const struct _LV2UI_Descriptor * descriptor,
       } else if (!strcmp(features[i]->URI, LV2_UI__resize)) {
         resize = (LV2UI_Resize*)features[i]->data;
       }
+      else if (!strcmp(features[i]->URI, LV2_URID__map)) {
+      self->map = (LV2_URID_Map*)features[i]->data;
+      }
     }
     
     
-    Fabla* self = (Fabla*)malloc(sizeof(Fabla));
-    if (self == NULL) return NULL;
-    memset(self, 0, sizeof(Fabla));
+    
+    
+    map_uris( self->map, self->uris );
     
     //cout << "Creating UI!" << endl;
     self->widget = new FablaUI( parentXwindow );
@@ -100,40 +115,75 @@ static void port_event(LV2UI_Handle handle,
     
     Fl::lock();
     
+    LV2_Atom* atom = 0;
+    LV2_Atom_Object* obj = 0;
+    LV2_Atom_Int* pad = 0;
+    
     switch ( port_index )
     {
       case MASTER_VOL: ui->masterVol->value( v );         break;
-      /*
-      case OSC_1_MOD: ui->osc1->X( v );                   break;
-      case OSC_1_VOL: ui->osc1->Y( v );                   break;
+      
+      case ATOM_OUT:
+          printf("atom out, buffer size = %i\n", buffer_size);
+          atom = (LV2_Atom*)buffer;
           
-      case OSC_2_MOD: ui->osc2->X( v );                   break;
-      case OSC_2_VOL: ui->osc2->Y( v );                   break;
+          printf("atom == %i\n", atom);
           
-      case OSC_3_MOD: ui->osc3->X( v );                   break;
-      case OSC_3_VOL: ui->osc3->Y( v );                   break;
-      
-      case LFO_MOD_AMP:   ui->lfoModAmp->value( v );
-                          ui->lfo->value( v );            break;
-      case LFO_MOD_SPEED: ui->lfoModSpeed->value( v );
-                          ui->lfo->modulation( v );       break;
-      
-      case LFO_FREQ_AMP:  ui->lfoFreqAmp->value( v );
-                          ui->freqLfo->value( v );        break;
-      case LFO_FREQ_SPEED: ui->lfoFreqSpeed->value( v );
-                          ui->freqLfo->modulation( v );   break;
-      
-      case FILTER_FREQ: ui->filtergraph->value( v );      break;
-                        ui->filterFreq->value ( v );      break;
-      //case FILTER_Q: ui->filtergraph;                   break;
-      //case FILTER_TYPE: ui->;                           break;
-      case REVERB_SIZE: ui->reverb->size( v );            break;
-      case REVERB_DAMPING: ui->reverb->damping( v );      break;
-      case REVERB_WET: ui->reverb->wet( v );              break;
-      case REVERB_ENABLE: ui->reverb->setActive( v > 0.5 ? true : false );
-                                                          break;
-      */
-      
+          printf("atom->type =  %i\n", atom->type);
+          
+          if (atom->type == self->uris->atom_eventTransfer )
+          {
+            printf("eventTransfer\n");
+          }
+          if (atom->type == self->uris->atom_Blank )
+          {
+            printf("atom_Blank\n");
+            
+            obj = (LV2_Atom_Object*)atom;
+            lv2_atom_object_get(obj, self->uris->fabla_pad, &pad, 0);
+          
+            //printf( "body.otype = %i\n",obj->body.otype );
+          
+            printf("pad = %i\n", *pad );
+          }
+          
+          
+
+          
+          
+          
+          
+          /*
+          obj = (LV2_Atom_Object*)buffer;
+          printf("cast done\n");
+          if ( obj == 0 )
+          {
+            printf("obj == 0!! \n");
+          }
+          
+          printf("past == 0\n");
+          
+          if ( obj->body ) {
+            fprintf(stderr, "Ignoring unknown message type %d\n", obj->body.otype);
+          }
+          */
+          
+          
+          /*
+          if (format == self->uris->atom_eventTransfer)
+          {
+            
+            LV2_ATOM_SEQUENCE_FOREACH( (LV2_Atom_Sequence*)buffer, ev)
+            {
+              printf("event\n");
+              if (ev->body.type == self->uris->fabla_Play)
+              {
+                printf("fabla_Play\n");
+              }
+            }
+          }
+          */
+        break;
       
       default: break;
     }

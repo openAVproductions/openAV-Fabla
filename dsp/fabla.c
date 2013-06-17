@@ -4,6 +4,7 @@
 #include <string.h>
 
 #include "shared.h"
+#include "lv2/lv2plug.in/ns/ext/atom/forge.h"
 
 #include "denormals.hxx"
 
@@ -143,13 +144,13 @@ run(LV2_Handle instance, uint32_t n_samples)
       uint8_t* const data = (uint8_t* const)(ev + 1);
       if ( (data[0] & 0xF0) == 0x90 ) // event & channel
       {
-        lv2_log_note(&self->logger, "Note on : %d\n", data[1] );
+        //lv2_log_note(&self->logger, "Note on : %d\n", data[1] );
         
         {
           lv2_atom_forge_frame_time(&self->forge, 0);
           
           LV2_Atom_Forge_Frame set_frame;
-          LV2_Atom* set = (LV2_Atom*)lv2_atom_forge_blank(&self->forge, &set_frame, 1, self->uris->fabla_Play);
+          LV2_Atom* set = (LV2_Atom*)lv2_atom_forge_blank(&self->forge, &set_frame, 1, self->uris->atom_eventTransfer);
           
           lv2_atom_forge_property_head(&self->forge, self->uris->fabla_Play, 0);
           LV2_Atom_Forge_Frame body_frame;
@@ -181,7 +182,7 @@ run(LV2_Handle instance, uint32_t n_samples)
       }
       else if ( (data[0] & 0xF0) == 0x80 )
       {
-        lv2_log_note(&self->logger, "Note off: %d\n", data[1] );
+        //lv2_log_note(&self->logger, "Note off: %d\n", data[1] );
       }
     }
     

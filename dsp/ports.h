@@ -6,10 +6,6 @@
 #define FABLA_URI    "http://www.openavproductions.com/fabla"
 #define FABLA_UI_URI "http://www.openavproductions.com/fabla/gui"
 
-// Lv2 includes
-#include "lv2/lv2plug.in/ns/lv2core/lv2.h"
-#include "lv2/lv2plug.in/ns/extensions/ui/ui.h"
-
 typedef enum {
   ATOM_IN= 0,
   ATOM_OUT,

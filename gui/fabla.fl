@@ -25,7 +25,8 @@ fl_open_display();} {}
       xywh {500 140 515 490} type Double color 56 selection_color 0 labelcolor 88
       code0 {\#include "avtk.h"}
       code1 {using namespace Avtk;}
-      code2 {\#include <FL/x.H>} visible
+      code2 {\#include <FL/x.H>}
+      code3 {\#include "lv2/lv2plug.in/ns/lv2core/lv2.h"} visible
     } {
       Fl_Box {} {
         label Source
@@ -50,9 +51,10 @@ fl_open_display();} {}
         xywh {351 379 97 97} box BORDER_BOX
       }
       Fl_Box masterVol {
-        label Vol
+        label Vol selected
         xywh {453 290 48 186} box UP_BOX
         code0 {\#include "../dsp/ports.h"}
+        code1 {\#include "lv2/lv2plug.in/ns/extensions/ui/ui.h"}
         class Volume
       }
       Fl_Box {} {
@@ -307,7 +309,6 @@ switch(selectedPad)
     code {printf("pad %i clicked\\n", id);
 
 // write PAD PLAY message here
-// int padNum = id;} {selected
-    }
+// int padNum = id;} {}
   }
 } 

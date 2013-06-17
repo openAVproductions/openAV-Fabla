@@ -36,16 +36,16 @@ dsp: $(DSPSOURCES) $(DSP)
 sa: $(SASOURCES) $(SA)
 
 $(DSP): $(DSPOBJECTS)
-	$(CC) -g $(INCLUDES)  -fPIC -shared $(LDFLAGS) $(DSPOBJECTS) -o $@
+	$(CC) $(INCLUDES) -fPIC -shared $(LDFLAGS) $(DSPOBJECTS) -o $@
 
 $(UI): $(UIOBJECTS)
-	$(CC) $(INCLUDES)  -fPIC -shared $(LDFLAGS) $(UIOBJECTS) -o $@
+	$(CC) $(INCLUDES) -fPIC -shared $(LDFLAGS) $(UIOBJECTS)  -o $@
 
 $(SA): $(SAOBJECTS)
 	$(CC) -g $(INCLUDES) $(LDFLAGS) $(SAOBJECTS) -o $@
 
 .cpp.o:
-	$(CC) $(CFLAGS) $< -o $@
+	$(CC) -g $(CFLAGS) $< -o $@
 
 
 
