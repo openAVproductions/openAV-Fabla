@@ -7,27 +7,7 @@
 
 #include <sndfile.h>
 
-class Sample
-{
-  public:
-    Sample()
-    {
-      index = 0;
-      speed = 1.f;
-      
-      data = 0;
-      path = 0;
-      path_len = 0;
-    }
-  
-  SF_INFO info;      // Info about sample from sndfile
-  float*  data;      // Sample data in float
-  char*   path;      // Path of file
-  size_t  path_len;  // Length of path
-  
-  size_t  index;     // Current playback index
-  float   speed;     // Current playback speed
-};
+#include "sample.hxx"
 
 class Voice
 {
@@ -36,6 +16,8 @@ class Voice
     {
       sr = rate;
       playingBool = 0;
+      
+      sample = 0;
       
       adsr = new ADSR( sr, 200, 200, 0.7, 300 );
     }
@@ -49,11 +31,13 @@ class Voice
       note = inNote;
       adsr->trigger();
       
-      printf("sample->data %i\n",sample->data[0]);
-      printf("sample index = %i\n sample size = %i\n", int(sample->index), int(sample->info.frames) );
-      printf("Loaded sample:\n\t %i samples\n\tdata = %i", sample->info.frames, sample->data);
       
-      
+      if ( sample )
+      {
+        sample->index = 0;
+        printf("sample index = %i\n sample size = %i\n", int(sample->index), int(sample->info.frames) );
+        printf("Loaded sample:\n\t %i samples\n\tdata = %i", sample->info.frames, sample->data);
+      }
     }
     
     
@@ -71,14 +55,17 @@ class Voice
     
     void process( int nframes, float* bufL, float* bufR )
     {
-      if( playingBool && sample && sample->data != 0 )
+      if( playingBool && sample )
       {
-        /*
-        */
-        
-        bufL[0] = sample->data[sample->index % sample->info.frames];
-        bufR[0] = sample->data[sample->index % sample->info.frames];
+        *bufL += sample->data[sample->index];
+        *bufR += sample->data[sample->index];
         sample->index++;
+        
+        if ( sample->index >= sample->info.frames )
+        {
+          sample->index = 0;
+          playingBool = false;
+        }
         
         
         adsr->process(nframes);
@@ -86,7 +73,7 @@ class Voice
         if ( adsr->finished() )
         {
           // turn off voice if ADSR has finished
-          playingBool = false;
+          //playingBool = false;
         }
         
         //return accum * adsr->process(1);

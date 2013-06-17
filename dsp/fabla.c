@@ -7,6 +7,7 @@
 #include "lv2/lv2plug.in/ns/ext/atom/forge.h"
 
 #include "voice.hxx"
+#include "sample.hxx"
 #include "denormals.hxx"
 
 #define NVOICES 16
@@ -52,6 +53,7 @@ typedef struct {
   float  speed;  // Transport speed (usually 0=stop, 1=play)
   
   Voice* voice[NVOICES];
+  Sample* samples[16];
   
 } FABLA_DSP;
 
@@ -156,10 +158,9 @@ instantiate(const LV2_Descriptor*     descriptor,
   char*        sample_path = (char*)malloc(len + 1);
   snprintf(sample_path, len + 1, "%s%s", bundle_path, default_sample);
   
-  Sample* sample = load_sample(self, sample_path);
+  Sample* newSamp = load_sample(self, sample_path);
   
-  for(int i = 0; i < NVOICES; i++)
-    self->voice[i]->sample = sample;
+  self->samples[0] = newSamp;
   
   free(sample_path);
   
@@ -242,12 +243,21 @@ run(LV2_Handle instance, uint32_t n_samples)
         lv2_atom_forge_int(&self->forge, int(data[1]) );
         
         // use next available voice for the note
-        int n = int(data[1]);
+        int n = int(data[1]) - 36;
+        
+        // clip MIDI input, only play 16 samples
+        if ( n > 15) n = 15;
+        if ( n <  0) n =  0;
+        
         bool alloced = false;
         for(int i = 0; i < NVOICES; i++)
         {
           if ( !self->voice[i]->playing() )
           {
+            // set the right sample to the voice
+            self->voice[i]->sample = self->samples[n];
+            
+            // play the voice
             self->voice[i]->play( n, int(data[2]) );
             lv2_log_note(&self->logger, "Voice %i gets note ON %i\n", i, n );
             alloced = true;
@@ -328,16 +338,16 @@ run(LV2_Handle instance, uint32_t n_samples)
   
   for (uint32_t pos = 0; pos < n_samples; pos++)
   {
-    float accumL;
-    float accumR;
+    float accumL = 0.f;
+    float accumR = 0.f;
     
     for(int i = 0; i < NVOICES; i++ )
     {
       self->voice[i]->process( 1, &accumL, &accumR );
     }
     
-    outputL[pos] = accumL * gain;
-    outputR[pos] = accumR * gain;
+    outputL[pos] = accumL; // * gain;
+    outputR[pos] = accumR; // * gain;
   }
 }
 
