@@ -16,13 +16,13 @@ w->show();} {}
 // embed drawn stuff into LV2 host provided area  
 fl_embed( w, (Window)xParentWindow );} {}
   }
-  Function {setupUI()} {open
+  Function {setupUI()} {open selected
   } {
     code {// In case FLTK hasn't set up yet
 fl_open_display();} {}
     Fl_Window w {
       label Fabla open
-      xywh {451 181 515 490} type Double color 56 selection_color 0 labelcolor 88
+      xywh {487 181 515 490} type Double color 56 selection_color 0 labelcolor 88
       code0 {\#include "avtk.h"}
       code1 {using namespace Avtk;}
       code2 {\#include <FL/x.H>}
@@ -62,8 +62,8 @@ fl_open_display();} {}
         xywh {350 155 150 98} box BORDER_BOX
       }
       Fl_Box {} {
-        label Release
-        xywh {406 435 30 30} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        label Rel
+        xywh {406 435 30 30} box UP_BOX color 48 labelcolor 32
         class Dial
       }
       Fl_Box {} {
@@ -202,18 +202,18 @@ fl_open_display();} {}
         class Pad
       }
       Fl_Box {} {
-        label Release
-        xywh {365 435 30 30} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        label Atk
+        xywh {365 435 30 30} box UP_BOX color 48 labelcolor 32
         class Dial
       }
       Fl_Box {} {
-        label Release
-        xywh {406 395 30 30} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        label Thres
+        xywh {406 395 30 30} box UP_BOX color 48 labelcolor 32
         class Dial
       }
       Fl_Box {} {
-        label Release
-        xywh {365 395 30 30} box UP_BOX color 48 labeltype NO_LABEL labelcolor 48
+        label Ratio
+        xywh {365 395 30 30} box UP_BOX color 48 labelcolor 32
         class Dial
       }
       Fl_Box gain {
@@ -233,7 +233,7 @@ fl_open_display();} {}
         class Dial
       }
       Fl_Box pitch {
-        label Pitch selected
+        label Pitch
         xywh {425 210 45 40} box UP_BOX color 48 labelcolor 40
         code0 {pitch->drawLabel(true);}
         class Dial
@@ -249,7 +249,6 @@ fl_open_display();} {}
         class Dial
       }
     }
-    code {//\#include "lv2/lv2plug.in/ns/ext/atom/forge.h"} {}
   }
   decl {LV2UI_Controller controller;} {public local
   }
