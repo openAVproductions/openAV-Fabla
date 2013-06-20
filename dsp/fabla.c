@@ -14,11 +14,20 @@
 
 static const char* default_sample = "click.wav";
 
-typedef struct {
-  LV2_Atom atom;
-  int pad;
-  Sample*  sample;
-} SampleMessage;
+class SampleMessage
+{
+  public:
+    SampleMessage(LV2_URID type)
+    {
+      atom.type = type;
+      atom.size = sizeof(SampleMessage);
+      pad = -1;
+      sample = 0;
+    }
+    LV2_Atom atom;
+    int pad;
+    Sample*  sample;
+};
 
 
 typedef struct {
@@ -163,10 +172,10 @@ instantiate(const LV2_Descriptor*     descriptor,
   snprintf(sample_path, len + 1, "%s%s", bundle_path, default_sample);
   
   Sample* newSamp = load_sample(self, sample_path);
-  
   self->samples[0] = newSamp;
-  
   free(sample_path);
+  newSamp = load_sample(self, "/root/drums.wav");
+  self->samples[1] = newSamp;
   
   return (LV2_Handle)self;
 }
@@ -312,14 +321,22 @@ run(LV2_Handle instance, uint32_t n_samples)
         const LV2_Atom_String* path = 0;
         lv2_atom_object_get( body, self->uris->fabla_filename, &path, 0);
         const char* f = (const char*)LV2_ATOM_BODY(path);
-        lv2_log_note(&self->logger, "fabla_Load recieved %s on pad %i   : scheduling work now!\n", f, pad );
+        lv2_log_note(&self->logger, "fabla_Load recieved %s on pad %i\n", f, pad );
         
         // schedule work
-        SampleMessage message;
+        SampleMessage message(self->uris->fabla_Load);
+        message.pad = pad;
+        message.sample = 0;
         
-        self->schedule->schedule_work(self->schedule->handle,
-                                      lv2_atom_total_size(&ev->body),
-                                      &ev->body);
+        
+        
+        
+        //int s = lv2_atom_total_size( body );
+        //lv2_log_note(&self->logger, "fabla_Load: scheduling work now, size %i\n", f, s );
+        
+        
+        //self->schedule->schedule_work(self->schedule->handle, s, &message);
+        //self->schedule->schedule_work(self->schedule->handle, s, body);
         
         lv2_log_note(&self->logger, "continuing...\n" );
         
@@ -526,12 +543,15 @@ work_response(LV2_Handle  instance,
   
   if ( freeOldSample )
   {
+    /*
     // send worker to free the current sample, 
     SampleMessage msg = { { sizeof(Sample*), self->uris->fabla_Unload },
                           sampleNum,
                           freeOldSample };
+    SampleMessage msg( 
     
     self->schedule->schedule_work(self->schedule->handle, sizeof(msg), &msg);
+    */
   }
   
   return LV2_WORKER_SUCCESS;

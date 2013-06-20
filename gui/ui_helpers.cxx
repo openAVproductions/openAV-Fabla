@@ -46,11 +46,9 @@ void writeLoadSample(Fabla* self, int pad, const char* filename, size_t filename
   lv2_atom_forge_pop(forge, &body_frame);
   lv2_atom_forge_pop(forge, &set_frame);
   
-  printf("writing message now, filename: %s\n", filename );
+  printf("writing message now, filename: %s, size %i\n", filename, lv2_atom_total_size(set) );
   
   self->write_function(self->controller, ATOM_IN, lv2_atom_total_size(set),
               self->uris->atom_eventTransfer,
               set );
-  
-  
 }

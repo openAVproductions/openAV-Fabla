@@ -41,10 +41,10 @@ $(UI): $(UIOBJECTS)
 	$(CC) $(INCLUDES) -fPIC -shared $(LDFLAGS) $(UIOBJECTS)  -o $@
 
 $(SA): $(SAOBJECTS)
-	$(CC) -g $(INCLUDES) $(LDFLAGS) $(SAOBJECTS) -o $@
+	$(CC) $(INCLUDES) $(LDFLAGS) $(SAOBJECTS) -o $@
 
 .cpp.o:
-	$(CC) -g $(CFLAGS) $< -o $@
+	$(CC) $(CFLAGS) $< -o $@
 
 
 
