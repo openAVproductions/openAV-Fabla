@@ -525,10 +525,6 @@ work_response(LV2_Handle  instance,
     // point to the new sample
     self->samples[sampleNum] = message->sample;
     
-    // set the "playback" of the current sample past the end by a frame:
-    // stops the sample from playing just after being loaded
-    self->samples[sampleNum]->index = message->sample->info.frames + 1;
-    
     /*
     // Send a notification that we're using a new sample
     lv2_atom_forge_frame_time(&self->forge, self->frame_offset);

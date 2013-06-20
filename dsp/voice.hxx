@@ -19,6 +19,9 @@ class Voice
       
       sample = 0;
       
+      index = 0;
+      speed = 1.f;
+      
       adsr = new ADSR( sr, 200, 200, 0.7, 300 );
     }
     
@@ -35,9 +38,7 @@ class Voice
         playingBool = true;
         note = inNote;
         
-        sample->index = 0;
-        printf("sample index = %i\n sample size = %i\n", int(sample->index), int(sample->info.frames) );
-        printf("Loaded sample:\n\t %i samples\n\tdata = %i", sample->info.frames, sample->data);
+        index = 0;
       }
     }
     
@@ -60,13 +61,13 @@ class Voice
     {
       if( playingBool && sample )
       {
-        *bufL += sample->data[sample->index];
-        *bufR += sample->data[sample->index];
-        sample->index++;
+        *bufL += sample->data[index];
+        *bufR += sample->data[index];
+        index += speed;
         
-        if ( sample->index >= sample->info.frames )
+        if ( index >= sample->info.frames )
         {
-          sample->index = 0;
+          index = 0;
           playingBool = false;
         }
         
@@ -87,6 +88,11 @@ class Voice
     int sr;
     int note;
     bool playingBool;
+    
+    // each voice has own index + speed, allowing for voices playing the same
+    // pad, without the "speedup" effect of using the same index
+    size_t  index;
+    float   speed;
 };
 
 #endif // FABLA_VOICE_H
