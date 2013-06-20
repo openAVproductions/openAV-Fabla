@@ -247,9 +247,10 @@ fl_open_display();} {}
         class Dial
       }
       Fl_Box s {
-        label S selected
+        label S
         xywh {428 170 30 30} box UP_BOX color 48 labelcolor 40
         code0 {extern void writeLoadSample(Fabla* self, int pad, const char* filename, size_t filename_len);}
+        code1 {extern void writePadPlay(Fabla* self, int pad );}
         class Dial
       }
     }
@@ -329,32 +330,15 @@ if ( rclick )
     case  1: printf("CANCEL\\n");                      break;  // CANCEL
     default: printf("Loading directory: %s\\n", fnfc.filename());    
     
-    // update path and load it
-    //path = fnfc.filename();
-    //browser->load( path.c_str() );
-    
     writeLoadSample(fabla, id, fnfc.filename(), strlen(fnfc.filename()));
-    
-    /*
-    lv2_atom_forge_frame_time(&self->forge, 0);
-    LV2_Atom_Forge_Frame set_frame;
-    LV2_Atom* set = (LV2_Atom*)lv2_atom_forge_blank(&self->forge, &set_frame, 1, self->uris->atom_eventTransfer);
-    
-    lv2_atom_forge_property_head(&self->forge, self->uris->fabla_Stop, 0);
-    LV2_Atom_Forge_Frame body_frame;
-    lv2_atom_forge_blank(&self->forge, &body_frame, 2, 0);
-    
-    lv2_atom_forge_property_head(&self->forge, self->uris->fabla_pad, 0);
-    lv2_atom_forge_int(&self->forge, int(data[1]) );
-    */
-    
     break;
  }
 }
 else
 {
   // write pad play Atom to DSP
-  
-}} {}
+  writePadPlay( fabla, id );
+}} {selected
+    }
   }
 } 

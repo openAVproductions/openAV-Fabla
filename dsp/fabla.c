@@ -208,6 +208,31 @@ connect_port(LV2_Handle instance,
   }
 }
 
+static void noteOn(FABLA_DSP* self, int note, int velocity)
+{
+  // clip MIDI input, only play 16 samples
+  if ( note > 15) note = 15;
+  if ( note <  0) note =  0;
+  
+  bool alloced = false;
+  for(int i = 0; i < NVOICES; i++)
+  {
+    if ( !self->voice[i]->playing() )
+    {
+      // set the right sample to the voice
+      self->voice[i]->sample = self->samples[note];
+      
+      // play the voice
+      self->voice[i]->play( note, velocity );
+      lv2_log_note(&self->logger, "Voice %i gets note ON %i\n", i, note );
+      alloced = true;
+      break;
+    }
+  }
+  if ( !alloced )
+    lv2_log_note(&self->logger, "Note %i ON: but no voice available\n", note );
+}
+
 
 static void
 activate(LV2_Handle instance)
@@ -257,28 +282,9 @@ run(LV2_Handle instance, uint32_t n_samples)
         
         // use next available voice for the note
         int n = int(data[1]) - 36;
+        int v = int(data[2]);
         
-        // clip MIDI input, only play 16 samples
-        if ( n > 15) n = 15;
-        if ( n <  0) n =  0;
-        
-        bool alloced = false;
-        for(int i = 0; i < NVOICES; i++)
-        {
-          if ( !self->voice[i]->playing() )
-          {
-            // set the right sample to the voice
-            self->voice[i]->sample = self->samples[n];
-            
-            // play the voice
-            self->voice[i]->play( n, int(data[2]) );
-            lv2_log_note(&self->logger, "Voice %i gets note ON %i\n", i, n );
-            alloced = true;
-            break;
-          }
-        }
-        if ( !alloced )
-          lv2_log_note(&self->logger, "Note %i ON: but no voice available\n", n );
+        noteOn( self, n, v );
       }
       else if ( (data[0] & 0xF0) == 0x80 )
       {
@@ -305,7 +311,6 @@ run(LV2_Handle instance, uint32_t n_samples)
     
     if (ev->body.type == self->uris->atom_Blank)
     {
-      
       const LV2_Atom_Object* obj = (LV2_Atom_Object*)&ev->body;
       
       const LV2_Atom_Object* body = NULL;
@@ -339,23 +344,32 @@ run(LV2_Handle instance, uint32_t n_samples)
         //self->schedule->schedule_work(self->schedule->handle, s, body);
         
         lv2_log_note(&self->logger, "continuing...\n" );
-        
-        
       }
       
-      if (obj->body.otype == self->uris->fabla_Load)
+      const LV2_Atom_Object* playBody = NULL;
+      lv2_atom_object_get(obj, self->uris->fabla_Play, &playBody, 0);
+      if (playBody)
       {
-        // work schedule here
-        lv2_log_note(&self->logger, "fabla_Load recieved\n");
+        // extract note from Atom, and play
+        lv2_log_note(&self->logger, "playbody pad \n");
+        const LV2_Atom_Int* padNum = 0;
+        lv2_atom_object_get( playBody, self->uris->fabla_pad, &padNum, 0);
+        if ( padNum )
+        {
+          int* p = (int*)LV2_ATOM_BODY(padNum);
+          int pad = *p;
+          noteOn( self, pad, 120 );
+        }
       }
       
       if (obj->body.otype == self->uris->atom_Blank)
       {
         // work schedule here
-        lv2_log_note(&self->logger, "atom_Blank recieved\n");
+        lv2_log_note(&self->logger, "atom_Blank ===== recieved\n");
       }
     }
     
+    /* TIME STUFF: Currently irrelevant
     if (ev->body.type == self->uris->atom_Blank)
     {
       const LV2_Atom_Object* obj = (LV2_Atom_Object*)&ev->body;
@@ -395,10 +409,11 @@ run(LV2_Handle instance, uint32_t n_samples)
           } else {
                   self->state = STATE_OFF;
           }
-          */
+          *
         }
       }
     }
+    */
   }
   
   
