@@ -21,7 +21,7 @@ class Voice
       
       index = 0;
       
-      adsr = new ADSR( sr, 200, 200, 0.7, 300 );
+      adsr = new ADSR( sr, 0.1, 0, 1.0, 0.1 );
     }
     
     Sample* sample;

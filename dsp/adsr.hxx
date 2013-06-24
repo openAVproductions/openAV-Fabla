@@ -2,18 +2,26 @@
 #ifndef OPENAV_DSP_ADSR_H
 #define OPENAV_DSP_ADSR_H
 
+#include <stdio.h>
+
+/// define max / min values for the ADSR in milliseconds
+
 // Adsr class, where 0-1 is the output
 class ADSR
 {
   public:
-    /// setup ADSR with samplerate (Hz), attack decay and release in millisecs,
+    /// setup ADSR with samplerate (Hz), attack decay and release in seconds (float),
     /// and sustain as a value between [0-1]
-    ADSR(int srate, int attackMS, int decayMS, float sustain01, int releaseMS )
+    ADSR(int srate, float attackMS, float decayMS, float sustain01, float releaseMS )
     {
-      attack  = sr/attackMS;
-      decay   = sr/decayMS;
+      sr = srate;
+      
+      attack  = attackMS * sr;
+      decay   = decayMS * sr;
       sustain = sustain01;
-      rel     = sr/releaseMS;
+      rel     = releaseMS * sr;
+      
+      //printf("%f, %f, %f", attack, decay, sustain);
       
       finish = true;
       
@@ -24,6 +32,9 @@ class ADSR
       
       progress = attack + decay + rel;
       released = true;
+      
+      // by default there is not lowpass on the output to avoid sudden value jumps
+      enableSmoothing = false;
     }
     
     void trigger()
@@ -44,6 +55,11 @@ class ADSR
       return finish;
     }
     
+    void setSmoothing(bool s)
+    {
+      enableSmoothing = s;
+    }
+    
     float process(int nframes)
     {
       progress += nframes;
@@ -56,7 +72,7 @@ class ADSR
       }
       else if ( progress < attack + decay ) // DECAY
       {
-        output = 1 - (1 - sustain) * (progress - attack) / decay;
+        output = 1 - (1 - sustain) * ((progress - attack) / decay);
       }
       else if ( released && progress > attack + decay && progress < attack + decay + rel )
       {
@@ -72,7 +88,7 @@ class ADSR
       }
       
       
-      if ( false )
+      if ( enableSmoothing )
       {
         g1 += w * (output - g1 - a * g2 - 1e-20f);
         g2 += w * (b * g1 - g2 + 1e-20f);
@@ -96,9 +112,10 @@ class ADSR
     };
     
     // smoothing filter state
+    bool enableSmoothing;
     float w, a, b, g1, g2;
     
-    int attack, decay, rel;
+    float attack, decay, rel;
     bool released;
     float sustain;
     bool finish;
