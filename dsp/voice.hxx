@@ -60,8 +60,9 @@ class Voice
     {
       if( playingBool && sample )
       {
-        *bufL += sample->data[index];
-        *bufR += sample->data[index];
+        float tmp = sample->data[index] * sample->gain;
+        *bufL += tmp;
+        *bufR += tmp;
         index += sample->speed;
         
         if ( index >= sample->info.frames )

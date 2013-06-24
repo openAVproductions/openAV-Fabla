@@ -491,6 +491,16 @@ run(LV2_Handle instance, uint32_t n_samples)
     */
   }
   
+  // loop over the pads, setting control port values
+  for(int i = 0; i < 16; i++)
+  {
+    if ( self->samples[i] )
+    {
+      self->samples[i]->gain = *(self->padData[i].gain);
+    }
+  }
+  
+  
   
   for (uint32_t pos = 0; pos < n_samples; pos++)
   {

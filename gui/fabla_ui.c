@@ -77,8 +77,10 @@ static LV2UI_Handle instantiate(const struct _LV2UI_Descriptor * descriptor,
     
     initForge( self );
     
-    //cout << "Creating UI!" << endl;
+    // Create UI, and set controller / write func
     self->widget = new FablaUI( parentXwindow, self );
+    self->widget->controller = controller;
+    self->widget->writeFunction = write_function;
     
     if (resize) {
       //resize->ui_resize(resize->handle, self->widget->getWidth(),self->widget->getHeight());
