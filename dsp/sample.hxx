@@ -19,6 +19,7 @@ class Sample
     char*   path;      // Path of file
     size_t  path_len;  // Length of path
     
+    float gain;
     float speed;
 };
 

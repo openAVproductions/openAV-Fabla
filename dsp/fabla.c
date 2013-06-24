@@ -30,12 +30,27 @@ class SampleMessage
     Sample*  sample;
 };
 
-class ADSRdata
+class PadData
 {
-  float* a;
-  float* d;
-  float* s;
-  float* r;
+  public:
+    PadData()
+    {
+      gain  = 0;
+      speed = 0;
+      
+      a     = 0;
+      d     = 0;
+      s     = 0;
+      r     = 0;
+    }
+    
+    float* gain;
+    float* speed;
+    
+    float* a;
+    float* d;
+    float* s;
+    float* r;
 };
 
 typedef struct {
@@ -54,7 +69,7 @@ typedef struct {
   float* comp_ratio;
   float* comp_makeup;
   
-  ADSRdata adsr[16];
+  PadData padData[16];
   
   // URID map
   LV2_URID_Map* map;
@@ -237,7 +252,21 @@ connect_port(LV2_Handle instance,
       self->comp_makeup = (float*)data; break;
     
     // deal with 16 * ADSR / gain / speed / pan here
+    case PAD_GAIN:
+    case pg2: case pg3: case pg4: case pg5: case pg6: case pg7: case pg8: case pg9:
+    case pg10: case pg11: case pg12: case pg13: case pg14: case pg15: case pg16:
+        // hack the enum to access the right array slice
+        self->padData[ port - int(PAD_GAIN) ].gain = (float*)data;
+        printf("Gain Pad %i\n", port);
+        break;
     
+    case PAD_SPEED:
+    case pspd2: case pspd3: case pspd4: case pspd5: case pspd6: case pspd7: case pspd8: case pspd9:
+    case pspd10: case pspd11: case pspd12: case pspd13: case pspd14: case pspd15: case pspd16:
+        // hack the enum to access the right array slice
+        self->padData[ port - int(PAD_SPEED) ].speed = (float*)data;
+        printf("Speed: Pad %i\n", port);
+        break;
     
     default:
       printf("Error: Attempted connect of non-existing port with ID %u \n", port); break;
