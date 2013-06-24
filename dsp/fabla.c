@@ -19,12 +19,12 @@ class SampleMessage
   public:
     SampleMessage(LV2_URID type)
     {
-      atom.type = type;
-      atom.size = sizeof(SampleMessage);
+      //atom.type = type;
+      //atom.size = sizeof(int) + sizeof(Sample*);
       pad = -1;
       sample = 0;
     }
-    LV2_Atom atom;
+    //LV2_Atom atom;
     int pad;
     Sample*  sample;
 };
@@ -94,7 +94,8 @@ static Sample* load_sample(FABLA_DSP* self, const char* path)
   SF_INFO* const info    = &sample->info;
   SNDFILE* const sndfile = sf_open(path, SFM_READ, info);
   
-  if (!sndfile || !info->frames || (info->channels != 1)) {
+  if (!sndfile) // || !info->frames ) { // || (info->channels != 1)) {
+  {
     lv2_log_error(&self->logger, "Failed to open sample '%s'\n", path);
     free(sample);
     return NULL;
@@ -120,7 +121,7 @@ static Sample* load_sample(FABLA_DSP* self, const char* path)
   sample->path_len = path_len;
   memcpy(sample->path, path, path_len + 1);
   
-  lv2_log_error(&self->logger, "Loaded sample:\n\t %i samples\n\tdata = %i", info->frames, sample->data);
+  lv2_log_error(&self->logger, "Loaded sample:\n\t %i samples\n\tdata = %i\n", info->frames, sample->data);
   
   return sample;
 }
@@ -186,11 +187,13 @@ instantiate(const LV2_Descriptor*     descriptor,
   char*        sample_path = (char*)malloc(len + 1);
   snprintf(sample_path, len + 1, "%s%s", bundle_path, default_sample);
   
+  /*
   Sample* newSamp = load_sample(self, sample_path);
   self->samples[0] = newSamp;
   free(sample_path);
   newSamp = load_sample(self, "/root/drums.wav");
   self->samples[1] = newSamp;
+  */
   
   return (LV2_Handle)self;
 }
@@ -358,21 +361,25 @@ run(LV2_Handle instance, uint32_t n_samples)
         lv2_log_note(&self->logger, "fabla_Load recieved %s on pad %i\n", f, pad );
         
         // schedule work
-        SampleMessage message(self->uris->fabla_Load);
-        message.pad = pad;
-        message.sample = 0;
+        //SampleMessage message(self->uris->fabla_Load);
+        //message.pad = pad;
         
-        
-        
-        
-        //int s = lv2_atom_total_size( body );
-        //lv2_log_note(&self->logger, "fabla_Load: scheduling work now, size %i\n", f, s );
-        
+        size_t s = sizeof(SampleMessage);
+        lv2_log_note(&self->logger, "fabla_Load: scheduling work now, size %i\n", s );
         
         //self->schedule->schedule_work(self->schedule->handle, s, &message);
-        //self->schedule->schedule_work(self->schedule->handle, s, body);
         
-        lv2_log_note(&self->logger, "continuing...\n" );
+        Sample* newSamp = load_sample(self, f);
+        
+        if( self->samples[pad] != 0 )
+        {
+          lv2_log_note(&self->logger, "freeing sample with %i frames\n", self->samples[pad]->info.frames );
+          free( self->samples[pad]->data );
+        }
+        
+        self->samples[pad] = newSamp;
+        
+        lv2_log_note(&self->logger, "finished loading new sample!\n" );
       }
       
       const LV2_Atom_Object* playBody = NULL;
