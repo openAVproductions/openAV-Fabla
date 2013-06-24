@@ -5,6 +5,7 @@
 
 #include "shared.h"
 #include "lv2/lv2plug.in/ns/ext/atom/forge.h"
+#include "lv2/lv2plug.in/ns/ext/state/state.h"
 
 #include "voice.hxx"
 #include "sample.hxx"
@@ -121,7 +122,7 @@ static Sample* load_sample(FABLA_DSP* self, const char* path)
   sample->path_len = path_len;
   memcpy(sample->path, path, path_len + 1);
   
-  lv2_log_error(&self->logger, "Loaded sample:\n\t %i samples\n\tdata = %i\n", info->frames, sample->data);
+  lv2_log_error(&self->logger, "Loaded sample:\n\t %i samples\n\tdata = %i\n\tPath: %s\n", info->frames, sample->data, sample->path);
   
   return sample;
 }
@@ -151,6 +152,9 @@ instantiate(const LV2_Descriptor*     descriptor,
   
   self->uris  = (Fabla_URIs*)malloc(sizeof(Fabla_URIs));
   memset(self, 0, sizeof(Fabla_URIs));
+  
+  for(int i = 0; i < 16; i++ )
+    self->samples[i] = 0;
   
   self->sr  = rate;
   self->bpm = 120.0f;
@@ -587,8 +591,8 @@ work_response(LV2_Handle  instance,
     lv2_atom_forge_frame_time(&self->forge, self->frame_offset);
     write_set_file_with_data(&self->forge, &self->uris,
                    sampleNum,
-                   self->sample[sampleNum]->path,
-                   self->sample[sampleNum]->path_len,
+                   self->samples[sampleNum]->path,
+                   self->samples[sampleNum]->path_len,
                    message->sample->data,
                    message->sample->info.frames);
     */
@@ -622,12 +626,112 @@ cleanup(LV2_Handle instance)
   free(instance);
 }
 
+
+static LV2_State_Status
+save(LV2_Handle                instance,
+     LV2_State_Store_Function  store,
+     LV2_State_Handle          handle,
+     uint32_t                  flags,
+     const LV2_Feature* const* features)
+{
+  LV2_State_Map_Path* map_path = NULL;
+  for (int i = 0; features[i]; ++i) {
+    if (!strcmp(features[i]->URI, LV2_STATE__mapPath)) {
+      map_path = (LV2_State_Map_Path*)features[i]->data;
+    }
+  }
+  
+  FABLA_DSP* self  = (FABLA_DSP*)instance;
+  
+  // loop over samples, if loaded save its state in the dictionary using
+  // the custom URI's created in uris.hxx
+  for ( int i = 0; i < 16; i++ )
+  {
+    if ( self->samples[i] )
+    {
+      //char* apath = map_path->abstract_path(map_path->handle, self->samples[i]->path);
+      
+      store(handle,
+            self->uris->padFilename[i],
+            self->samples[i]->path,
+            strlen(self->samples[i]->path) + 1,
+            self->uris->atom_Path,
+            LV2_STATE_IS_POD | LV2_STATE_IS_PORTABLE);
+      
+      
+      printf("Pad %i storing %s\n", i, self->samples[i]->path );
+      //free(apath);
+    }
+  }
+  
+  return LV2_STATE_SUCCESS;
+}
+
+static LV2_State_Status
+restore(LV2_Handle                  instance,
+        LV2_State_Retrieve_Function retrieve,
+        LV2_State_Handle            handle,
+        uint32_t                    flags,
+        const LV2_Feature* const*   features)
+{
+  FABLA_DSP* self = (FABLA_DSP*)instance;
+  
+  size_t   size;
+  uint32_t type;
+  uint32_t valflags;
+  
+  for ( int i = 0; i < 16; i++ )
+  {
+    const void* value = retrieve( handle, self->uris->padFilename[i], &size, &type, &valflags);
+    if (value)
+    {
+      const char* path = (const char*)value;
+      //#ifdef DEBUG 
+      printf( "Restoring file %s\n", path);
+      //#endif
+      if ( self->samples[i] )
+      {
+        free_sample(self, self->samples[i] );
+      }
+      Sample* newSample = load_sample(self, path);
+      if ( newSample )
+      {
+        self->samples[i] = newSample;
+        
+        /*
+        // Send a notification to UI that we're using a new sample
+        lv2_atom_forge_frame_time(&self->forge, 0); // 0 = frame offset
+        write_set_file_with_data(&self->forge, &self->uris,
+                       i,
+                       self->samples[i]->path,
+                       self->samples[i]->path_len,
+                       message->sample->data,
+                       message->sample->info.frames);
+        */
+        
+        printf("Restored sample %s successfully\n", self->samples[i]->path);
+      }
+      else
+      {
+        printf( "Error loading sample\n");
+      }
+    }
+  }
+  
+  return LV2_STATE_SUCCESS;
+}
+
 const void*
 extension_data(const char* uri)
 {
+  static const LV2_State_Interface  state  = { save, restore };
   static const LV2_Worker_Interface worker = { work, work_response, NULL };
+  
+  
   if (!strcmp(uri, LV2_WORKER__interface)) {
     return &worker;
+  } else if (!strcmp(uri, LV2_STATE__interface)) {
+    return &state;
   }
   return NULL;
 }

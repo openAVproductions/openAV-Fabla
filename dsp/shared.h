@@ -2,6 +2,8 @@
 #ifndef SHARED_H
 #define SHARED_H
 
+#include <sstream>
+
 #include "lv2/lv2plug.in/ns/ext/atom/util.h"
 #include "lv2/lv2plug.in/ns/ext/log/log.h"
 #include "lv2/lv2plug.in/ns/ext/log/logger.h"
@@ -45,6 +47,8 @@ typedef struct {
   LV2_URID fabla_pad;
   LV2_URID fabla_filename;
   
+  LV2_URID padFilename[16];
+  
 } Fabla_URIs;
 
 
@@ -76,6 +80,14 @@ map_uris(LV2_URID_Map* map, Fabla_URIs* uris)
   
   uris->fabla_pad          = map->map(map->handle, FABLA_URI"#pad");
   uris->fabla_filename     = map->map(map->handle, FABLA_URI"#filename");
+  
+  // Sample restore URI's  per pad
+  for ( int i = 0; i < 16; i++ )
+  {
+    std::stringstream s;
+    s << FABLA_URI"#pad_" << i << "_filename";
+    uris->padFilename[i] = map->map(map->handle, s.str().c_str() );
+  }
 }
 
 
