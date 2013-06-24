@@ -312,6 +312,9 @@ run(LV2_Handle instance, uint32_t n_samples)
         lv2_atom_forge_property_head(&self->forge, self->uris->fabla_pad, 0);
         lv2_atom_forge_int(&self->forge, int(data[1]) );
         
+        lv2_atom_forge_pop(&self->forge, &body_frame);
+        lv2_atom_forge_pop(&self->forge, &set_frame);
+        
         // use next available voice for the note
         int n = int(data[1]) - 36;
         int v = int(data[2]);
@@ -332,6 +335,9 @@ run(LV2_Handle instance, uint32_t n_samples)
         
         lv2_atom_forge_property_head(&self->forge, self->uris->fabla_pad, 0);
         lv2_atom_forge_int(&self->forge, int(data[1]) );
+        
+        lv2_atom_forge_pop(&self->forge, &body_frame);
+        lv2_atom_forge_pop(&self->forge, &set_frame);
         
         // release ADSR of note
         for(int i = 0; i < NVOICES; i++)
