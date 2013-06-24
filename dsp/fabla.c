@@ -29,6 +29,13 @@ class SampleMessage
     Sample*  sample;
 };
 
+class ADSRdata
+{
+  float* a;
+  float* d;
+  float* s;
+  float* r;
+};
 
 typedef struct {
   // instantiate values
@@ -39,6 +46,14 @@ typedef struct {
   
   float* output_L;
   float* output_R;
+  
+  float* comp_attack;
+  float* comp_decay;
+  float* comp_thres;
+  float* comp_ratio;
+  float* comp_makeup;
+  
+  ADSRdata adsr[16];
   
   // URID map
   LV2_URID_Map* map;
@@ -202,6 +217,20 @@ connect_port(LV2_Handle instance,
     
     case MASTER_VOL:
       self->master = (float*)data; break;
+    
+    case COMP_ATTACK:
+      self->comp_attack = (float*)data; break;
+    case COMP_DECAY:
+      self->comp_decay  = (float*)data; break;
+    case COMP_THRES:
+      self->comp_thres  = (float*)data; break;
+    case COMP_RATIO:
+      self->comp_ratio  = (float*)data; break;
+    case COMP_MAKEUP:
+      self->comp_makeup = (float*)data; break;
+    
+    // deal with 16 * ADSR / gain / speed / pan here
+    
     
     default:
       printf("Error: Attempted connect of non-existing port with ID %u \n", port); break;

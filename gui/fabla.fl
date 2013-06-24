@@ -45,7 +45,7 @@ fl_open_display();} {}
         class Background
       }
       Fl_Box compressor {
-        label Compressor
+        label Compressor selected
         xywh {352 290 97 84} box UP_BOX
         class Compressor
       }
@@ -211,11 +211,13 @@ fl_open_display();} {}
       }
       Fl_Box {} {
         label Thres
+        callback {compressor->threshold( o->value() );}
         xywh {406 395 30 30} box UP_BOX color 48 labelcolor 32
         class Dial
       }
       Fl_Box {} {
         label Ratio
+        callback {compressor->ratio( o->value() );}
         xywh {365 395 30 30} box UP_BOX color 48 labelcolor 32
         class Dial
       }
@@ -227,11 +229,13 @@ fl_open_display();} {}
       }
       Fl_Box d {
         label D
+        callback {adsr->decay( o->value() );}
         xywh {393 170 30 30} box UP_BOX color 48 labelcolor 40
         class Dial
       }
       Fl_Box a {
         label A
+        callback {adsr->attack( o->value() );}
         xywh {358 170 30 30} box UP_BOX color 48 labelcolor 40
         class Dial
       }
@@ -243,11 +247,13 @@ fl_open_display();} {}
       }
       Fl_Box r {
         label R
+        callback {adsr->release( o->value() );}
         xywh {463 170 30 30} box UP_BOX color 48 labelcolor 40
         class Dial
       }
       Fl_Box s {
         label S
+        callback {adsr->sustain( o->value() );}
         xywh {428 170 30 30} box UP_BOX color 48 labelcolor 40
         code0 {extern void writeLoadSample(Fabla* self, int pad, const char* filename, size_t filename_len);}
         code1 {extern void writePadPlay(Fabla* self, int pad );}
@@ -338,7 +344,6 @@ else
 {
   // write pad play Atom to DSP
   writePadPlay( fabla, id );
-}} {selected
-    }
+}} {}
   }
 } 

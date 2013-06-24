@@ -8,7 +8,7 @@ UISOURCES=gui/ui_helpers.cxx gui/fabla.cxx gui/fabla_ui.c
 UIOBJECTS=$(UISOURCES:.cpp=.o)
 UI=fabla.lv2/fabla_ui.so
 
-SASOURCES=gui/fabla.cxx gui/ui_test.cxx
+SASOURCES=gui/fabla.cxx gui/ui_helpers.cxx gui/ui_test.cxx
 SAOBJECTS=$(SASOURCES:.cpp=.o)
 SA=uiTest
 
