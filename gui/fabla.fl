@@ -26,7 +26,7 @@ fl_open_display();
 selectedPad = 0;} {}
     Fl_Window w {
       label Fabla open
-      xywh {638 28 515 490} type Double color 56 selection_color 0 labelcolor 88
+      xywh {447 20 515 490} type Double color 56 selection_color 0 labelcolor 88
       code0 {\#include "avtk.h"}
       code1 {using namespace Avtk;}
       code2 {\#include <FL/x.H>}
@@ -227,6 +227,7 @@ selectedPad = 0;} {}
         label Gain
         callback {float tmp = o->value();
 int port = int(PAD_GAIN) + selectedPad;
+padData[selectedPad].gain = tmp;
 writeFunction(controller, port, sizeof(float), 0, (const void*) &tmp);
 printf("gain on pad\# %i, port\# %i, value %f\\n", selectedPad, port, tmp);} selected
         xywh {374 210 42 40} box UP_BOX color 48 labelcolor 40
@@ -318,7 +319,9 @@ switch(selectedPad+1)
   case 15: p15->selected(true); break;
   case 16: p16->selected(true); break;
   default: printf("unknown pad");
-}} {}
+}
+
+gain->value( padData[selectedPad].gain );} {}
   }
   decl {int selectedPad;} {private local
   }
@@ -358,5 +361,8 @@ else
   decl {LV2UI_Controller controller;} {public local
   }
   decl {LV2UI_Write_Function writeFunction} {public local
+  }
+  decl {UIPadData padData[16];} {
+    comment {holds all pad individual data} public local
   }
 } 

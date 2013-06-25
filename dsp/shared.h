@@ -91,5 +91,29 @@ map_uris(LV2_URID_Map* map, Fabla_URIs* uris)
 }
 
 
+class UIPadData
+{
+  public:
+    UIPadData()
+    {
+      gain  = 0.5;
+      speed = 1.0;
+      
+      a     = 0;
+      d     = 0;
+      s     = 1;
+      r     = 0;
+    }
+    
+    float gain;
+    float speed;
+    
+    float a;
+    float d;
+    float s;
+    float r;
+};
+
+
 #endif // SHARED_H
 
