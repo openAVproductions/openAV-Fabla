@@ -213,6 +213,29 @@ static void port_event(LV2UI_Handle handle,
               }
             }
             
+            // Meter Levels
+            body = NULL;
+            lv2_atom_object_get(obj, self->uris->fabla_MeterLevels, &body, 0);
+            if (body)
+            {
+              const LV2_Atom_Float* L = 0;
+              lv2_atom_object_get( body, self->uris->fabla_level_l, &L, 0);
+              float levelL = *(float*)LV2_ATOM_BODY(L);
+              
+              const LV2_Atom_Float* R = 0;
+              lv2_atom_object_get( body, self->uris->fabla_level_r, &R, 0);
+              float levelR = *(float*)LV2_ATOM_BODY(R);
+              
+              
+              // range scale, so 75% of the way up is 0dB FS
+              float finalL = (1-(levelL / -96.f)) * 0.75;
+              float finalR = (1-(levelR / -96.f)) * 0.75;
+              
+              //printf("levelL = %f\n final %f\n", levelL, final );
+              
+              ui->masterVol->amplitude( finalL, finalR );
+            }
+            
           }
         break;
       
