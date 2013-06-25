@@ -37,7 +37,7 @@ selectedPad = 0;} {}
         xywh {346 41 159 215} box UP_BOX
         class Background
       }
-      Fl_Box adsr {selected
+      Fl_Box adsr {
         xywh {351 66 150 84} box UP_BOX
         code0 {adsr->attack(0); adsr->decay(0);}
         code1 {adsr->sustain(1); adsr->release(0);}
@@ -226,13 +226,13 @@ selectedPad = 0;} {}
         class Dial
       }
       Fl_Box gain {
-        label Gain
+        label VOL
         callback {float tmp = o->value();
 int port = int(PAD_GAIN) + selectedPad;
 padData[selectedPad].gain = tmp;
 writeFunction(controller, port, sizeof(float), 0, (const void*) &tmp);
 printf("gain on pad\# %i, port\# %i, value %f\\n", selectedPad, port, tmp);}
-        xywh {374 210 42 40} box UP_BOX color 48 labelcolor 40
+        xywh {357 210 38 38} box UP_BOX color 48 labelfont 1 labelcolor 40
         code0 {gain->drawLabel(true);}
         code1 {gain->value( 0.5 );}
         class Dial
@@ -245,8 +245,20 @@ float tmp = o->value();
 int port = int(PAD_DECAY) + selectedPad;
 padData[selectedPad].d = tmp;
 writeFunction(controller, port, sizeof(float), 0, (const void*) &tmp);
-printf("decay on pad\# %i, port\# %i, value %f\\n", selectedPad, port, tmp);}
-        xywh {393 170 30 30} box UP_BOX color 48 labelcolor 40
+printf("decay on pad\# %i, port\# %i, value %f\\n", selectedPad, port, tmp);} selected
+        xywh {393 170 30 30} box UP_BOX color 48 labelfont 1 labelcolor 40
+        class Dial
+      }
+      Fl_Box speed {
+        label SPD
+        callback {float tmp = o->value();
+int port = int(PAD_SPEED) + selectedPad;
+padData[selectedPad].speed = tmp;
+writeFunction(controller, port, sizeof(float), 0, (const void*) &tmp);
+printf("speed on pad\# %i, port\# %i, value %f\\n", selectedPad, port, tmp);}
+        xywh {408 210 38 38} box UP_BOX color 48 labelfont 1 labelcolor 40
+        code0 {speed->drawLabel(true);}
+        code1 {speed->value( 0.5 );}
         class Dial
       }
       Fl_Box a {
@@ -257,20 +269,8 @@ float tmp = o->value();
 int port = int(PAD_ATTACK) + selectedPad;
 padData[selectedPad].a = tmp;
 writeFunction(controller, port, sizeof(float), 0, (const void*) &tmp);
-printf("attack on pad\# %i, port\# %i, value %f\\n", selectedPad, port, tmp);}
-        xywh {358 170 30 30} box UP_BOX color 48 labelcolor 40
-        class Dial
-      }
-      Fl_Box speed {
-        label Speed
-        callback {float tmp = o->value();
-int port = int(PAD_SPEED) + selectedPad;
-padData[selectedPad].speed = tmp;
-writeFunction(controller, port, sizeof(float), 0, (const void*) &tmp);
-printf("speed on pad\# %i, port\# %i, value %f\\n", selectedPad, port, tmp);}
-        xywh {425 210 45 40} box UP_BOX color 48 labelcolor 40
-        code0 {speed->drawLabel(true);}
-        code1 {speed->value( 0.5 );}
+printf("attack on pad\# %i, port\# %i, value %f\\n", selectedPad, port, tmp);} selected
+        xywh {358 170 30 30} box UP_BOX color 48 labelfont 1 labelcolor 40
         class Dial
       }
       Fl_Box r {
@@ -281,8 +281,8 @@ float tmp = o->value();
 int port = int(PAD_RELEASE) + selectedPad;
 padData[selectedPad].r = tmp;
 writeFunction(controller, port, sizeof(float), 0, (const void*) &tmp);
-printf("release on pad\# %i, port\# %i, value %f\\n", selectedPad, port, tmp);}
-        xywh {463 170 30 30} box UP_BOX color 48 labelcolor 40
+printf("release on pad\# %i, port\# %i, value %f\\n", selectedPad, port, tmp);} selected
+        xywh {463 170 30 30} box UP_BOX color 48 labelfont 1 labelcolor 40
         class Dial
       }
       Fl_Box s {
@@ -293,11 +293,23 @@ float tmp = o->value();
 int port = int(PAD_SUSTAIN) + selectedPad;
 padData[selectedPad].s = tmp;
 writeFunction(controller, port, sizeof(float), 0, (const void*) &tmp);
-printf("sustain on pad\# %i, port\# %i, value %f\\n", selectedPad, port, tmp);}
-        xywh {428 170 30 30} box UP_BOX color 48 labelcolor 40
+printf("sustain on pad\# %i, port\# %i, value %f\\n", selectedPad, port, tmp);} selected
+        xywh {428 170 30 30} box UP_BOX color 48 labelfont 1 labelcolor 40
         code0 {extern void writeLoadSample(Fabla* self, int pad, const char* filename, size_t filename_len);}
         code1 {extern void writePadPlay(Fabla* self, int pad );}
         code2 {s->value(1.0);}
+        class Dial
+      }
+      Fl_Box pan {
+        label PAN
+        callback {float tmp = o->value();
+int port = int(PAD_PAN) + selectedPad;
+padData[selectedPad].pan = tmp;
+writeFunction(controller, port, sizeof(float), 0, (const void*) &tmp);
+printf("pan on pad\# %i, port\# %i, value %f\\n", selectedPad, port, tmp);}
+        xywh {455 210 38 38} box UP_BOX color 48 labelfont 1 labelcolor 40
+        code0 {pan->drawLabel(true);}
+        code1 {pan->value( 0.5 );}
         class Dial
       }
     }
@@ -358,6 +370,7 @@ switch(selectedPad+1)
 // set dial values
 gain->value( padData[selectedPad].gain );
 speed->value( padData[selectedPad].speed );
+pan->value( padData[selectedPad].pan );
 
 a->value( padData[selectedPad].a );
 d->value( padData[selectedPad].d );

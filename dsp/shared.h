@@ -98,6 +98,7 @@ class UIPadData
     {
       gain  = 0.5;
       speed = 0.5;
+      pan   = 0.5;
       
       a     = 0;
       d     = 0;
@@ -107,6 +108,7 @@ class UIPadData
     
     float gain;
     float speed;
+    float pan;
     
     float a;
     float d;
