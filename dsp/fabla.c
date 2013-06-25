@@ -11,6 +11,7 @@
 #include "sample.hxx"
 #include "denormals.hxx"
 #include "dsp_dbmeter.hxx"
+#include "dsp_compressor.hxx"
 
 #define NVOICES 16
 
@@ -101,6 +102,7 @@ typedef struct {
   int uiUpdateCounter;
   DBMeter* meterL;
   DBMeter* meterR;
+  Compressor* comp;
   
 } FABLA_DSP;
 
@@ -202,6 +204,7 @@ instantiate(const LV2_Descriptor*     descriptor,
   self->uiUpdateCounter = 0;
   self->meterL = new DBMeter( rate );
   self->meterR = new DBMeter( rate );
+  self->comp   = new Compressor( rate );
   
   // map all known URIs to ints
   map_uris( self->map, self->uris );
@@ -512,6 +515,14 @@ run(LV2_Handle instance, uint32_t n_samples)
     }
   }
   
+  // set the compressor values
+  self->comp->setAttack( *self->comp_attack );
+  self->comp->setRelease(*self->comp_decay  );
+  self->comp->setThreshold(*self->comp_thres);
+  self->comp->setRatio ( *self->comp_ratio  );
+  
+  //printf("%f\t%f\t%f\t%f\n", *self->comp_attack, *self->comp_decay, *self->comp_thres, *self->comp_ratio );
+  // makeup TODO
   
   
   for (uint32_t pos = 0; pos < n_samples; pos++)
@@ -533,6 +544,8 @@ run(LV2_Handle instance, uint32_t n_samples)
     
     self->meterL->process( 1, &buf[0], &buf[0] ); // left  channel, in place
     self->meterR->process( 1, &buf[1], &buf[1] ); // right channel, in place
+    
+    self->comp->process( 1, &buf[0], &buf[0] );   // stereo, in place
     
     outputL[pos] = accumL;
     outputR[pos] = accumR;

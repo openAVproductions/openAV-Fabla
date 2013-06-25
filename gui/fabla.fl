@@ -26,7 +26,7 @@ fl_open_display();
 selectedPad = 0;} {}
     Fl_Window w {
       label Fabla open
-      xywh {386 125 515 490} type Double color 56 selection_color 0 labelcolor 88
+      xywh {632 42 515 490} type Double color 56 selection_color 0 labelcolor 88
       code0 {\#include "avtk.h"}
       code1 {using namespace Avtk;}
       code2 {\#include <FL/x.H>}
@@ -59,7 +59,7 @@ selectedPad = 0;} {}
       Fl_Box masterVol {
         label Vol
         callback {float tmp = o->value();
-writeFunction(controller, MASTER_VOL, sizeof(float), 0, (const void*) &tmp);} selected
+writeFunction(controller, MASTER_VOL, sizeof(float), 0, (const void*) &tmp);}
         xywh {453 290 48 186} box UP_BOX
         code0 {\#include "../dsp/ports.h"}
         code1 {\#include "lv2/lv2plug.in/ns/extensions/ui/ui.h"}
@@ -72,6 +72,9 @@ writeFunction(controller, MASTER_VOL, sizeof(float), 0, (const void*) &tmp);} se
       }
       Fl_Box {} {
         label Rel
+        callback {float tmp = o->value();
+//compressor->release( tmp );
+writeFunction(controller, COMP_DECAY, sizeof(float), 0, (const void*) &tmp);} selected
         xywh {406 435 30 30} box UP_BOX color 48 labelcolor 32
         class Dial
       }
@@ -212,18 +215,25 @@ writeFunction(controller, MASTER_VOL, sizeof(float), 0, (const void*) &tmp);} se
       }
       Fl_Box {} {
         label Atk
+        callback {float tmp = o->value();
+//compressor->attack( tmp );
+writeFunction(controller, COMP_ATTACK, sizeof(float), 0, (const void*) &tmp);}
         xywh {365 435 30 30} box UP_BOX color 48 labelcolor 32
         class Dial
       }
       Fl_Box {} {
         label Thres
-        callback {compressor->threshold( o->value() );}
+        callback {float tmp = o->value();
+compressor->threshold( tmp );
+writeFunction(controller, COMP_THRES, sizeof(float), 0, (const void*) &tmp);}
         xywh {406 395 30 30} box UP_BOX color 48 labelcolor 32
         class Dial
       }
       Fl_Box {} {
         label Ratio
-        callback {compressor->ratio( o->value() );}
+        callback {float tmp = o->value();
+compressor->ratio( tmp );
+writeFunction(controller, COMP_RATIO, sizeof(float), 0, (const void*) &tmp);}
         xywh {365 395 30 30} box UP_BOX color 48 labelcolor 32
         class Dial
       }
