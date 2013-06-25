@@ -10,6 +10,7 @@
 #include "voice.hxx"
 #include "sample.hxx"
 #include "denormals.hxx"
+#include "dsp_dbmeter.hxx"
 
 #define NVOICES 16
 
@@ -96,6 +97,9 @@ typedef struct {
   
   Voice* voice[NVOICES];
   Sample* samples[16];
+  
+  DBMeter* meterL;
+  DBMeter* meterR;
   
 } FABLA_DSP;
 
@@ -192,6 +196,10 @@ instantiate(const LV2_Descriptor*     descriptor,
   // allocate voices
   for(int i = 0; i < NVOICES; i++)
     self->voice[i] = new Voice(rate);
+  
+  // allocate meters
+  self->meterL = new DBMeter( rate );
+  self->meterR = new DBMeter( rate );
   
   // map all known URIs to ints
   map_uris( self->map, self->uris );
@@ -512,9 +520,21 @@ run(LV2_Handle instance, uint32_t n_samples)
       self->voice[i]->process( 1, &accumL, &accumR );
     }
     
-    outputL[pos] = accumL * gain;
-    outputR[pos] = accumR * gain;
+    accumL = accumL * gain;
+    accumR = accumR * gain;
+    
+    float* buf[2];
+    buf[0] = &accumL;
+    buf[1] = &accumR;
+    
+    self->meterL->process( 1, &buf[0], &buf[0] ); // left  channel, in place
+    self->meterR->process( 1, &buf[1], &buf[1] ); // right channel, in place
+    
+    outputL[pos] = accumL;
+    outputR[pos] = accumR;
   }
+  
+  //printf("%f\t%f\n", self->meterL->getDB(), self->meterR->getDB() );
 }
 
 
