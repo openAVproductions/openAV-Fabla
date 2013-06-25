@@ -14,6 +14,7 @@
 #include "dsp_compressor.hxx"
 
 #define NVOICES 16
+#define UI_WAVEFORM_PIXELS 324
 
 static const char* default_sample = "click.wav";
 
@@ -98,11 +99,18 @@ typedef struct {
   
   Voice* voice[NVOICES];
   Sample* samples[16];
+  Compressor* comp;
   
+  // UI related stuff
   int uiUpdateCounter;
   DBMeter* meterL;
   DBMeter* meterR;
-  Compressor* comp;
+  
+  // Array to store the waveform pixels gets copied to ringbuffer on sample load,
+  // then not used until next sample load. Having this always in memory simplifies
+  // sending a lot
+  float uiWaveform[UI_WAVEFORM_PIXELS];
+  
   
 } FABLA_DSP;
 
@@ -111,7 +119,7 @@ static Sample* load_sample(FABLA_DSP* self, const char* path)
 {
   const size_t path_len  = strlen(path);
   
-  lv2_log_trace(&self->logger, "Loading sample %s\n", path);
+  lv2_log_note(&self->logger, "Loading sample %s\n", path);
   
   Sample* sample = new Sample();
   SF_INFO* const info    = &sample->info;
@@ -125,7 +133,7 @@ static Sample* load_sample(FABLA_DSP* self, const char* path)
   }
   else
   {
-    lv2_log_error(&self->logger, "Sample has '%i' samples\n", info->frames);
+    //lv2_log_error(&self->logger, "Sample has '%i' samples\n", info->frames);
   }
   
   // Read data
@@ -143,8 +151,32 @@ static Sample* load_sample(FABLA_DSP* self, const char* path)
   sample->path     = (char*)malloc(path_len + 1);
   sample->path_len = path_len;
   memcpy(sample->path, path, path_len + 1);
+  //lv2_log_error(&self->logger, "Loaded sample:\n\t %i samples\n\tdata = %i\n\tPath: %s\n", info->frames, sample->data, sample->path);
   
-  lv2_log_error(&self->logger, "Loaded sample:\n\t %i samples\n\tdata = %i\n\tPath: %s\n", info->frames, sample->data, sample->path);
+  // Analyse the waveform, resampling length of waveform to UI_WAVEFORM_PIXELS
+  lv2_log_note(&self->logger, "Analysing waveform...\n");
+  
+  // find how many samples per pixel
+  int samplesPerPix = info->frames / UI_WAVEFORM_PIXELS;
+  
+  
+  lv2_log_note(&self->logger, "Done analysing waveform, samplesPerPix %i\n", samplesPerPix);
+  
+  // loop over each pixel value we need
+  for( int p = 0; p < UI_WAVEFORM_PIXELS; p++ )
+  {
+    float average = 0.f;
+    
+    // calc value for this pixel
+    for( int i = 0; i < samplesPerPix; i++ )
+    {
+      float tmp = sample->data[i + (p * samplesPerPix)];
+      if ( tmp < 0 ) { tmp = -tmp; }
+      average += tmp;
+    }
+    average = (average / samplesPerPix);
+    self->uiWaveform[p] = average;
+  }
   
   return sample;
 }
