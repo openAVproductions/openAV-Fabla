@@ -26,7 +26,7 @@ fl_open_display();
 selectedPad = 0;} {}
     Fl_Window w {
       label Fabla open
-      xywh {632 42 515 490} type Double color 56 selection_color 0 labelcolor 88
+      xywh {444 88 515 490} type Double color 56 selection_color 0 labelcolor 88
       code0 {\#include "avtk.h"}
       code1 {using namespace Avtk;}
       code2 {\#include <FL/x.H>}
@@ -74,7 +74,7 @@ writeFunction(controller, MASTER_VOL, sizeof(float), 0, (const void*) &tmp);}
         label Rel
         callback {float tmp = o->value();
 //compressor->release( tmp );
-writeFunction(controller, COMP_DECAY, sizeof(float), 0, (const void*) &tmp);} selected
+writeFunction(controller, COMP_DECAY, sizeof(float), 0, (const void*) &tmp);}
         xywh {406 435 30 30} box UP_BOX color 48 labelcolor 32
         class Dial
       }
@@ -405,21 +405,34 @@ if ( rclick )
 {
   // pop up "load sample" dialog, write Atom event to DSP
   
-  Fl_Native_File_Chooser fnfc;
-  fnfc.title("Load Sample");
-  fnfc.type(Fl_Native_File_Chooser::BROWSE_FILE);
-  fnfc.filter("Wav\\t*.wav");
-  fnfc.directory( getenv("HOME") );
+  /*
+  Fl_File_Chooser* fnfc = new Fl_File_Chooser( getenv("HOME"),
+  			"Wav\\t*.wav",
+  			0, // single file select
+  			"Load Sample" );
   
-  switch ( fnfc.show() )
+  fnfc->show();
+  printf("shown");
+  while( fnfc->shown() )
   {
-    case -1: printf("ERROR: %s\\n", fnfc.errmsg());    break;  // ERROR
-    case  1: printf("CANCEL\\n");                      break;  // CANCEL
-    default: printf("Loading directory: %s\\n", fnfc.filename());    
-    
-    writeLoadSample(fabla, id, fnfc.filename(), strlen(fnfc.filename()));
-    break;
- }
+    printf("waiting...");
+    Fl::wait();
+    printf("waiting 2");
+  }
+  printf("done");
+  const char* filename = fnfc->value();
+  */
+  char * filename = fl_file_chooser ("Load Sample", "Wav\\t*.wav", NULL, 0);
+  
+  if ( filename )
+  {
+    printf("Loading directory: %s\\n", filename);    
+    writeLoadSample(fabla, id, filename, strlen(filename) );
+    free( (void*)filename );
+  }
+  
+  //delete fnfc;
+  
 }
 else
 {
@@ -428,7 +441,8 @@ else
   
   // update the UI showing the ADSR / waveform of this pad
   select_pad( id );
-}} {}
+}} {selected
+    }
   }
   decl {LV2UI_Controller controller;} {public local
   }
