@@ -736,11 +736,18 @@ save(LV2_Handle                instance,
      uint32_t                  flags,
      const LV2_Feature* const* features)
 {
+  // Analyse new features, check for map path
   LV2_State_Map_Path* map_path = NULL;
   for (int i = 0; features[i]; ++i) {
     if (!strcmp(features[i]->URI, LV2_STATE__mapPath)) {
       map_path = (LV2_State_Map_Path*)features[i]->data;
     }
+  }
+  
+  if ( !map_path )
+  {
+    printf("Error: map path not available! SAVE DID NOT COMPLETE!\n" );
+    return;
   }
   
   FABLA_DSP* self  = (FABLA_DSP*)instance;
@@ -751,18 +758,24 @@ save(LV2_Handle                instance,
   {
     if ( self->samples[i] )
     {
-      //char* apath = map_path->abstract_path(map_path->handle, self->samples[i]->path);
+      char* apath = map_path->abstract_path(map_path->handle, self->samples[i]->path);
       
-      store(handle,
+      if ( apath )
+      {
+        store(handle,
             self->uris->padFilename[i],
-            self->samples[i]->path,
+            apath,
             strlen(self->samples[i]->path) + 1,
             self->uris->atom_Path,
             LV2_STATE_IS_POD | LV2_STATE_IS_PORTABLE);
       
-      
-      printf("Pad %i storing %s\n", i, self->samples[i]->path );
-      //free(apath);
+        printf("Pad %i, apath %s, sample path %s\n", i, apath );
+        free(apath);
+      }
+      else
+      {
+        printf("apath = null on pad %i\n", i );
+      }
     }
   }
   
