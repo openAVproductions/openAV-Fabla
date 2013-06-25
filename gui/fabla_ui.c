@@ -228,8 +228,11 @@ static void port_event(LV2UI_Handle handle,
               
               
               // range scale, so 75% of the way up is 0dB FS
-              float finalL = (1-(levelL / -96.f)) * 0.75;
-              float finalR = (1-(levelR / -96.f)) * 0.75;
+              float zeroOneL = (1-(levelL / -96.f));
+              float zeroOneR = (1-(levelR / -96.f));
+              
+              float finalL = pow(zeroOneL, 4);
+              float finalR = pow(zeroOneR, 4);
               
               //printf("levelL = %f\n final %f\n", levelL, final );
               
