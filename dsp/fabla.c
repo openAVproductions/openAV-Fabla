@@ -267,7 +267,7 @@ connect_port(LV2_Handle instance,
     case pg10: case pg11: case pg12: case pg13: case pg14: case pg15: case pg16:
         // hack the enum to access the right array slice
         self->padData[ port - int(PAD_GAIN) ].gain = (float*)data;
-        printf("Gain Pad %i\n", port);
+        //printf("Gain Pad %i\n", port);
         break;
     
     case PAD_SPEED:
@@ -275,7 +275,7 @@ connect_port(LV2_Handle instance,
     case pspd10: case pspd11: case pspd12: case pspd13: case pspd14: case pspd15: case pspd16:
         // hack the enum to access the right array slice
         self->padData[ port - int(PAD_SPEED) ].speed = (float*)data;
-        printf("Speed: Pad %i\n", port);
+        //printf("Speed: Pad %i\n", port);
         break;
     
     default:
@@ -299,7 +299,7 @@ static void noteOn(FABLA_DSP* self, int note, int velocity)
       
       // play the voice
       self->voice[i]->play( note, velocity );
-      lv2_log_note(&self->logger, "Voice %i gets note ON %i\n", i, note );
+      //lv2_log_note(&self->logger, "Voice %i gets note ON %i\n", i, note );
       alloced = true;
       break;
     }
