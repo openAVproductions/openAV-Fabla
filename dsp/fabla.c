@@ -747,7 +747,7 @@ save(LV2_Handle                instance,
   if ( !map_path )
   {
     printf("Error: map path not available! SAVE DID NOT COMPLETE!\n" );
-    return;
+    return LV2_STATE_ERR_NO_FEATURE;
   }
   
   FABLA_DSP* self  = (FABLA_DSP*)instance;
@@ -756,20 +756,20 @@ save(LV2_Handle                instance,
   // the custom URI's created in uris.hxx
   for ( int i = 0; i < 16; i++ )
   {
-    if ( self->samples[i] )
+    if ( self->samples[i] && self->samples[i]->path )
     {
       char* apath = map_path->abstract_path(map_path->handle, self->samples[i]->path);
       
       if ( apath )
       {
+        printf("Storing on pad %i, apath %s\n", i, apath );
         store(handle,
             self->uris->padFilename[i],
             apath,
             strlen(self->samples[i]->path) + 1,
             self->uris->atom_Path,
             LV2_STATE_IS_POD | LV2_STATE_IS_PORTABLE);
-      
-        printf("Pad %i, apath %s, sample path %s\n", i, apath );
+        
         free(apath);
       }
       else
