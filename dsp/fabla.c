@@ -321,7 +321,8 @@ run(LV2_Handle instance, uint32_t n_samples)
 {
   FABLA_DSP* self = (FABLA_DSP*)instance;
   
-  const float        gain   = *(self->master);
+  // x^^4 approximates exponential volume control, * 1.5 to make 75% be 0dB FS
+  const float        gain   = pow ( (*self->master), 4.f ) * 1.5;
   float* const       outputL = self->output_L;
   float* const       outputR = self->output_R;
   
