@@ -97,7 +97,7 @@ class UIPadData
     UIPadData()
     {
       gain  = 0.5;
-      speed = 1.0;
+      speed = 0.5;
       
       a     = 0;
       d     = 0;
