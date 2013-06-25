@@ -506,7 +506,8 @@ run(LV2_Handle instance, uint32_t n_samples)
   {
     if ( self->samples[i] )
     {
-      self->samples[i]->gain = *(self->padData[i].gain);
+      self->samples[i]->gain  = *(self->padData[i].gain);
+      self->samples[i]->speed = *(self->padData[i].speed);
     }
   }
   

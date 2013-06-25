@@ -60,10 +60,10 @@ class Voice
     {
       if( playingBool && sample )
       {
-        float tmp = sample->data[index] * sample->gain;
+        float tmp = sample->data[int(index)] * sample->gain;
         *bufL += tmp;
         *bufR += tmp;
-        index += sample->speed;
+        index += 0.5 + sample->speed * 1.5;
         
         if ( index >= sample->info.frames )
         {
@@ -91,7 +91,7 @@ class Voice
     
     // each voice has own index, allowing for voices playing the same
     // pad, without the "speedup" effect of incrementing the same index
-    size_t  index;
+    float index;
 };
 
 #endif // FABLA_VOICE_H
