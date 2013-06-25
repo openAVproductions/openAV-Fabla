@@ -534,7 +534,27 @@ run(LV2_Handle instance, uint32_t n_samples)
     outputR[pos] = accumR;
   }
   
-  //printf("%f\t%f\n", self->meterL->getDB(), self->meterR->getDB() );
+  // send levels to UI
+  float L = self->meterL->getDB();
+  float R = self->meterR->getDB();
+  
+  lv2_atom_forge_frame_time(&self->forge, 0);
+  
+  LV2_Atom_Forge_Frame set_frame;
+  LV2_Atom* set = (LV2_Atom*)lv2_atom_forge_blank(&self->forge, &set_frame, 1, self->uris->atom_eventTransfer);
+  
+  lv2_atom_forge_property_head(&self->forge, self->uris->fabla_MeterLevels, 0);
+  LV2_Atom_Forge_Frame body_frame;
+  lv2_atom_forge_blank(&self->forge, &body_frame, 4, 0);
+  
+  lv2_atom_forge_property_head(&self->forge, self->uris->fabla_level_l, 0);
+  lv2_atom_forge_float(&self->forge, L );
+  
+  lv2_atom_forge_property_head(&self->forge, self->uris->fabla_level_r, 0);
+  lv2_atom_forge_float(&self->forge, R );
+  
+  lv2_atom_forge_pop(&self->forge, &body_frame);
+  lv2_atom_forge_pop(&self->forge, &set_frame);
 }
 
 
