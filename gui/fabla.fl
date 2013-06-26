@@ -403,8 +403,7 @@ if ( padData[selectedPad].loaded )
 else
 {
   waveform->setData( 0, 0 );
-}} {selected
-    }
+}} {}
   }
   decl {int selectedPad;} {private local
   }
@@ -432,7 +431,6 @@ if ( rclick )
   }
   printf("done");
   const char* filename = fnfc->value();
-  */
   char * filename = fl_file_chooser ("Load Sample", "Wav\\t*.wav", NULL, 0);
   
   if ( filename )
@@ -443,6 +441,25 @@ if ( rclick )
   }
   
   //delete fnfc;
+  */
+  
+  // pop up "load sample" dialog, write Atom event to DSP
+  
+  Fl_Native_File_Chooser fnfc;
+  fnfc.title("Load Sample");
+  fnfc.type(Fl_Native_File_Chooser::BROWSE_FILE);
+  fnfc.filter("Wav\\\\t*.wav");
+  fnfc.directory( getenv("HOME") );
+  
+  switch ( fnfc.show() )
+  {
+    case -1: printf("ERROR: %s\\\\n", fnfc.errmsg());    break;  // ERROR
+    case  1: printf("CANCEL\\\\n");                      break;  // CANCEL
+    default: printf("Loading directory: %s\\\\n", fnfc.filename());    
+    
+    writeLoadSample(fabla, id, fnfc.filename(), strlen(fnfc.filename()));
+    break;
+ }
   
 }
 else
@@ -452,7 +469,8 @@ else
   
   // update the UI showing the ADSR / waveform of this pad
   select_pad( id );
-}} {}
+}} {selected
+    }
   }
   decl {LV2UI_Controller controller;} {public local
   }
