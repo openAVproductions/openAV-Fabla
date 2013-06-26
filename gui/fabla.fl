@@ -448,7 +448,7 @@ if ( rclick )
   Fl_Native_File_Chooser fnfc;
   fnfc.title("Load Sample");
   fnfc.type(Fl_Native_File_Chooser::BROWSE_FILE);
-  fnfc.filter("Wav\\\\t*.wav");
+  fnfc.filter("Wav\\t*.wav");
   fnfc.directory( getenv("HOME") );
   
   switch ( fnfc.show() )

@@ -259,7 +259,7 @@ static void port_event(LV2UI_Handle handle,
               
               for(int i = 0; i < UI_WAVEFORM_PIXELS; i++)
               {
-                ui->padData[pad].waveform[i] = data[i];
+                ui->padData[pad].waveform[i] = data[i]; // sin( 3.14* float(i * 2 * pad) / UI_WAVEFORM_PIXELS );
               }
               ui->waveform->setData( UI_WAVEFORM_PIXELS, &ui->padData[pad].waveform[0] );
               ui->padData[pad].loaded = true;
