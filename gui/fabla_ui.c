@@ -239,6 +239,25 @@ static void port_event(LV2UI_Handle handle,
               ui->masterVol->amplitude( finalL, finalR );
             }
             
+            
+            // Waveform Data
+            body = NULL;
+            lv2_atom_object_get(obj, self->uris->fabla_Waveform, &body, 0);
+            if (body)
+            {
+              const LV2_Atom_Int* padNum = 0;
+              lv2_atom_object_get( body, self->uris->fabla_pad, &padNum, 0);
+              int pad = *(int*)LV2_ATOM_BODY(padNum);
+              
+              printf("recieved waveform data on pad %i\n", pad );
+              
+              const LV2_Atom_Vector* waveform = 0;
+              lv2_atom_object_get( body, self->uris->fabla_waveformData, &waveform, 0);
+              float* data = (float*)LV2_ATOM_BODY(waveform);
+              
+              printf("waveform data [0] = %f\n", data[0] );
+            }
+            
           }
         break;
       
