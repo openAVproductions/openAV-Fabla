@@ -176,6 +176,7 @@ static Sample* load_sample(FABLA_DSP* self, const char* path)
     }
     average = (average / samplesPerPix);
     self->uiWaveform[p] = average;
+    printf("sample %i = %f", p, average );
   }
   
   return sample;
@@ -463,8 +464,31 @@ run(LV2_Handle instance, uint32_t n_samples)
         }
         
         self->samples[pad] = newSamp;
+        lv2_log_note(&self->logger, "finished loading new sample, writing audio data to UI!\n" );
         
-        lv2_log_note(&self->logger, "finished loading new sample!\n" );
+        
+        // Write UI_WAVEFORM_PIXELS size of float data to the UI, for displaying
+        // as the waveform
+        lv2_atom_forge_frame_time(&self->forge, 1);
+        LV2_Atom_Forge_Frame set_frame;
+        LV2_Atom* set = (LV2_Atom*)lv2_atom_forge_blank(&self->forge, &set_frame, 1, self->uris->atom_eventTransfer);
+        
+        lv2_atom_forge_property_head(&self->forge, self->uris->fabla_Waveform, 0);
+        LV2_Atom_Forge_Frame body_frame;
+        lv2_atom_forge_blank(&self->forge, &body_frame, 2, 0);
+        
+        lv2_atom_forge_property_head(&self->forge, self->uris->fabla_pad, 0);
+        lv2_atom_forge_int(&self->forge, pad );
+        
+        lv2_atom_forge_property_head(&self->forge, self->uris->fabla_waveformData, 0);
+        lv2_atom_forge_vector(&self->forge,
+                              sizeof(float),
+                              self->uris->atom_Float,
+                              UI_WAVEFORM_PIXELS,
+                              &self->uiWaveform[0] );
+        
+        lv2_atom_forge_pop(&self->forge, &body_frame);
+        lv2_atom_forge_pop(&self->forge, &set_frame);
       }
       
       const LV2_Atom_Object* playBody = NULL;
@@ -585,7 +609,7 @@ run(LV2_Handle instance, uint32_t n_samples)
   
   self->uiUpdateCounter += n_samples;
   
-  if ( self->uiUpdateCounter > self->sr / 20 )
+  if ( false ) //self->uiUpdateCounter > self->sr / 20 )
   {
     // send levels to UI
     float L = self->meterL->getDB();
