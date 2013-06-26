@@ -14,7 +14,6 @@
 #include "dsp_compressor.hxx"
 
 #define NVOICES 16
-#define UI_WAVEFORM_PIXELS 324
 
 static const char* default_sample = "click.wav";
 

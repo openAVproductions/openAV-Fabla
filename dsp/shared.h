@@ -15,6 +15,7 @@
 
 #include "ports.h"
 
+#define UI_WAVEFORM_PIXELS 324
 
 typedef struct {
   LV2_URID atom_Blank;
@@ -115,6 +116,8 @@ class UIPadData
       d     = 0;
       s     = 1;
       r     = 0;
+      
+      memset( &waveform[0], 0, sizeof(float)*UI_WAVEFORM_PIXELS );
     }
     
     float gain;
@@ -125,6 +128,9 @@ class UIPadData
     float d;
     float s;
     float r;
+    
+    // stores waveform data for UI
+    float waveform[UI_WAVEFORM_PIXELS];
 };
 
 

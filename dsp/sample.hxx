@@ -2,6 +2,8 @@
 #ifndef FABLA_SAMPLE_H
 #define FABLA_SAMPLE_H
 
+#include "shared.h"
+
 class Sample
 {
   public:
@@ -12,6 +14,7 @@ class Sample
       path_len = 0;
       
       speed = 1.0f;
+
     }
     
     SF_INFO info;      // Info about sample from sndfile
