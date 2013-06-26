@@ -264,7 +264,6 @@ static void port_event(LV2UI_Handle handle,
               ui->waveform->setData( UI_WAVEFORM_PIXELS, &ui->padData[pad].waveform[0] );
               ui->padData[pad].loaded = true;
               ui->waveform->redraw();
-              
             }
           }
         break;
@@ -275,7 +274,7 @@ static void port_event(LV2UI_Handle handle,
       case pg2: case pg3: case pg4: case pg5: case pg6: case pg7: case pg8: case pg9:
       case pg10: case pg11: case pg12: case pg13: case pg14: case pg15: case pg16:
           // hack the enum to access the right array slice
-          printf("Gain Pad %i, pad# %i\n", port_index, port_index - int(PAD_GAIN) );
+          //printf("Gain Pad %i, pad# %i\n", port_index, port_index - int(PAD_GAIN) );
           ui->padData[ port_index-int(PAD_GAIN) ].gain = *(float*)buffer;
           break;
       

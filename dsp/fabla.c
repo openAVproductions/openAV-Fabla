@@ -158,9 +158,6 @@ static Sample* load_sample(FABLA_DSP* self, const char* path)
   // find how many samples per pixel
   int samplesPerPix = info->frames / UI_WAVEFORM_PIXELS;
   
-  
-  lv2_log_note(&self->logger, "Done analysing waveform, samplesPerPix %i\n", samplesPerPix);
-  
   // loop over each pixel value we need
   for( int p = 0; p < UI_WAVEFORM_PIXELS; p++ )
   {
@@ -175,8 +172,10 @@ static Sample* load_sample(FABLA_DSP* self, const char* path)
     }
     average = (average / samplesPerPix);
     self->uiWaveform[p] = average;
-    printf("sample %i = %f", p, average );
+    //printf("sample %i = %f", p, average );
   }
+  
+  lv2_log_note(&self->logger, "Done analysing waveform, samplesPerPix %i\n", samplesPerPix);
   
   return sample;
 }
@@ -334,13 +333,15 @@ static void noteOn(FABLA_DSP* self, int note, int velocity)
       
       // play the voice
       self->voice[i]->play( note, velocity );
-      //lv2_log_note(&self->logger, "Voice %i gets note ON %i\n", i, note );
+      lv2_log_note(&self->logger, "Voice %i gets note ON %i\n", i, note );
       alloced = true;
       break;
     }
   }
   if ( !alloced )
     lv2_log_note(&self->logger, "Note %i ON: but no voice available\n", note );
+  
+  lv2_log_note(&self->logger, "noteOn done\n" );
 }
 
 
@@ -370,6 +371,7 @@ run(LV2_Handle instance, uint32_t n_samples)
   lv2_atom_forge_set_buffer(&self->forge, (uint8_t*)self->notify_port, notify_capacity);
   lv2_atom_forge_sequence_head(&self->forge, &self->notify_frame, 0);
   
+  int evCounter = 0;
   LV2_ATOM_SEQUENCE_FOREACH(self->control_port, ev)
   {
     //self->frame_offset = ev->time.frames;
@@ -379,20 +381,24 @@ run(LV2_Handle instance, uint32_t n_samples)
       uint8_t* const data = (uint8_t* const)(ev + 1);
       if ( (data[0] & 0xF0) == 0x90 ) // event & channel
       {
-        //lv2_log_note(&self->logger, "Note on : %d\n", data[1] );
+        lv2_log_note(&self->logger, "Note on : %d, frame %i, event# this nframes %i\n", data[1], int(ev->time.frames), evCounter++ );
         lv2_atom_forge_frame_time(&self->forge, 0);
         LV2_Atom_Forge_Frame set_frame;
-        LV2_Atom* set = (LV2_Atom*)lv2_atom_forge_blank(&self->forge, &set_frame, 1, self->uris->atom_eventTransfer);
+        
+        // LV2_Atom* set = (LV2_Atom*)
+        lv2_atom_forge_blank(&self->forge, &set_frame, 1, self->uris->atom_eventTransfer);
         
         lv2_atom_forge_property_head(&self->forge, self->uris->fabla_Play, 0);
         LV2_Atom_Forge_Frame body_frame;
-        lv2_atom_forge_blank(&self->forge, &body_frame, 2, 0);
+        lv2_atom_forge_blank(&self->forge, &body_frame, self->uris->atom_Blank, 0);
         
         lv2_atom_forge_property_head(&self->forge, self->uris->fabla_pad, 0);
         lv2_atom_forge_int(&self->forge, int(data[1]) );
         
         lv2_atom_forge_pop(&self->forge, &body_frame);
         lv2_atom_forge_pop(&self->forge, &set_frame);
+        
+        lv2_log_note(&self->logger, "popped lv2 stuff\n" );
         
         // use next available voice for the note
         int n = int(data[1]) - 36;
