@@ -26,7 +26,7 @@ fl_open_display();
 selectedPad = 0;} {}
     Fl_Window w {
       label Fabla open
-      xywh {444 88 515 490} type Double color 56 selection_color 0 labelcolor 88
+      xywh {460 42 515 490} type Double color 56 selection_color 0 labelcolor 88
       code0 {\#include "avtk.h"}
       code1 {using namespace Avtk;}
       code2 {\#include <FL/x.H>}
@@ -88,7 +88,7 @@ writeFunction(controller, COMP_DECAY, sizeof(float), 0, (const void*) &tmp);}
         xywh {9 180 330 300} box UP_BOX
         class Background
       }
-      Fl_Box freqLfo {
+      Fl_Box waveform {
         xywh {11 64 324 107} box UP_BOX
         class Waveform
       }
@@ -393,7 +393,18 @@ r->value( padData[selectedPad].r );
 adsr->attack ( a->value() );
 adsr->decay  ( d->value() );
 adsr->sustain( s->value() );
-adsr->release( r->value() );} {}
+adsr->release( r->value() );
+
+// set Waveform to draw new data
+if ( padData[selectedPad].loaded )
+{
+  waveform->setData( UI_WAVEFORM_PIXELS, padData[selectedPad].waveform );
+}
+else
+{
+  waveform->setData( 0, 0 );
+}} {selected
+    }
   }
   decl {int selectedPad;} {private local
   }
@@ -441,8 +452,7 @@ else
   
   // update the UI showing the ADSR / waveform of this pad
   select_pad( id );
-}} {selected
-    }
+}} {}
   }
   decl {LV2UI_Controller controller;} {public local
   }

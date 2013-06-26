@@ -256,8 +256,13 @@ static void port_event(LV2UI_Handle handle,
               float* data = (float*)LV2_ATOM_BODY(waveform);
               
               printf("waveform data [0] = %f\n", data[0] );
+              
+              for(int i = 0; i < UI_WAVEFORM_PIXELS; i++)
+              {
+                ui->padData[pad].waveform[i] = data[i];
+              }
+              ui->padData[pad].loaded = true;
             }
-            
           }
         break;
       

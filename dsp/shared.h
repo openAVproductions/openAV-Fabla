@@ -108,6 +108,8 @@ class UIPadData
   public:
     UIPadData()
     {
+      loaded = false;
+      
       gain  = 0.5;
       speed = 0.5;
       pan   = 0.5;
@@ -119,6 +121,8 @@ class UIPadData
       
       memset( &waveform[0], 0, sizeof(float)*UI_WAVEFORM_PIXELS );
     }
+    
+    bool loaded;
     
     float gain;
     float speed;
