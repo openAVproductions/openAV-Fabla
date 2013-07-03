@@ -46,7 +46,12 @@ class Compressor
       // 1 -> 20
       ratio = 1 + r * 19;
     }
-  
+    
+    void setMakeup(float m)
+    {
+      makeup = pow( 1 + (m/4.f), 4.f );
+    }
+    
     Compressor(int rate)
     {
       fSamplingFreq = rate;
@@ -60,6 +65,7 @@ class Compressor
       threshold = 0.0f;
       attack = 0.1f;
       release = 0.1f;
+      makeup = 0.f;
       
       fRec0[0] = 0;
       fRec0[1] = 0;
@@ -94,8 +100,8 @@ class Compressor
         fRec1[0] = ((fSlow6 * fRec2[0]) + (fSlow3 * fRec1[1]));
         fRec0[0] = ((fSlow7 * max(((20 * log10f(fRec1[0])) - fSlow2), 0.f)) + (fSlow1 * fRec0[1]));
         float fTemp3 = powf(10,(0.05f * fRec0[0]));
-        output0[i] = (float)(fTemp0 * fTemp3);
-        output1[i] = (float)(fTemp1 * fTemp3);
+        output0[i] = (float)(fTemp0 * fTemp3) * makeup;
+        output1[i] = (float)(fTemp1 * fTemp3) * makeup;
         // post processing
         fRec0[1] = fRec0[0];
         fRec1[1] = fRec1[0];
@@ -111,6 +117,7 @@ class Compressor
     float threshold;
     float fConst2;
     float release;
+    float makeup;
     float fRec2[2];
     float fRec1[2];
     float ratio;

@@ -26,7 +26,7 @@ fl_open_display();
 selectedPad = 0;} {}
     Fl_Window w {
       label Fabla open
-      xywh {76 -15 515 490} type Double color 56 selection_color 0 labelcolor 88
+      xywh {587 180 515 490} type Double color 56 selection_color 0 labelcolor 88
       code0 {\#include "avtk.h"}
       code1 {using namespace Avtk;}
       code2 {\#include <FL/x.H>}
@@ -50,10 +50,20 @@ selectedPad = 0;} {}
       }
       Fl_Box compressor {
         label Compressor
-        callback {float tmp = 0.0f;
-if ( o->value() > 0.5 )
-  tmp = 1.f;
-writeFunction(controller, COMP_ENABLE, sizeof(float), 0, (const void*) &tmp);} selected
+        callback {if ( o->mouseRightClicked )
+{
+  float tmp = 0.0f;
+  if ( o->active )
+    tmp = 1.f;
+  writeFunction(controller, COMP_ENABLE, sizeof(float), 0, (const void*) &tmp);
+  printf("comp enable = %f\\n", tmp );
+}
+else
+{
+  float tmp = o->getMakeup();
+  writeFunction(controller, COMP_MAKEUP, sizeof(float), 0, (const void*) &tmp);
+  printf("makeup = %f\\n", tmp );
+}} selected
         xywh {352 290 97 84} box UP_BOX
         class Compressor
       }

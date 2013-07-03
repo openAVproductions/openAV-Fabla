@@ -361,8 +361,8 @@ run(LV2_Handle instance, uint32_t n_samples)
 {
   FABLA_DSP* self = (FABLA_DSP*)instance;
   
-  // x^^4 approximates exponential volume control, * 1.5 to make 75% be 0dB FS
-  const float        gain   = pow ( (*self->master), 4.f ) * 1.5;
+  // x^^4 approximates exponential volume control, master vol + makeup gain here
+  const float        gain   = pow ( (*self->master)     , 4.f );
   float* const       outputL = self->output_L;
   float* const       outputR = self->output_R;
   
@@ -629,10 +629,11 @@ run(LV2_Handle instance, uint32_t n_samples)
   }
   
   // set the compressor values
-  self->comp->setAttack( *self->comp_attack );
-  self->comp->setRelease(*self->comp_decay  );
-  self->comp->setThreshold(*self->comp_thres);
-  self->comp->setRatio ( *self->comp_ratio  );
+  self->comp->setAttack   ( *self->comp_attack );
+  self->comp->setRelease  ( *self->comp_decay  );
+  self->comp->setThreshold( *self->comp_thres  );
+  self->comp->setRatio    ( *self->comp_ratio  );
+  self->comp->setMakeup   ( *self->comp_makeup );
   
   //printf("%f\t%f\t%f\t%f\n", *self->comp_attack, *self->comp_decay, *self->comp_thres, *self->comp_ratio );
   // makeup TODO
@@ -655,8 +656,9 @@ run(LV2_Handle instance, uint32_t n_samples)
     buf[0] = &accumL;
     buf[1] = &accumR;
     
+    //printf( "comp enable %f\n" , *self->comp_enable );
     
-    if ( true ) //*self->comp_enable > 0.5 )
+    if ( *self->comp_enable > 0.5 )
     {
       self->comp->process( 1, &buf[0], &buf[0] );   // stereo, in place
     }
@@ -670,7 +672,7 @@ run(LV2_Handle instance, uint32_t n_samples)
   
   self->uiUpdateCounter += n_samples;
   
-  if ( self->uiUpdateCounter > self->sr / 20 )
+  if ( self->uiUpdateCounter > self->sr / 15 )
   {
     // send levels to UI
     float L = self->meterL->getDB();
