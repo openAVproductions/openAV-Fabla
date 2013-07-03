@@ -38,7 +38,7 @@ class Compressor
     void setThreshold(float t)
     {
       // -20db -> 0 dB
-      threshold = (t * 30) - 30;
+      threshold = (t * 20) - 20;
     }
     
     void setRatio(float r)
