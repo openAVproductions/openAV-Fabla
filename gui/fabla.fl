@@ -26,7 +26,7 @@ fl_open_display();
 selectedPad = 0;} {}
     Fl_Window w {
       label Fabla open
-      xywh {460 42 515 490} type Double color 56 selection_color 0 labelcolor 88
+      xywh {258 55 515 490} type Double color 56 selection_color 0 labelcolor 88
       code0 {\#include "avtk.h"}
       code1 {using namespace Avtk;}
       code2 {\#include <FL/x.H>}
@@ -50,6 +50,8 @@ selectedPad = 0;} {}
       }
       Fl_Box compressor {
         label Compressor
+        callback {float tmp = o->value();
+writeFunction(controller, MASTER_VOL, sizeof(float), 0, (const void*) &tmp);}
         xywh {352 290 97 84} box UP_BOX
         class Compressor
       }
@@ -58,8 +60,10 @@ selectedPad = 0;} {}
       }
       Fl_Box masterVol {
         label Vol
-        callback {float tmp = o->value();
-writeFunction(controller, MASTER_VOL, sizeof(float), 0, (const void*) &tmp);}
+        callback {float tmp = 0.0f;
+if ( o->value() > 0.5 )
+  tmp = 1.f;
+writeFunction(controller, COMP_ENABLE, sizeof(float), 0, (const void*) &tmp);} selected
         xywh {453 290 48 186} box UP_BOX
         code0 {\#include "../dsp/ports.h"}
         code1 {\#include "lv2/lv2plug.in/ns/extensions/ui/ui.h"}
@@ -469,8 +473,7 @@ else
   
   // update the UI showing the ADSR / waveform of this pad
   select_pad( id );
-}} {selected
-    }
+}} {}
   }
   decl {LV2UI_Controller controller;} {public local
   }

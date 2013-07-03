@@ -70,6 +70,7 @@ typedef struct {
   float* comp_thres;
   float* comp_ratio;
   float* comp_makeup;
+  float* comp_enable;
   
   PadData padData[16];
   
@@ -294,6 +295,9 @@ connect_port(LV2_Handle instance,
       self->comp_ratio  = (float*)data; break;
     case COMP_MAKEUP:
       self->comp_makeup = (float*)data; break;
+    case COMP_ENABLE:
+      printf("Comp Enable %i\n", port);
+      self->comp_enable = (float*)data; break;
     
     // deal with 16 * ADSR / gain / speed / pan here
     case PAD_GAIN:
@@ -301,7 +305,7 @@ connect_port(LV2_Handle instance,
     case pg10: case pg11: case pg12: case pg13: case pg14: case pg15: case pg16:
         // hack the enum to access the right array slice
         self->padData[ port - int(PAD_GAIN) ].gain = (float*)data;
-        //printf("Gain Pad %i\n", port);
+        printf("Gain Pad %i, port num %i\n", port - int(PAD_GAIN), port);
         break;
     
     case PAD_SPEED:
@@ -412,7 +416,9 @@ run(LV2_Handle instance, uint32_t n_samples)
         lv2_atom_forge_frame_time(&self->forge, 0);
         
         LV2_Atom_Forge_Frame set_frame;
-        LV2_Atom* set = (LV2_Atom*)lv2_atom_forge_blank(&self->forge, &set_frame, 1, self->uris->atom_eventTransfer);
+        
+        //LV2_Atom* set = (LV2_Atom*)
+        lv2_atom_forge_blank(&self->forge, &set_frame, 1, self->uris->atom_eventTransfer);
         
         lv2_atom_forge_property_head(&self->forge, self->uris->fabla_Stop, 0);
         LV2_Atom_Forge_Frame body_frame;
@@ -429,6 +435,8 @@ run(LV2_Handle instance, uint32_t n_samples)
         {
           self->voice[i]->stopIfNoteEquals( int(data[1]) );
         }
+        
+        
       }
     }
     
@@ -456,7 +464,7 @@ run(LV2_Handle instance, uint32_t n_samples)
         //message.pad = pad;
         
         size_t s = sizeof(SampleMessage);
-        lv2_log_note(&self->logger, "fabla_Load: scheduling work now, size %i\n", s );
+        lv2_log_note(&self->logger, "fabla_Load: scheduling work now, size %i\n", int(s) );
         
         //self->schedule->schedule_work(self->schedule->handle, s, &message);
         
@@ -464,7 +472,7 @@ run(LV2_Handle instance, uint32_t n_samples)
         
         if( self->samples[pad] != 0 )
         {
-          lv2_log_note(&self->logger, "freeing sample with %i frames\n", self->samples[pad]->info.frames );
+          lv2_log_note(&self->logger, "freeing sample with %i frames\n", int(self->samples[pad]->info.frames) );
           free( self->samples[pad]->data );
         }
         
@@ -509,6 +517,11 @@ run(LV2_Handle instance, uint32_t n_samples)
             lv2_atom_forge_pop(&self->forge, &set_frame);
           
             toBeWritten -= writeThisTime;
+          }
+          else
+          {
+            printf("breaking from waveform->UI loop, returned NULL\n");
+            break;
           }
         }
         /*
@@ -599,16 +612,6 @@ run(LV2_Handle instance, uint32_t n_samples)
           const float bar_beats       = ((LV2_Atom_Float*)beat)->body;
           const float beat_beats      = bar_beats - floorf(bar_beats);
           
-          /*
-          self->elapsed_len           = beat_beats * frames_per_beat;
-          if (self->elapsed_len < self->attack_len) {
-                  self->state = STATE_ATTACK;
-          } else if (self->elapsed_len < self->attack_len + self->decay_len) {
-                  self->state = STATE_DECAY;
-          } else {
-                  self->state = STATE_OFF;
-          }
-          *
         }
       }
     }
@@ -652,10 +655,14 @@ run(LV2_Handle instance, uint32_t n_samples)
     buf[0] = &accumL;
     buf[1] = &accumR;
     
+    
+    if ( true ) //*self->comp_enable > 0.5 )
+    {
+      self->comp->process( 1, &buf[0], &buf[0] );   // stereo, in place
+    }
+    
     self->meterL->process( 1, &buf[0], &buf[0] ); // left  channel, in place
     self->meterR->process( 1, &buf[1], &buf[1] ); // right channel, in place
-    
-    self->comp->process( 1, &buf[0], &buf[0] );   // stereo, in place
     
     outputL[pos] = accumL;
     outputR[pos] = accumR;
@@ -663,7 +670,7 @@ run(LV2_Handle instance, uint32_t n_samples)
   
   self->uiUpdateCounter += n_samples;
   
-  if ( false ) //self->uiUpdateCounter > self->sr / 20 )
+  if ( self->uiUpdateCounter > self->sr / 20 )
   {
     // send levels to UI
     float L = self->meterL->getDB();
@@ -671,7 +678,9 @@ run(LV2_Handle instance, uint32_t n_samples)
     
     lv2_atom_forge_frame_time(&self->forge, 0);
     LV2_Atom_Forge_Frame set_frame;
-    LV2_Atom* set = (LV2_Atom*)lv2_atom_forge_blank(&self->forge, &set_frame, 1, self->uris->atom_eventTransfer);
+    
+    //LV2_Atom* set = (LV2_Atom*)
+    lv2_atom_forge_blank(&self->forge, &set_frame, 1, self->uris->atom_eventTransfer);
     
     lv2_atom_forge_property_head(&self->forge, self->uris->fabla_MeterLevels, 0);
     LV2_Atom_Forge_Frame body_frame;
@@ -743,7 +752,7 @@ work(LV2_Handle                  instance,
       return LV2_WORKER_ERR_UNKNOWN;
     }
     
-    int padNum = sampleNum->body;
+    //int padNum = sampleNum->body;
     
     /* Load sample. */
     /*

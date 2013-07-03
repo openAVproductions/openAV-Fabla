@@ -270,10 +270,11 @@ static void port_event(LV2UI_Handle handle,
               float* data = (float*)LV2_ATOM_BODY(waveform);
               
               
-              for(int i = 0; i < 100; i++)
+              for(int i = 0; i < 10; i++)
               {
-                printf("waveform data [%i] = %f\n", i, data[i] );
-                ui->padData[pad].waveform[i*msg] = data[i]; //sin( 3.14* float(i * 2 * pad) / UI_WAVEFORM_PIXELS );
+                int pos = i + msg*10;
+                printf("waveform data [%i] = %f\n", pos, data[i] );
+                ui->padData[pad].waveform[pos] = data[i]; //sin( 3.14* float(i * 2 * pad) / UI_WAVEFORM_PIXELS );
               }
               // sets the current waveform to the one just loaded: not always accurate
               ui->waveform->setData( UI_WAVEFORM_PIXELS, &ui->padData[pad].waveform[0] );

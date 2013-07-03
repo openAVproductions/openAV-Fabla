@@ -20,6 +20,7 @@ typedef enum {
   COMP_THRES,
   COMP_RATIO,
   COMP_MAKEUP,
+  COMP_ENABLE,
   
   // p*2... is to place hold that index for the functionality before.
   // Actual interaction with the value is by comparison of "port" variable
