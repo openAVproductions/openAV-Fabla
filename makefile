@@ -1,7 +1,12 @@
 
 CC=g++
+
 INCLUDES=-I../avtk/ -I/usr/include/cairomm-1.0 -I/usr/lib/cairomm-1.0/include -I/usr/include/sigc++-2.0 -I/usr/lib/sigc++-2.0/include -I/usr/include/ntk -I/usr/include/cairo -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/libpng15
-CFLAGS=-g -c -Wall
+
+#INCLUDES=-I../avtk/ -I/usr/include/cairomm-1.0 -I/usr/lib/cairomm-1.0/include -I/usr/include/cairo -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/libpng15 -I/usr/include/sigc++-2.0 -I/usr/lib/sigc++-2.0/include -I/usr/include/cairo -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/libpng15 
+#INCLUDES+=$(shell pkg-config --cflags cairomm-1.0 cairo)
+
+CFLAGS=-g -Wall
 LDFLAGS=-lntk -lcairomm-1.0 -lcairo -lsndfile -z nodelete
 
 UISOURCES=gui/ui_helpers.cxx gui/fabla.cxx gui/fabla_ui.c
@@ -23,6 +28,7 @@ genUI:
 
 folder:
 	mkdir -p fabla.lv2/
+	echo $(INCLUDES)
 
 install:
 	cp dsp/fabla.ttl fabla.lv2/
@@ -35,16 +41,16 @@ dsp: $(DSPSOURCES) $(DSP)
 sa: $(SASOURCES) $(SA)
 
 $(DSP): $(DSPOBJECTS)
-	$(CC) $(INCLUDES) -fPIC -shared $(LDFLAGS) $(DSPOBJECTS) -o $@
+	$(CC) $(INCLUDES) $(CFLAGS) -fPIC -shared $(LDFLAGS) $(DSPOBJECTS) -o $@
 
 $(UI): $(UIOBJECTS)
-	$(CC) $(INCLUDES) -fPIC -shared $(LDFLAGS) $(UIOBJECTS)  -o $@
+	$(CC) $(INCLUDES) $(CFLAGS) -fPIC -shared $(LDFLAGS) $(UIOBJECTS)  -o $@
 
 $(SA): $(SAOBJECTS)
 	$(CC) $(INCLUDES) $(LDFLAGS) $(SAOBJECTS) -o $@
 
 .cpp.o:
-	$(CC) $(CFLAGS) $< -o $@
+	$(CC) -g $(CFLAGS) -c $< -o $@
 
 
 
