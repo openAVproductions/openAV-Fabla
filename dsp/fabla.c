@@ -471,29 +471,72 @@ run(LV2_Handle instance, uint32_t n_samples)
         self->samples[pad] = newSamp;
         lv2_log_note(&self->logger, "finished loading new sample, writing audio data to UI!\n" );
         
+        //int written = 0;
+        //for( int i = 0; i < 1; i++ )
+        {
+          // Write UI_WAVEFORM_PIXELS size of float data to the UI, for displaying
+          // as the waveform: 4 seperate messages of 100 floats each
+          lv2_atom_forge_frame_time(&self->forge, 1);
+          LV2_Atom_Forge_Frame set_frame;
+          LV2_Atom* set = (LV2_Atom*)lv2_atom_forge_blank(&self->forge, &set_frame, 1, self->uris->atom_eventTransfer);
+          
+          lv2_atom_forge_property_head(&self->forge, self->uris->fabla_Waveform, 0);
+          LV2_Atom_Forge_Frame body_frame;
+          lv2_atom_forge_blank(&self->forge, &body_frame, 0, 0);
+          
+          lv2_atom_forge_property_head(&self->forge, self->uris->fabla_pad, 0);
+          lv2_atom_forge_int(&self->forge, pad );
+          
+          lv2_atom_forge_property_head(&self->forge, self->uris->fabla_WaveformMsgNum, 0);
+          lv2_atom_forge_int(&self->forge, 0 );
+          
+          int amount = 10;
+          //if ( i == 3 )
+          //  amount = UI_WAVEFORM_PIXELS % 100;
+          
+          lv2_atom_forge_property_head(&self->forge, self->uris->fabla_waveformData, 0);
+          lv2_atom_forge_vector(&self->forge,
+                                sizeof(float),
+                                self->uris->atom_Float,
+                                amount,
+                                &self->uiWaveform[0] );
+          
+          lv2_atom_forge_pop(&self->forge, &body_frame);
+          lv2_atom_forge_pop(&self->forge, &set_frame);
+          
+        }
+        /*
         
-        // Write UI_WAVEFORM_PIXELS size of float data to the UI, for displaying
-        // as the waveform
-        lv2_atom_forge_frame_time(&self->forge, 1);
-        LV2_Atom_Forge_Frame set_frame;
-        LV2_Atom* set = (LV2_Atom*)lv2_atom_forge_blank(&self->forge, &set_frame, 1, self->uris->atom_eventTransfer);
+        */
         
-        lv2_atom_forge_property_head(&self->forge, self->uris->fabla_Waveform, 0);
-        LV2_Atom_Forge_Frame body_frame;
-        lv2_atom_forge_blank(&self->forge, &body_frame, 2, 0);
-        
-        lv2_atom_forge_property_head(&self->forge, self->uris->fabla_pad, 0);
-        lv2_atom_forge_int(&self->forge, pad );
-        
+        /*
+        //int size = sizeof(float)*100; //works;
+        int size = sizeof(float)*100; //UI_WAVEFORM_PIXELS;
         lv2_atom_forge_property_head(&self->forge, self->uris->fabla_waveformData, 0);
-        lv2_atom_forge_vector(&self->forge,
-                              sizeof(float),
-                              self->uris->atom_Float,
-                              UI_WAVEFORM_PIXELS,
-                              &self->uiWaveform[0] );
+        lv2_atom_forge_atom(&self->forge, size, self->uris->atom_Chunk );
+        lv2_atom_forge_write(&self->forge, &self->uiWaveform[0], size );
+        */
         
-        lv2_atom_forge_pop(&self->forge, &body_frame);
-        lv2_atom_forge_pop(&self->forge, &set_frame);
+        /*
+        lv2_atom_forge_property_head(&forge, eg_chunk, 0);
+        lv2_atom_forge_atom(&forge, sizeof(chunk_buf), forge.Chunk);
+        lv2_atom_forge_write(&forge, chunk_buf, sizeof(chunk_buf));
+        
+        
+        ##############
+        // eg_vector = (Vector<Int32>)1,2,3,4
+        lv2_atom_forge_property_head(&forge, eg_vector, 0);
+        int32_t elems[] = { 1, 2, 3, 4 };
+        
+        lv2_atom_forge_vector(&forge,
+                              4,
+                              forge.Int,
+                              sizeof(int32_t),
+                              elems);
+        */
+        
+        //lv2_atom_forge_pop(&self->forge, &vector_frame);
+        
       }
       
       const LV2_Atom_Object* playBody = NULL;

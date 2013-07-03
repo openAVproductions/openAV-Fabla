@@ -249,19 +249,22 @@ static void port_event(LV2UI_Handle handle,
               lv2_atom_object_get( body, self->uris->fabla_pad, &padNum, 0);
               int pad = *(int*)LV2_ATOM_BODY(padNum);
               
-              printf("recieved waveform data on pad %i\n", pad );
+              printf("UI recieved waveform data on pad %i\n", pad );
               
               const LV2_Atom_Vector* waveform = 0;
               lv2_atom_object_get( body, self->uris->fabla_waveformData, &waveform, 0);
               float* data = (float*)LV2_ATOM_BODY(waveform);
               
-              printf("waveform data [0] = %f\n", data[0] );
               
-              for(int i = 0; i < UI_WAVEFORM_PIXELS; i++)
+              
+              for(int i = 0; i < 100; i++)
               {
-                ui->padData[pad].waveform[i] = data[i]; // sin( 3.14* float(i * 2 * pad) / UI_WAVEFORM_PIXELS );
+                printf("waveform data [%i] = %f\n", i, data[0] );
+                ui->padData[pad].waveform[i] = data[i]; //sin( 3.14* float(i * 2 * pad) / UI_WAVEFORM_PIXELS );
               }
+              // sets the current waveform to the one just loaded: not always accurate
               ui->waveform->setData( UI_WAVEFORM_PIXELS, &ui->padData[pad].waveform[0] );
+              
               ui->padData[pad].loaded = true;
               ui->waveform->redraw();
             }

@@ -24,6 +24,7 @@ typedef struct {
   LV2_URID atom_Sequence;
   LV2_URID atom_Vector;
   LV2_URID atom_Float;
+  LV2_URID atom_Chunk;
   LV2_URID atom_eventTransfer;
   
   LV2_URID time_Position;
@@ -46,6 +47,7 @@ typedef struct {
   LV2_URID fabla_Unload;
   LV2_URID fabla_MeterLevels;
   LV2_URID fabla_Waveform;
+  LV2_URID fabla_WaveformMsgNum;
   
   LV2_URID fabla_pad;
   LV2_URID fabla_filename;
@@ -68,6 +70,7 @@ map_uris(LV2_URID_Map* map, Fabla_URIs* uris)
   uris->atom_Sequence      = map->map(map->handle, LV2_ATOM__Sequence);
   uris->atom_Vector        = map->map(map->handle, LV2_ATOM__Vector);
   uris->atom_Float         = map->map(map->handle, LV2_ATOM__Float);
+  uris->atom_Chunk         = map->map(map->handle, LV2_ATOM__Chunk);
   uris->atom_eventTransfer = map->map(map->handle, LV2_ATOM__eventTransfer);
   
   uris->time_Position      = map->map(map->handle, LV2_TIME__Position);
@@ -86,6 +89,7 @@ map_uris(LV2_URID_Map* map, Fabla_URIs* uris)
   uris->fabla_Unload       = map->map(map->handle, FABLA_URI"#Unload");
   uris->fabla_MeterLevels  = map->map(map->handle, FABLA_URI"#MeterLevels");
   uris->fabla_Waveform     = map->map(map->handle, FABLA_URI"#Waveform");
+  uris->fabla_WaveformMsgNum=map->map(map->handle, FABLA_URI"#WaveformMsgNum");
   
   uris->fabla_pad          = map->map(map->handle, FABLA_URI"#pad");
   uris->fabla_level_l      = map->map(map->handle, FABLA_URI"#level_r");
