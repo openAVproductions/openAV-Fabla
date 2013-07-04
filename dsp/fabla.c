@@ -438,7 +438,7 @@ run(LV2_Handle instance, uint32_t n_samples)
         
         
       }
-    }
+    } // MIDI event
     
     if (ev->body.type == self->uris->atom_Blank)
     {
@@ -518,49 +518,9 @@ run(LV2_Handle instance, uint32_t n_samples)
         }
       }
       
-      if (obj->body.otype == self->uris->atom_Blank)
-      {
-        // work schedule here
-        lv2_log_note(&self->logger, "atom_Blank ===== recieved\n");
-      }
-    }
+    } // atom Blank
     
-    /* TIME STUFF: Currently irrelevant
-    if (ev->body.type == self->uris->atom_Blank)
-    {
-      const LV2_Atom_Object* obj = (LV2_Atom_Object*)&ev->body;
-      if (obj->body.otype == self->uris->time_Position)
-      {
-        // Receive position information, update
-        LV2_Atom *beat = NULL, *bpm = NULL, *speed = NULL;
-        lv2_atom_object_get(obj,
-                            self->uris->time_barBeat, &beat,
-                            self->uris->time_beatsPerMinute, &bpm,
-                            self->uris->time_speed, &speed,
-                            NULL);
-        
-        if (bpm && bpm->type == self->uris->atom_Float) {
-          // Tempo changed, update BPM
-          self->bpm = ((LV2_Atom_Float*)bpm)->body;
-          const float frames_per_beat = 60.0f / self->bpm * self->sr;
-          lv2_log_note(&self->logger, "Tempo change to %f, fpb at %f\n", self->bpm, frames_per_beat);
-        }
-        if (speed && speed->type == self->uris->atom_Float) {
-          // Speed changed, e.g. 0 (stop) to 1 (play)
-          self->speed = ((LV2_Atom_Float*)speed)->body;
-        }
-        if (beat && beat->type == self->uris->atom_Float) {
-          // Received a beat position, synchronise
-          // This hard sync may cause clicks, a real plugin would be more graceful
-          const float frames_per_beat = 60.0f / self->bpm * self->sr;
-          const float bar_beats       = ((LV2_Atom_Float*)beat)->body;
-          const float beat_beats      = bar_beats - floorf(bar_beats);
-          
-        }
-      }
-    }
-    */
-  }
+  } // LV2_ATOM_SEQUENCE_FOREACH
   
   // loop over the pads, setting control port values
   for(int i = 0; i < 16; i++)
