@@ -583,7 +583,8 @@ run(LV2_Handle instance, uint32_t n_samples)
   
   self->uiUpdateCounter += n_samples;
   
-  if ( false )// self->uiUpdateCounter > self->sr / 15 )
+  // disable for Atom debug purposes: stops the huge stream of Atoms
+  if ( self->uiUpdateCounter > self->sr / 15 ) //  false )// 
   {
     // send levels to UI
     float L = self->meterL->getDB();
