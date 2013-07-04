@@ -63,7 +63,7 @@ else
   float tmp = o->getMakeup();
   writeFunction(controller, COMP_MAKEUP, sizeof(float), 0, (const void*) &tmp);
   printf("makeup = %f\\n", tmp );
-}} selected
+}}
         xywh {352 290 97 84} box UP_BOX
         class Compressor
       }
@@ -257,7 +257,7 @@ writeFunction(controller, COMP_RATIO, sizeof(float), 0, (const void*) &tmp);}
 int port = int(PAD_GAIN) + selectedPad;
 padData[selectedPad].gain = tmp;
 writeFunction(controller, port, sizeof(float), 0, (const void*) &tmp);
-printf("gain on pad\# %i, port\# %i, value %f\\n", selectedPad, port, tmp);}
+//printf("gain on pad\# %i, port\# %i, value %f\\n", selectedPad, port, tmp);}
         xywh {357 210 38 38} box UP_BOX color 48 labelfont 1 labelcolor 40
         code0 {gain->drawLabel(true);}
         code1 {gain->value( 0.5 );}
@@ -412,14 +412,15 @@ adsr->release( r->value() );
 // set Waveform to draw new data
 if ( padData[selectedPad].loaded )
 {
-  waveform->setData( UI_WAVEFORM_PIXELS, padData[selectedPad].waveform );
+  waveform->setData( UI_WAVEFORM_PIXELS, padData[selectedPad].waveformLength, padData[selectedPad].waveform );
 }
 else
 {
-  waveform->setData( 0, 0 );
-}} {}
+  waveform->setData( 0, 0, 0 );
+}} {selected
+    }
   }
-  decl {int selectedPad;} {private local
+  decl {int selectedPad;} {public local
   }
   Function {pad_click(int id, int rclick)} {open
   } {

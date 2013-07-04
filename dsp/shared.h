@@ -138,6 +138,7 @@ class UIPadData
     float r;
     
     // stores waveform data for UI
+    long waveformLength;
     float waveform[UI_WAVEFORM_PIXELS];
 };
 

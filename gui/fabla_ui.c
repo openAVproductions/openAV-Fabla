@@ -289,7 +289,7 @@ static void port_event(LV2UI_Handle handle,
               }
               sf_seek(sndfile, 0ul, SEEK_SET);
               sf_read_float(sndfile, data, info.frames);
-              sf_close(sndfile);
+              
               
               // find how many samples per pixel
               int samplesPerPix = info.frames / UI_WAVEFORM_PIXELS;
@@ -309,13 +309,17 @@ static void port_event(LV2UI_Handle handle,
                 average = (average / samplesPerPix);
                 ui->padData[pad].waveform[p] = average;
               }
-              ui->padData[pad].loaded = true;
               
-              ui->waveform->setData( UI_WAVEFORM_PIXELS, &ui->padData[pad].waveform[0] );
+              ui->padData[pad].loaded = true;
+              ui->padData[pad].waveformLength = info.frames;
+              
+              if(ui->selectedPad == pad )
+                ui->waveform->setData( UI_WAVEFORM_PIXELS, info.frames, &ui->padData[pad].waveform[0] );
+              
               ui->waveform->redraw();
               
               free(data);
-              
+              sf_close(sndfile);
               
               /*
               for(int i = 0; i < 10; i++)

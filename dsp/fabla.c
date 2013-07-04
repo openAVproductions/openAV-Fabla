@@ -106,11 +106,10 @@ typedef struct {
   DBMeter* meterL;
   DBMeter* meterR;
   
-  // Array to store the waveform pixels gets copied to ringbuffer on sample load,
-  // then not used until next sample load. Having this always in memory simplifies
-  // sending a lot
-  float uiWaveform[UI_WAVEFORM_PIXELS];
-  
+  // if true, re-write the path names to UI
+  // restore triggers this, to load UI waveforms
+  bool updateUiPaths;
+  int  updateUiPathCounter;
   
 } FABLA_DSP;
 
@@ -151,32 +150,7 @@ static Sample* load_sample(FABLA_DSP* self, const char* path)
   sample->path     = (char*)malloc(path_len + 1);
   sample->path_len = path_len;
   memcpy(sample->path, path, path_len + 1);
-  //lv2_log_error(&self->logger, "Loaded sample:\n\t %i samples\n\tdata = %i\n\tPath: %s\n", info->frames, sample->data, sample->path);
-  
-  // Analyse the waveform, resampling length of waveform to UI_WAVEFORM_PIXELS
-  lv2_log_note(&self->logger, "Analysing waveform...\n");
-  
-  // find how many samples per pixel
-  int samplesPerPix = info->frames / UI_WAVEFORM_PIXELS;
-  
-  // loop over each pixel value we need
-  for( int p = 0; p < UI_WAVEFORM_PIXELS; p++ )
-  {
-    float average = 0.f;
-    
-    // calc value for this pixel
-    for( int i = 0; i < samplesPerPix; i++ )
-    {
-      float tmp = sample->data[i + (p * samplesPerPix)];
-      if ( tmp < 0 ) { tmp = -tmp; }
-      average += tmp;
-    }
-    average = (average / samplesPerPix);
-    self->uiWaveform[p] = average;
-    //printf("sample %i = %f", p, average );
-  }
-  
-  lv2_log_note(&self->logger, "Done analysing waveform, samplesPerPix %i\n", samplesPerPix);
+  lv2_log_error(&self->logger, "Loaded sample:\n\t %i samples\n\tPath: %s\n", int(info->frames), sample->path);
   
   return sample;
 }
@@ -226,7 +200,8 @@ instantiate(const LV2_Descriptor*     descriptor,
     }
   }
   
-  
+  self->updateUiPaths = false;
+  self->updateUiPathCounter = 0;
   
   // allocate voices
   for(int i = 0; i < NVOICES; i++)
@@ -250,14 +225,6 @@ instantiate(const LV2_Descriptor*     descriptor,
   const size_t len         = path_len + file_len;
   char*        sample_path = (char*)malloc(len + 1);
   snprintf(sample_path, len + 1, "%s%s", bundle_path, default_sample);
-  
-  /*
-  Sample* newSamp = load_sample(self, sample_path);
-  self->samples[0] = newSamp;
-  free(sample_path);
-  newSamp = load_sample(self, "/root/drums.wav");
-  self->samples[1] = newSamp;
-  */
   
   return (LV2_Handle)self;
 }
@@ -522,6 +489,46 @@ run(LV2_Handle instance, uint32_t n_samples)
     
   } // LV2_ATOM_SEQUENCE_FOREACH
   
+  // triggered by Restore, need to write Atoms from here
+  if ( self->updateUiPaths )
+  {
+    if ( self->samples[self->updateUiPathCounter] )
+    {
+      lv2_log_note(&self->logger, "writing Atom %i to UI\n", self->updateUiPathCounter);
+      // write path to UI so it loads the waveform
+      lv2_atom_forge_frame_time(&self->forge, 0);
+      LV2_Atom_Forge_Frame set_frame;
+
+      //LV2_Atom* set = (LV2_Atom*)
+      lv2_atom_forge_blank(&self->forge, &set_frame, 1, self->uris->atom_eventTransfer);
+
+      lv2_atom_forge_property_head(&self->forge, self->uris->fabla_Waveform, 0);
+      LV2_Atom_Forge_Frame body_frame;
+      lv2_atom_forge_blank(&self->forge, &body_frame, 2, 0);
+
+      lv2_atom_forge_property_head(&self->forge, self->uris->fabla_pad, 0);
+      lv2_atom_forge_int(&self->forge, self->updateUiPathCounter);
+
+      lv2_atom_forge_property_head(&self->forge, self->uris->fabla_filename, 0);
+      lv2_atom_forge_path(&self->forge,
+                          self->samples[self->updateUiPathCounter]->path,
+                          self->samples[self->updateUiPathCounter]->path_len );
+
+      lv2_atom_forge_pop(&self->forge, &body_frame);
+      lv2_atom_forge_pop(&self->forge, &set_frame);
+    }
+    
+    self->updateUiPathCounter++;
+    
+    if ( self->updateUiPathCounter >= 15 )
+    {
+      self->updateUiPaths = false;
+      self->updateUiPathCounter = 0;
+      lv2_log_note(&self->logger, "finished writing pads to UI\n");
+    }
+  }
+  
+  
   // loop over the pads, setting control port values
   for(int i = 0; i < 16; i++)
   {
@@ -576,7 +583,7 @@ run(LV2_Handle instance, uint32_t n_samples)
   
   self->uiUpdateCounter += n_samples;
   
-  if ( self->uiUpdateCounter > self->sr / 15 )
+  if ( false )// self->uiUpdateCounter > self->sr / 15 )
   {
     // send levels to UI
     float L = self->meterL->getDB();
@@ -605,15 +612,6 @@ run(LV2_Handle instance, uint32_t n_samples)
   }
 }
 
-
-
-/**
-   Do work in a non-realtime thread.
-
-   This is called for every piece of work scheduled in the audio thread using
-   self->schedule->schedule_work().  A reply can be sent back to the audio
-   thread using the provided respond function.
-*/
 static LV2_Worker_Status
 work(LV2_Handle                  instance,
      LV2_Worker_Respond_Function respond,
@@ -683,13 +681,6 @@ work(LV2_Handle                  instance,
   return LV2_WORKER_SUCCESS;
 }
 
-/**
-   Handle a response from work() in the audio thread.
-
-   When running normally, this will be called by the host after run().  When
-   freewheeling, this will be called immediately at the point the work was
-   scheduled.
-*/
 static LV2_Worker_Status
 work_response(LV2_Handle  instance,
               uint32_t    size,
@@ -826,37 +817,36 @@ restore(LV2_Handle                  instance,
     if (value)
     {
       const char* path = (const char*)value;
-      //#ifdef DEBUG 
-      printf( "Restoring file %s\n", path);
-      //#endif
-      if ( self->samples[i] )
+      if (path)
       {
-        free_sample(self, self->samples[i] );
-      }
-      Sample* newSample = load_sample(self, path);
-      if ( newSample )
-      {
-        self->samples[i] = newSample;
+        printf( "Restoring pad %i, filepath: %s\n", i, path);
         
-        /*
-        // Send a notification to UI that we're using a new sample
-        lv2_atom_forge_frame_time(&self->forge, 0); // 0 = frame offset
-        write_set_file_with_data(&self->forge, &self->uris,
-                       i,
-                       self->samples[i]->path,
-                       self->samples[i]->path_len,
-                       message->sample->data,
-                       message->sample->info.frames);
-        */
+        if ( self->samples[i] )
+        {
+          free_sample(self, self->samples[i] );
+        }
         
-        printf("Restored sample %s successfully\n", self->samples[i]->path);
-      }
+        Sample* newSample = load_sample(self, path);
+        if ( newSample )
+        {
+          self->samples[i] = newSample;
+          
+          printf("Restored sample %s successfully\n", self->samples[i]->path);
+        }
+        else
+        {
+          printf("Error: Sample Restore on pad %i, %s\n", i, self->samples[i]->path);
+        }
+        
+      } // path is valid
       else
       {
         printf( "Error loading sample\n");
       }
     }
   }
+  
+  self->updateUiPaths = true;
   
   return LV2_STATE_SUCCESS;
 }
