@@ -33,7 +33,7 @@ class ADSR
       progress = attack + decay + rel;
       released = true;
       
-      // by default there is not lowpass on the output to avoid sudden value jumps
+      // by default there is no lowpass on the output to avoid sudden value jumps
       enableSmoothing = false;
     }
     
