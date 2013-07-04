@@ -348,6 +348,13 @@ static void port_event(LV2UI_Handle handle,
           //printf("Gain Pad %i, pad# %i\n", port_index, port_index - int(PAD_GAIN) );
           ui->padData[ port_index-int(PAD_GAIN) ].gain = *(float*)buffer;
           break;
+      case PAD_SPEED:
+      case pspd2: case pspd3: case pspd4: case pspd5: case pspd6: case pspd7: case pspd8: case pspd9:
+      case pspd10: case pspd11: case pspd12: case pspd13: case pspd14: case pspd15: case pspd16:
+          // hack the enum to access the right array slice
+          //printf("Gain Pad %i, pad# %i\n", port_index, port_index - int(PAD_GAIN) );
+          ui->padData[ port_index-int(PAD_SPEED) ].speed = *(float*)buffer;
+          break;
       
       default: break;
     }
