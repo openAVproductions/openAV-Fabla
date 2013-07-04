@@ -477,84 +477,28 @@ run(LV2_Handle instance, uint32_t n_samples)
         }
         
         self->samples[pad] = newSamp;
-        lv2_log_note(&self->logger, "finished loading new sample, sending waveform to UI!\n" );
-        
-        int messageSize = 10;
-        int toBeWritten = UI_WAVEFORM_PIXELS;
-        for( int i = 0; toBeWritten > 0; i++ )
-        {
-          lv2_log_note(&self->logger, "wrote UI waveform %i\n", i );
-          
-          // Write UI_WAVEFORM_PIXELS size of float data to the UI, for displaying
-          // as the waveform
-          lv2_atom_forge_frame_time(&self->forge, i);
-          LV2_Atom_Forge_Frame set_frame;
-          LV2_Atom* set = (LV2_Atom*)lv2_atom_forge_blank(&self->forge, &set_frame, 0, self->uris->atom_eventTransfer);
-          
-          if ( set )
-          {
-            lv2_atom_forge_property_head(&self->forge, self->uris->fabla_Waveform, 0);
-            LV2_Atom_Forge_Frame body_frame;
-            lv2_atom_forge_blank(&self->forge, &body_frame, 0, 0);
-            
-            lv2_atom_forge_property_head(&self->forge, self->uris->fabla_pad, 0);
-            lv2_atom_forge_int(&self->forge, pad );
-            
-            lv2_atom_forge_property_head(&self->forge, self->uris->fabla_WaveformMsgNum, 0);
-            lv2_atom_forge_int(&self->forge, i );
-            
-            int writeThisTime = toBeWritten;
-            if (writeThisTime > messageSize) writeThisTime = messageSize;
-            
-            lv2_atom_forge_property_head(&self->forge, self->uris->fabla_waveformData, 0);
-            lv2_atom_forge_vector(&self->forge,
-                                  sizeof(float),
-                                  self->uris->atom_Float,
-                                  writeThisTime,
-                                  &self->uiWaveform[i*messageSize] );
-            
-            lv2_atom_forge_pop(&self->forge, &body_frame);
-            lv2_atom_forge_pop(&self->forge, &set_frame);
-          
-            toBeWritten -= writeThisTime;
-          }
-          else
-          {
-            printf("breaking from waveform->UI loop, returned NULL\n");
-            break;
-          }
-        }
-        /*
-        
-        */
-        
-        /*
-        //int size = sizeof(float)*100; //works;
-        int size = sizeof(float)*100; //UI_WAVEFORM_PIXELS;
-        lv2_atom_forge_property_head(&self->forge, self->uris->fabla_waveformData, 0);
-        lv2_atom_forge_atom(&self->forge, size, self->uris->atom_Chunk );
-        lv2_atom_forge_write(&self->forge, &self->uiWaveform[0], size );
-        */
-        
-        /*
-        lv2_atom_forge_property_head(&forge, eg_chunk, 0);
-        lv2_atom_forge_atom(&forge, sizeof(chunk_buf), forge.Chunk);
-        lv2_atom_forge_write(&forge, chunk_buf, sizeof(chunk_buf));
+        lv2_log_note(&self->logger, "finished loading new sample, writing waveform path to UI!\n" );
         
         
-        ##############
-        // eg_vector = (Vector<Int32>)1,2,3,4
-        lv2_atom_forge_property_head(&forge, eg_vector, 0);
-        int32_t elems[] = { 1, 2, 3, 4 };
+        // send the filename to the UI, it will load the waveform itself
+        lv2_atom_forge_frame_time(&self->forge, 0);
+        LV2_Atom_Forge_Frame set_frame;
         
-        lv2_atom_forge_vector(&forge,
-                              4,
-                              forge.Int,
-                              sizeof(int32_t),
-                              elems);
-        */
+        //LV2_Atom* set = (LV2_Atom*)
+        lv2_atom_forge_blank(&self->forge, &set_frame, 1, self->uris->atom_eventTransfer);
         
-        //lv2_atom_forge_pop(&self->forge, &vector_frame);
+        lv2_atom_forge_property_head(&self->forge, self->uris->fabla_Waveform, 0);
+        LV2_Atom_Forge_Frame body_frame;
+        lv2_atom_forge_blank(&self->forge, &body_frame, 2, 0);
+        
+        lv2_atom_forge_property_head(&self->forge, self->uris->fabla_pad, 0);
+        lv2_atom_forge_int(&self->forge, pad);
+        
+        lv2_atom_forge_property_head(&self->forge, self->uris->fabla_filename, 0);
+        lv2_atom_forge_path(&self->forge, f, strlen(f) );
+        
+        lv2_atom_forge_pop(&self->forge, &body_frame);
+        lv2_atom_forge_pop(&self->forge, &set_frame);
         
       }
       

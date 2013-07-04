@@ -24,6 +24,8 @@
 #include "lv2/lv2plug.in/ns/ext/atom/util.h"
 //#include "lv2/lv2plug.in/ns/ext/atom/forge.h"
 
+#include <sndfile.h>
+
 using namespace std;
 
 extern void initForge(Fabla*);
@@ -245,42 +247,90 @@ static void port_event(LV2UI_Handle handle,
             lv2_atom_object_get(obj, self->uris->fabla_Waveform, &body, 0);
             if (body)
             {
+              printf( "UI: recieved waveform data\n" );
               const LV2_Atom_Int* padNum = 0;
               lv2_atom_object_get( body, self->uris->fabla_pad, &padNum, 0);
               int pad = -1;
               if ( padNum )
                 pad = *(int*)LV2_ATOM_BODY(padNum);
               
-              const LV2_Atom_Int* msgNum = 0;
-              lv2_atom_object_get( body, self->uris->fabla_WaveformMsgNum, &msgNum, 0);
-              int msg = -1;
-              if ( msgNum )
-                msg = *(int*)LV2_ATOM_BODY(msgNum);
+              const LV2_Atom_String* path = 0;
+              lv2_atom_object_get( body, self->uris->fabla_filename, &path, 0);
+              const char* f = 0;
+              if ( path )
+                f = (const char*)LV2_ATOM_BODY(path);
               
-              if ( pad == -1 || msg == -1 )
+              if ( pad == -1 || f == 0 )
               {
-                printf( "UI: Error, waveform data message malformed" );
+                printf( "UI: Error, waveform data message malformed\n" );
                 return;
               }
               
-              printf("UI recieved waveform data on pad %i, msg %i\n", pad , msg);
+              printf("UI recieved waveform data on pad %i, path %s\nLoading sample now...\n", pad , f);
               
-              const LV2_Atom_Vector* waveform = 0;
-              lv2_atom_object_get( body, self->uris->fabla_waveformData, &waveform, 0);
-              float* data = (float*)LV2_ATOM_BODY(waveform);
+              SF_INFO info;
+              SNDFILE* const sndfile = sf_open( f, SFM_READ, &info);
+              
+              if (!sndfile) // || !info.frames ) { // || (info.channels != 1)) {
+              {
+                printf( "Failed to open sample '%s'\n", f);
+                return;
+              }
+              else
+              {
+                //lv2_log_error(&self->logger, "Sample has '%i' samples\n", info.frames);
+              }
+              
+              // Read data
+              float* const data = (float*)malloc(sizeof(float) * info.frames);
+              if (!data) {
+                printf("Failed to allocate memory for sample\n");
+                return;
+              }
+              sf_seek(sndfile, 0ul, SEEK_SET);
+              sf_read_float(sndfile, data, info.frames);
+              sf_close(sndfile);
+              
+              // find how many samples per pixel
+              int samplesPerPix = info.frames / UI_WAVEFORM_PIXELS;
+              
+              // loop over each pixel value we need
+              for( int p = 0; p < UI_WAVEFORM_PIXELS; p++ )
+              {
+                float average = 0.f;
+                
+                // calc value for this pixel
+                for( int i = 0; i < samplesPerPix; i++ )
+                {
+                  float tmp = data[i + (p * samplesPerPix)];
+                  if ( tmp < 0 ) { tmp = -tmp; }
+                  average += tmp;
+                }
+                average = (average / samplesPerPix);
+                ui->padData[pad].waveform[p] = average;
+              }
+              ui->padData[pad].loaded = true;
+              
+              ui->waveform->setData( UI_WAVEFORM_PIXELS, &ui->padData[pad].waveform[0] );
+              ui->waveform->redraw();
+              
+              free(data);
               
               
+              /*
               for(int i = 0; i < 10; i++)
               {
                 int pos = i + msg*10;
                 printf("waveform data [%i] = %f\n", pos, data[i] );
                 ui->padData[pad].waveform[pos] = data[i]; //sin( 3.14* float(i * 2 * pad) / UI_WAVEFORM_PIXELS );
               }
+              
               // sets the current waveform to the one just loaded: not always accurate
               ui->waveform->setData( UI_WAVEFORM_PIXELS, &ui->padData[pad].waveform[0] );
               
               ui->padData[pad].loaded = true;
               ui->waveform->redraw();
+              */
             }
           }
         break;
