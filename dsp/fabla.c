@@ -304,7 +304,7 @@ static void noteOn(FABLA_DSP* self, int note, int velocity)
       
       // play the voice
       self->voice[i]->play( note, velocity );
-      lv2_log_note(&self->logger, "Voice %i gets note ON %i\n", i, note );
+      //lv2_log_note(&self->logger, "Voice %i gets note ON %i\n", i, note );
       alloced = true;
       break;
     }
@@ -312,7 +312,7 @@ static void noteOn(FABLA_DSP* self, int note, int velocity)
   if ( !alloced )
     lv2_log_note(&self->logger, "Note %i ON: but no voice available\n", note );
   
-  lv2_log_note(&self->logger, "noteOn done\n" );
+  //lv2_log_note(&self->logger, "noteOn done\n" );
 }
 
 
@@ -352,7 +352,7 @@ run(LV2_Handle instance, uint32_t n_samples)
       uint8_t* const data = (uint8_t* const)(ev + 1);
       if ( (data[0] & 0xF0) == 0x90 ) // event & channel
       {
-        lv2_log_note(&self->logger, "Note on : %d, frame %i, event# this nframes %i\n", data[1], int(ev->time.frames), evCounter++ );
+        //lv2_log_note(&self->logger, "Note on : %d, frame %i, event# this nframes %i\n", data[1], int(ev->time.frames), evCounter++ );
         lv2_atom_forge_frame_time(&self->forge, 0);
         LV2_Atom_Forge_Frame set_frame;
         
@@ -368,8 +368,6 @@ run(LV2_Handle instance, uint32_t n_samples)
         
         lv2_atom_forge_pop(&self->forge, &body_frame);
         lv2_atom_forge_pop(&self->forge, &set_frame);
-        
-        lv2_log_note(&self->logger, "popped lv2 stuff\n" );
         
         // use next available voice for the note
         int n = int(data[1]) - 36;
@@ -424,14 +422,14 @@ run(LV2_Handle instance, uint32_t n_samples)
         const LV2_Atom_String* path = 0;
         lv2_atom_object_get( body, self->uris->fabla_filename, &path, 0);
         const char* f = (const char*)LV2_ATOM_BODY(path);
-        lv2_log_note(&self->logger, "fabla_Load recieved %s on pad %i\n", f, pad );
+        //lv2_log_note(&self->logger, "fabla_Load recieved %s on pad %i\n", f, pad );
         
         // schedule work
         //SampleMessage message(self->uris->fabla_Load);
         //message.pad = pad;
         
         size_t s = sizeof(SampleMessage);
-        lv2_log_note(&self->logger, "fabla_Load: scheduling work now, size %i\n", int(s) );
+        //lv2_log_note(&self->logger, "fabla_Load: scheduling work now, size %i\n", int(s) );
         
         //self->schedule->schedule_work(self->schedule->handle, s, &message);
         
@@ -439,12 +437,12 @@ run(LV2_Handle instance, uint32_t n_samples)
         
         if( self->samples[pad] != 0 )
         {
-          lv2_log_note(&self->logger, "freeing sample with %i frames\n", int(self->samples[pad]->info.frames) );
+          //lv2_log_note(&self->logger, "freeing sample with %i frames\n", int(self->samples[pad]->info.frames) );
           free( self->samples[pad]->data );
         }
         
         self->samples[pad] = newSamp;
-        lv2_log_note(&self->logger, "finished loading new sample, writing waveform path to UI!\n" );
+        //lv2_log_note(&self->logger, "finished loading new sample, writing waveform path to UI!\n" );
         
         
         // send the filename to the UI, it will load the waveform itself
@@ -474,7 +472,7 @@ run(LV2_Handle instance, uint32_t n_samples)
       if (playBody)
       {
         // extract note from Atom, and play
-        lv2_log_note(&self->logger, "playbody pad \n");
+        //lv2_log_note(&self->logger, "playbody pad \n");
         const LV2_Atom_Int* padNum = 0;
         lv2_atom_object_get( playBody, self->uris->fabla_pad, &padNum, 0);
         if ( padNum )
@@ -494,7 +492,7 @@ run(LV2_Handle instance, uint32_t n_samples)
   {
     if ( self->samples[self->updateUiPathCounter] )
     {
-      lv2_log_note(&self->logger, "writing Atom %i to UI\n", self->updateUiPathCounter);
+      //lv2_log_note(&self->logger, "writing Atom %i to UI\n", self->updateUiPathCounter);
       // write path to UI so it loads the waveform
       lv2_atom_forge_frame_time(&self->forge, 0);
       LV2_Atom_Forge_Frame set_frame;
@@ -524,7 +522,7 @@ run(LV2_Handle instance, uint32_t n_samples)
     {
       self->updateUiPaths = false;
       self->updateUiPathCounter = 0;
-      lv2_log_note(&self->logger, "finished writing pads to UI\n");
+      //lv2_log_note(&self->logger, "finished writing pads to UI\n");
     }
   }
   

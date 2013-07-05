@@ -126,6 +126,13 @@ static void port_event(LV2UI_Handle handle,
     {
       case MASTER_VOL: ui->masterVol->value( v );         break;
       
+      case COMP_ATTACK: ui->compAttack->value(v); break;
+      case COMP_DECAY:  ui->compRelease->value(v);  break;
+      case COMP_RATIO:  ui->compRatio->value(v);  break;
+      case COMP_THRES:  ui->compThres->value(v);  break;
+      case COMP_MAKEUP: ui->compressor->makeup(v); break;
+      
+      
       case ATOM_OUT:
           if (format != self->uris->atom_eventTransfer) {
             printf("format != atom_eventTransfer\n");
@@ -176,6 +183,9 @@ static void port_event(LV2UI_Handle handle,
                   case 15: ui->p16->play(true); break;
                   default: break;
                 }
+                
+                // set the "selectedPad" to the played note
+                ui->select_pad(pad);
               }
             }
             
@@ -247,7 +257,7 @@ static void port_event(LV2UI_Handle handle,
             lv2_atom_object_get(obj, self->uris->fabla_Waveform, &body, 0);
             if (body)
             {
-              printf( "UI: recieved waveform data\n" );
+              //printf( "UI: recieved waveform data\n" );
               const LV2_Atom_Int* padNum = 0;
               lv2_atom_object_get( body, self->uris->fabla_pad, &padNum, 0);
               int pad = -1;
@@ -266,14 +276,14 @@ static void port_event(LV2UI_Handle handle,
                 return;
               }
               
-              printf("UI recieved waveform data on pad %i, path %s\nLoading sample now...\n", pad , f);
+              //printf("UI recieved waveform data on pad %i, path %s\nLoading sample now...\n", pad , f);
               
               SF_INFO info;
               SNDFILE* const sndfile = sf_open( f, SFM_READ, &info);
               
               if (!sndfile) // || !info.frames ) { // || (info.channels != 1)) {
               {
-                printf( "Failed to open sample '%s'\n", f);
+                printf( "UI Failed to open sample '%s'\n", f);
                 return;
               }
               else
@@ -284,7 +294,7 @@ static void port_event(LV2UI_Handle handle,
               // Read data
               float* const data = (float*)malloc(sizeof(float) * info.frames);
               if (!data) {
-                printf("Failed to allocate memory for sample\n");
+                printf("UI Failed to allocate memory for sample\n");
                 return;
               }
               sf_seek(sndfile, 0ul, SEEK_SET);

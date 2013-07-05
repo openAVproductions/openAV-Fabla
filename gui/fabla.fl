@@ -26,7 +26,7 @@ fl_open_display();
 selectedPad = 0;} {}
     Fl_Window w {
       label Fabla open
-      xywh {587 180 515 490} type Double color 56 selection_color 0 labelcolor 88
+      xywh {216 -30 515 490} type Double color 56 selection_color 0 labelcolor 88
       code0 {\#include "avtk.h"}
       code1 {using namespace Avtk;}
       code2 {\#include <FL/x.H>}
@@ -63,7 +63,7 @@ else
   float tmp = o->getMakeup();
   writeFunction(controller, COMP_MAKEUP, sizeof(float), 0, (const void*) &tmp);
   printf("makeup = %f\\n", tmp );
-}}
+}} selected
         xywh {352 290 97 84} box UP_BOX
         class Compressor
       }
@@ -84,7 +84,7 @@ writeFunction(controller, MASTER_VOL, sizeof(float), 0, (const void*) &tmp);}
       Fl_Box {} {
         xywh {350 155 150 98} box BORDER_BOX
       }
-      Fl_Box {} {
+      Fl_Box compRelease {
         label Rel
         callback {float tmp = o->value();
 //compressor->release( tmp );
@@ -227,7 +227,7 @@ writeFunction(controller, COMP_DECAY, sizeof(float), 0, (const void*) &tmp);}
         code0 {p4->ID(3);}
         class Pad
       }
-      Fl_Box {} {
+      Fl_Box compAttack {
         label Atk
         callback {float tmp = o->value();
 //compressor->attack( tmp );
@@ -235,7 +235,7 @@ writeFunction(controller, COMP_ATTACK, sizeof(float), 0, (const void*) &tmp);}
         xywh {365 435 30 30} box UP_BOX color 48 labelcolor 32
         class Dial
       }
-      Fl_Box {} {
+      Fl_Box compThres {
         label Thres
         callback {float tmp = o->value();
 compressor->threshold( tmp );
@@ -243,7 +243,7 @@ writeFunction(controller, COMP_THRES, sizeof(float), 0, (const void*) &tmp);}
         xywh {406 395 30 30} box UP_BOX color 48 labelcolor 32
         class Dial
       }
-      Fl_Box {} {
+      Fl_Box compRatio {
         label Ratio
         callback {float tmp = o->value();
 compressor->ratio( tmp );
@@ -417,8 +417,7 @@ if ( padData[selectedPad].loaded )
 else
 {
   waveform->setData( 0, 0, 0 );
-}} {selected
-    }
+}} {}
   }
   decl {int selectedPad;} {public local
   }
