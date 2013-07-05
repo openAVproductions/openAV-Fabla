@@ -291,6 +291,39 @@ connect_port(LV2_Handle instance,
         printf("Pan: Pad %i\n", port);
         break;
     
+    // ADSR
+    case PAD_ATTACK:
+    case pa2: case pa3: case pa4: case pa5: case pa6: case pa7: case pa8: case pa9:
+    case pa10: case pa11: case pa12: case pa13: case pa14: case pa15: case pa16:
+        // hack the enum to access the right array slice
+        self->padData[ port - int(PAD_ATTACK) ].a = (float*)data;
+        printf("ADSR Attack: Pad %i\n", port);
+        break;
+    
+    case PAD_DECAY:
+    case pd2: case pd3: case pd4: case pd5: case pd6: case pd7: case pd8: case pd9:
+    case pd10: case pd11: case pd12: case pd13: case pd14: case pd15: case pd16:
+        // hack the enum to access the right array slice
+        self->padData[ port - int(PAD_DECAY) ].d = (float*)data;
+        printf("ADSR Decay: Pad %i\n", port);
+        break;
+    
+    case PAD_SUSTAIN:
+    case ps2: case ps3: case ps4: case ps5: case ps6: case ps7: case ps8: case ps9:
+    case ps10: case ps11: case ps12: case ps13: case ps14: case ps15: case ps16:
+        // hack the enum to access the right array slice
+        self->padData[ port - int(PAD_SUSTAIN) ].s = (float*)data;
+        printf("ADSR Sustain: Pad %i\n", port);
+        break;
+    
+    case PAD_RELEASE:
+    case pr2: case pr3: case pr4: case pr5: case pr6: case pr7: case pr8: case pr9:
+    case pr10: case pr11: case pr12: case pr13: case pr14: case pr15: case pr16:
+        // hack the enum to access the right array slice
+        self->padData[ port - int(PAD_RELEASE) ].r = (float*)data;
+        printf("ADSR Release: Pad %i\n", port);
+        break;
+    
     default:
       printf("Error: Attempted connect of non-existing port with ID %u \n", port); break;
   }

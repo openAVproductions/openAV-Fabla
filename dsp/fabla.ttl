@@ -412,7 +412,746 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
-    
+  ]
+  
+  ,
+  
+  [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 43;
+    lv2:symbol "pad_pan_1" ;
+    lv2:name "Pan 1"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 44;
+    lv2:symbol "pad_pan_2" ;
+    lv2:name "Pan 2"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 45;
+    lv2:symbol "pad_pan_3" ;
+    lv2:name "Pan 3"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 46;
+    lv2:symbol "pad_pan_4" ;
+    lv2:name "Pan 4"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 47;
+    lv2:symbol "pad_pan_5" ;
+    lv2:name "Pan 5"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 48;
+    lv2:symbol "pad_pan_6" ;
+    lv2:name "Pan 6"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 49;
+    lv2:symbol "pad_pan_7" ;
+    lv2:name "Pan 7"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 50;
+    lv2:symbol "pad_pan_8" ;
+    lv2:name "Pan 8"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 51;
+    lv2:symbol "pad_pan_9" ;
+    lv2:name "Pan 9"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 52;
+    lv2:symbol "pad_pan_10" ;
+    lv2:name "Pan 10"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 53;
+    lv2:symbol "pad_pan_11" ;
+    lv2:name "Pan 11"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 54;
+    lv2:symbol "pad_pan_12" ;
+    lv2:name "Pan 12"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 55;
+    lv2:symbol "pad_pan_13" ;
+    lv2:name "Pan 13"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 56;
+    lv2:symbol "pad_pan_14" ;
+    lv2:name "Pan 14"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 57;
+    lv2:symbol "pad_pan_15" ;
+    lv2:name "Pan 15"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 58;
+    lv2:symbol "pad_pan_16" ;
+    lv2:name "Pan 16"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ]
+  
+  ,
+  
+  [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 59;
+    lv2:symbol "pad_attack_1" ;
+    lv2:name "Attack 1"
+    lv2:default 0.0 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 60;
+    lv2:symbol "pad_attack_2" ;
+    lv2:name "Attack 2"
+    lv2:default 0.0 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 61;
+    lv2:symbol "pad_attack_3" ;
+    lv2:name "Attack 3"
+    lv2:default 0.0 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 62;
+    lv2:symbol "pad_attack_4" ;
+    lv2:name "Attack 4"
+    lv2:default 0.0 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 63;
+    lv2:symbol "pad_attack_5" ;
+    lv2:name "Attack 5"
+    lv2:default 0.0 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 64;
+    lv2:symbol "pad_attack_6" ;
+    lv2:name "Attack 6"
+    lv2:default 0.0 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 65;
+    lv2:symbol "pad_attack_7" ;
+    lv2:name "Attack 7"
+    lv2:default 0.0 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 66;
+    lv2:symbol "pad_attack_8" ;
+    lv2:name "Attack 8"
+    lv2:default 0.0 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 67;
+    lv2:symbol "pad_attack_9" ;
+    lv2:name "Attack 9"
+    lv2:default 0.0 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 68;
+    lv2:symbol "pad_attack_10" ;
+    lv2:name "Attack 10"
+    lv2:default 0.0 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 69;
+    lv2:symbol "pad_attack_11" ;
+    lv2:name "Attack 11"
+    lv2:default 0.0 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 70;
+    lv2:symbol "pad_attack_12" ;
+    lv2:name "Attack 12"
+    lv2:default 0.0 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 71;
+    lv2:symbol "pad_attack_13" ;
+    lv2:name "Attack 13"
+    lv2:default 0.0 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 72;
+    lv2:symbol "pad_attack_14" ;
+    lv2:name "Attack 14"
+    lv2:default 0.0 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 73;
+    lv2:symbol "pad_attack_15" ;
+    lv2:name "Attack 15"
+    lv2:default 0.0 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 74;
+    lv2:symbol "pad_attack_16" ;
+    lv2:name "Attack 16"
+    lv2:default 0.0 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ]
+  
+  ,
+  
+  [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 75;
+    lv2:symbol "pad_decay_1" ;
+    lv2:name "Decay 1"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 76;
+    lv2:symbol "pad_decay_2" ;
+    lv2:name "Decay 2"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 77;
+    lv2:symbol "pad_decay_3" ;
+    lv2:name "Decay 3"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 78;
+    lv2:symbol "pad_decay_4" ;
+    lv2:name "Decay 4"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 79;
+    lv2:symbol "pad_decay_5" ;
+    lv2:name "Decay 5"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 80;
+    lv2:symbol "pad_decay_6" ;
+    lv2:name "Decay 6"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 81;
+    lv2:symbol "pad_decay_7" ;
+    lv2:name "Decay 7"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 82;
+    lv2:symbol "pad_decay_8" ;
+    lv2:name "Decay 8"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 83;
+    lv2:symbol "pad_decay_9" ;
+    lv2:name "Decay 9"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 84;
+    lv2:symbol "pad_decay_10" ;
+    lv2:name "Decay 10"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 85;
+    lv2:symbol "pad_decay_11" ;
+    lv2:name "Decay 11"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 86;
+    lv2:symbol "pad_decay_12" ;
+    lv2:name "Decay 12"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 87;
+    lv2:symbol "pad_decay_13" ;
+    lv2:name "Decay 13"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 88;
+    lv2:symbol "pad_decay_14" ;
+    lv2:name "Decay 14"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 89;
+    lv2:symbol "pad_decay_15" ;
+    lv2:name "Decay 15"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 90;
+    lv2:symbol "pad_decay_16" ;
+    lv2:name "Decay 16"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ]
+  
+  ,
+  
+  [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 91;
+    lv2:symbol "pad_sustain_1" ;
+    lv2:name "Sustain 1"
+    lv2:default 1.0 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 92;
+    lv2:symbol "pad_sustain_2" ;
+    lv2:name "Sustain 2"
+    lv2:default 1.0 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 93;
+    lv2:symbol "pad_sustain_3" ;
+    lv2:name "Sustain 3"
+    lv2:default 1.0 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 94;
+    lv2:symbol "pad_sustain_4" ;
+    lv2:name "Sustain 4"
+    lv2:default 1.0 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 95;
+    lv2:symbol "pad_sustain_5" ;
+    lv2:name "Sustain 5"
+    lv2:default 1.0 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 96;
+    lv2:symbol "pad_sustain_6" ;
+    lv2:name "Sustain 6"
+    lv2:default 1.0 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 97;
+    lv2:symbol "pad_sustain_7" ;
+    lv2:name "Sustain 7"
+    lv2:default 1.0 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 98;
+    lv2:symbol "pad_sustain_8" ;
+    lv2:name "Sustain 8"
+    lv2:default 1.0 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 99;
+    lv2:symbol "pad_sustain_9" ;
+    lv2:name "Sustain 9"
+    lv2:default 1.0 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 100;
+    lv2:symbol "pad_sustain_10" ;
+    lv2:name "Sustain 10"
+    lv2:default 1.0 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 101;
+    lv2:symbol "pad_sustain_11" ;
+    lv2:name "Sustain 11"
+    lv2:default 1.0 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 102;
+    lv2:symbol "pad_sustain_12" ;
+    lv2:name "Sustain 12"
+    lv2:default 1.0 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 103;
+    lv2:symbol "pad_sustain_13" ;
+    lv2:name "Sustain 13"
+    lv2:default 1.0 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 104;
+    lv2:symbol "pad_sustain_14" ;
+    lv2:name "Sustain 14"
+    lv2:default 1.0 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 105;
+    lv2:symbol "pad_sustain_15" ;
+    lv2:name "Sustain 15"
+    lv2:default 1.0 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 106;
+    lv2:symbol "pad_sustain_16" ;
+    lv2:name "Sustain 16"
+    lv2:default 1.0 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ]
+  
+  ,
+  
+  [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 107;
+    lv2:symbol "pad_release_1" ;
+    lv2:name "Release 1"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 108;
+    lv2:symbol "pad_release_2" ;
+    lv2:name "Release 2"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 109;
+    lv2:symbol "pad_release_3" ;
+    lv2:name "Release 3"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 110;
+    lv2:symbol "pad_release_4" ;
+    lv2:name "Release 4"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 111;
+    lv2:symbol "pad_release_5" ;
+    lv2:name "Release 5"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 112;
+    lv2:symbol "pad_release_6" ;
+    lv2:name "Release 6"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 113;
+    lv2:symbol "pad_release_7" ;
+    lv2:name "Release 7"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 114;
+    lv2:symbol "pad_release_8" ;
+    lv2:name "Release 8"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 115;
+    lv2:symbol "pad_release_9" ;
+    lv2:name "Release 9"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 116;
+    lv2:symbol "pad_release_10" ;
+    lv2:name "Release 10"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 117;
+    lv2:symbol "pad_release_11" ;
+    lv2:name "Release 11"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 118;
+    lv2:symbol "pad_release_12" ;
+    lv2:name "Release 12"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 119;
+    lv2:symbol "pad_release_13" ;
+    lv2:name "Release 13"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 120;
+    lv2:symbol "pad_release_14" ;
+    lv2:name "Release 14"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 121;
+    lv2:symbol "pad_release_15" ;
+    lv2:name "Release 15"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
+  ] , [
+    a lv2:ControlPort ,
+      lv2:InputPort ;
+    lv2:index 122;
+    lv2:symbol "pad_release_16" ;
+    lv2:name "Release 16"
+    lv2:default 0.5 ;
+    lv2:minimum 0.0 ;
+    lv2:maximum 1.0 ;
     
   ] .
 
