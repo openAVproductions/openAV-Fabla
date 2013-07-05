@@ -71,12 +71,16 @@ class Waveform : public Fl_Widget
     
     bool newWaveform;
     
+    string waveformName;
     int    data_size;
     long   realLength;
     float* data;
     
-    void setData( int numDataPoints, long realLen, float* d )
+    void setData( int numDataPoints, long realLen, float* d, std::string name )
     {
+      // title of the sample
+      waveformName = name;
+      
       // the number of samples in the original file
       realLength = realLen;
       
@@ -204,12 +208,22 @@ class Waveform : public Fl_Widget
             cairo_set_source_rgb( waveformCr, 0.8,0.8,0.8);
             cairo_stroke( waveformCr );
             
+            /*
             // draw text
             cairo_move_to( waveformCr,  8, h-10 );
             cairo_set_source_rgb ( waveformCr, 0.6,0.6,0.6);
             cairo_set_font_size( waveformCr, 10 );
             std::stringstream s;
             s << "Length: " << realLength;
+            cairo_show_text( waveformCr, s.str().c_str() );
+            */
+            
+            // draw sample name
+            cairo_move_to( waveformCr,  8, h-10 );
+            cairo_set_source_rgb ( waveformCr, 0.6,0.6,0.6);
+            cairo_set_font_size( waveformCr, 10 );
+            std::stringstream s;
+            s << "Sample: " << waveformName;
             cairo_show_text( waveformCr, s.str().c_str() );
             
           }

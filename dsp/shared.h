@@ -2,6 +2,7 @@
 #ifndef SHARED_H
 #define SHARED_H
 
+#include <string>
 #include <sstream>
 
 #include "lv2/lv2plug.in/ns/ext/atom/util.h"
@@ -127,6 +128,8 @@ class UIPadData
     }
     
     bool loaded;
+    
+    std::string name;
     
     float gain;
     float speed;

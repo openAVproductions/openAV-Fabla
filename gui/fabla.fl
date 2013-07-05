@@ -26,7 +26,7 @@ fl_open_display();
 selectedPad = 0;} {}
     Fl_Window w {
       label Fabla open
-      xywh {365 102 515 490} type Double color 56 selection_color 0 labelcolor 88
+      xywh {430 147 515 490} type Double color 56 selection_color 0 labelcolor 88
       code0 {\#include "avtk.h"}
       code1 {using namespace Avtk;}
       code2 {\#include <FL/x.H>}
@@ -37,7 +37,7 @@ selectedPad = 0;} {}
         xywh {346 41 159 215} box UP_BOX
         class Background
       }
-      Fl_Box adsr {selected
+      Fl_Box adsr {
         xywh {351 66 150 84} box UP_BOX
         code0 {adsr->attack(0); adsr->decay(0.5);}
         code1 {adsr->sustain(1); adsr->release(0.5);}
@@ -63,8 +63,9 @@ else
   float tmp = o->getMakeup();
   writeFunction(controller, COMP_MAKEUP, sizeof(float), 0, (const void*) &tmp);
   printf("makeup = %f\\n", tmp );
-}}
+}} selected
         xywh {352 290 97 84} box UP_BOX
+        code0 {compressor->set_active( false );}
         class Compressor
       }
       Fl_Box {} {
@@ -412,11 +413,11 @@ adsr->release( r->value() );
 // set Waveform to draw new data
 if ( padData[selectedPad].loaded )
 {
-  waveform->setData( UI_WAVEFORM_PIXELS, padData[selectedPad].waveformLength, padData[selectedPad].waveform );
+  waveform->setData( UI_WAVEFORM_PIXELS, padData[selectedPad].waveformLength, padData[selectedPad].waveform, padData[selectedPad].name );
 }
 else
 {
-  waveform->setData( 0, 0, 0 );
+  waveform->setData( 0, 0, 0, "" );
 }} {}
   }
   decl {int selectedPad;} {public local

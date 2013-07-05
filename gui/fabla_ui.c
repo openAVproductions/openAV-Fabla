@@ -134,6 +134,8 @@ static void port_event(LV2UI_Handle handle,
                         ui->compressor->threshold(v); break;
       case COMP_MAKEUP: ui->compressor->makeup(v);    break;
       
+      case COMP_ENABLE: ui->compressor->set_active(v);break;
+      
       
       
       
@@ -324,11 +326,21 @@ static void port_event(LV2UI_Handle handle,
                 ui->padData[pad].waveform[p] = average;
               }
               
+              
+              // only display "name" of file, not path
+              std::string name = f;
+              int i = name.find_last_of('/') + 1;
+              std::string sub = name.substr( i );
+              ui->padData[pad].name = sub;
+              printf("name %s\ni %i\nsub %s\n", name.c_str(), i, sub.c_str() );
+              
               ui->padData[pad].loaded = true;
               ui->padData[pad].waveformLength = info.frames;
               
               if(ui->selectedPad == pad )
-                ui->waveform->setData( UI_WAVEFORM_PIXELS, info.frames, &ui->padData[pad].waveform[0] );
+              {
+                ui->waveform->setData( UI_WAVEFORM_PIXELS, info.frames, &ui->padData[pad].waveform[0], sub );
+              }
               
               ui->waveform->redraw();
               
