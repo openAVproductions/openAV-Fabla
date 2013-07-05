@@ -48,6 +48,7 @@ class PadData
     
     float* gain;
     float* speed;
+    float* pan;
     
     float* a;
     float* d;
@@ -263,7 +264,6 @@ connect_port(LV2_Handle instance,
     case COMP_MAKEUP:
       self->comp_makeup = (float*)data; break;
     case COMP_ENABLE:
-      printf("Comp Enable %i\n", port);
       self->comp_enable = (float*)data; break;
     
     // deal with 16 * ADSR / gain / speed / pan here
@@ -272,7 +272,7 @@ connect_port(LV2_Handle instance,
     case pg10: case pg11: case pg12: case pg13: case pg14: case pg15: case pg16:
         // hack the enum to access the right array slice
         self->padData[ port - int(PAD_GAIN) ].gain = (float*)data;
-        printf("Gain Pad %i, port num %i\n", port - int(PAD_GAIN), port);
+        //printf("Gain Pad %i, port num %i\n", port - int(PAD_GAIN), port);
         break;
     
     case PAD_SPEED:
@@ -281,6 +281,14 @@ connect_port(LV2_Handle instance,
         // hack the enum to access the right array slice
         self->padData[ port - int(PAD_SPEED) ].speed = (float*)data;
         //printf("Speed: Pad %i\n", port);
+        break;
+    
+    case PAD_PAN:
+    case pp2: case pp3: case pp4: case pp5: case pp6: case pp7: case pp8: case pp9:
+    case pp10: case pp11: case pp12: case pp13: case pp14: case pp15: case pp16:
+        // hack the enum to access the right array slice
+        self->padData[ port - int(PAD_PAN) ].pan = (float*)data;
+        printf("Pan: Pad %i\n", port);
         break;
     
     default:

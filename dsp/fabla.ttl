@@ -124,7 +124,7 @@
     a lv2:ControlPort ,
       lv2:InputPort ;
     lv2:index 11;
-    lv2:symbol "pad_gain" ;
+    lv2:symbol "pad_gain_1" ;
     lv2:name "Gain 1"
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
@@ -133,7 +133,7 @@
     a lv2:ControlPort ,
       lv2:InputPort ;
     lv2:index 12;
-    lv2:symbol "pad_gain" ;
+    lv2:symbol "pad_gain_2" ;
     lv2:name "Gain 2"
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
@@ -142,7 +142,7 @@
     a lv2:ControlPort ,
       lv2:InputPort ;
     lv2:index 13;
-    lv2:symbol "pad_gain" ;
+    lv2:symbol "pad_gain_3" ;
     lv2:name "Gain 3"
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
@@ -151,7 +151,7 @@
     a lv2:ControlPort ,
       lv2:InputPort ;
     lv2:index 14;
-    lv2:symbol "pad_gain" ;
+    lv2:symbol "pad_gain_4" ;
     lv2:name "Gain 4"
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
@@ -160,7 +160,7 @@
     a lv2:ControlPort ,
       lv2:InputPort ;
     lv2:index 15;
-    lv2:symbol "pad_gain" ;
+    lv2:symbol "pad_gain_5" ;
     lv2:name "Gain 5"
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
@@ -169,7 +169,7 @@
     a lv2:ControlPort ,
       lv2:InputPort ;
     lv2:index 16;
-    lv2:symbol "pad_gain" ;
+    lv2:symbol "pad_gain_6" ;
     lv2:name "Gain 6"
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
@@ -178,7 +178,7 @@
     a lv2:ControlPort ,
       lv2:InputPort ;
     lv2:index 17;
-    lv2:symbol "pad_gain" ;
+    lv2:symbol "pad_gain_7" ;
     lv2:name "Gain 7"
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
@@ -187,7 +187,7 @@
     a lv2:ControlPort ,
       lv2:InputPort ;
     lv2:index 18;
-    lv2:symbol "pad_gain" ;
+    lv2:symbol "pad_gain_8" ;
     lv2:name "Gain 8"
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
@@ -196,7 +196,7 @@
     a lv2:ControlPort ,
       lv2:InputPort ;
     lv2:index 19;
-    lv2:symbol "pad_gain" ;
+    lv2:symbol "pad_gain_9" ;
     lv2:name "Gain 9"
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
@@ -205,7 +205,7 @@
     a lv2:ControlPort ,
       lv2:InputPort ;
     lv2:index 20;
-    lv2:symbol "pad_gain" ;
+    lv2:symbol "pad_gain_10" ;
     lv2:name "Gain 10"
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
@@ -214,7 +214,7 @@
     a lv2:ControlPort ,
       lv2:InputPort ;
     lv2:index 21;
-    lv2:symbol "pad_gain" ;
+    lv2:symbol "pad_gain_11" ;
     lv2:name "Gain 11"
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
@@ -223,7 +223,7 @@
     a lv2:ControlPort ,
       lv2:InputPort ;
     lv2:index 22;
-    lv2:symbol "pad_gain" ;
+    lv2:symbol "pad_gain_12" ;
     lv2:name "Gain 12"
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
@@ -232,7 +232,7 @@
     a lv2:ControlPort ,
       lv2:InputPort ;
     lv2:index 23;
-    lv2:symbol "pad_gain" ;
+    lv2:symbol "pad_gain_13" ;
     lv2:name "Gain 13"
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
@@ -241,7 +241,7 @@
     a lv2:ControlPort ,
       lv2:InputPort ;
     lv2:index 24;
-    lv2:symbol "pad_gain" ;
+    lv2:symbol "pad_gain_14" ;
     lv2:name "Gain 14"
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
@@ -250,7 +250,7 @@
     a lv2:ControlPort ,
       lv2:InputPort ;
     lv2:index 25;
-    lv2:symbol "pad_gain" ;
+    lv2:symbol "pad_gain_15" ;
     lv2:name "Gain 15"
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
@@ -259,7 +259,7 @@
     a lv2:ControlPort ,
       lv2:InputPort ;
     lv2:index 26;
-    lv2:symbol "pad_gain" ;
+    lv2:symbol "pad_gain_16" ;
     lv2:name "Gain 16"
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
@@ -272,7 +272,7 @@
     a lv2:ControlPort ,
       lv2:InputPort ;
     lv2:index 27;
-    lv2:symbol "pad_speed" ;
+    lv2:symbol "pad_speed_1" ;
     lv2:name "Speed 1"
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
@@ -281,7 +281,7 @@
     a lv2:ControlPort ,
       lv2:InputPort ;
     lv2:index 28;
-    lv2:symbol "pad_speed" ;
+    lv2:symbol "pad_speed_2" ;
     lv2:name "Speed 2"
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
@@ -290,7 +290,7 @@
     a lv2:ControlPort ,
       lv2:InputPort ;
     lv2:index 29;
-    lv2:symbol "pad_speed" ;
+    lv2:symbol "pad_speed_3" ;
     lv2:name "Speed 3"
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
@@ -299,7 +299,7 @@
     a lv2:ControlPort ,
       lv2:InputPort ;
     lv2:index 30;
-    lv2:symbol "pad_speed" ;
+    lv2:symbol "pad_speed_4" ;
     lv2:name "Speed 4"
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
@@ -308,7 +308,7 @@
     a lv2:ControlPort ,
       lv2:InputPort ;
     lv2:index 31;
-    lv2:symbol "pad_speed" ;
+    lv2:symbol "pad_speed_5" ;
     lv2:name "Speed 5"
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
@@ -317,7 +317,7 @@
     a lv2:ControlPort ,
       lv2:InputPort ;
     lv2:index 32;
-    lv2:symbol "pad_speed" ;
+    lv2:symbol "pad_speed_6" ;
     lv2:name "Speed 6"
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
@@ -326,7 +326,7 @@
     a lv2:ControlPort ,
       lv2:InputPort ;
     lv2:index 33;
-    lv2:symbol "pad_speed" ;
+    lv2:symbol "pad_speed_7" ;
     lv2:name "Speed 7"
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
@@ -335,7 +335,7 @@
     a lv2:ControlPort ,
       lv2:InputPort ;
     lv2:index 34;
-    lv2:symbol "pad_speed" ;
+    lv2:symbol "pad_speed_8" ;
     lv2:name "Speed 8"
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
@@ -344,7 +344,7 @@
     a lv2:ControlPort ,
       lv2:InputPort ;
     lv2:index 35;
-    lv2:symbol "pad_speed" ;
+    lv2:symbol "pad_speed_9" ;
     lv2:name "Speed 9"
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
@@ -353,7 +353,7 @@
     a lv2:ControlPort ,
       lv2:InputPort ;
     lv2:index 36;
-    lv2:symbol "pad_speed" ;
+    lv2:symbol "pad_speed_10" ;
     lv2:name "Speed 10"
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
@@ -362,7 +362,7 @@
     a lv2:ControlPort ,
       lv2:InputPort ;
     lv2:index 37;
-    lv2:symbol "pad_speed" ;
+    lv2:symbol "pad_speed_11" ;
     lv2:name "Speed 11"
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
@@ -371,7 +371,7 @@
     a lv2:ControlPort ,
       lv2:InputPort ;
     lv2:index 38;
-    lv2:symbol "pad_speed" ;
+    lv2:symbol "pad_speed_12" ;
     lv2:name "Speed 12"
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
@@ -380,7 +380,7 @@
     a lv2:ControlPort ,
       lv2:InputPort ;
     lv2:index 39;
-    lv2:symbol "pad_speed" ;
+    lv2:symbol "pad_speed_13" ;
     lv2:name "Speed 13"
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
@@ -389,7 +389,7 @@
     a lv2:ControlPort ,
       lv2:InputPort ;
     lv2:index 40;
-    lv2:symbol "pad_speed" ;
+    lv2:symbol "pad_speed_14" ;
     lv2:name "Speed 14"
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
@@ -398,7 +398,7 @@
     a lv2:ControlPort ,
       lv2:InputPort ;
     lv2:index 41;
-    lv2:symbol "pad_speed" ;
+    lv2:symbol "pad_speed_15" ;
     lv2:name "Speed 15"
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
@@ -407,7 +407,7 @@
     a lv2:ControlPort ,
       lv2:InputPort ;
     lv2:index 42;
-    lv2:symbol "pad_speed" ;
+    lv2:symbol "pad_speed_16" ;
     lv2:name "Speed 16"
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
