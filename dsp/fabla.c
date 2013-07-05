@@ -344,11 +344,11 @@ static void noteOn(FABLA_DSP* self, int note, int velocity)
       // set the right sample to the voice
       self->voice[i]->sample = self->samples[note];
       
-      // set the ADSR values (copied into voice)
-      self->voice[i]->setAdsr(*self->padData[note].a,
-                              *self->padData[note].d,
+      // set the ADSR values (copied into voice), 1/2 second control on dial
+      self->voice[i]->setAdsr(*self->padData[note].a * 0.5,
+                              *self->padData[note].d * 0.5,
                               *self->padData[note].s,
-                              *self->padData[note].r);
+                              *self->padData[note].r * 0.5);
       
       self->voice[i]->setPan( self->samples[note]->pan );
       

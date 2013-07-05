@@ -40,13 +40,13 @@ class ADSR
     /// set attack in milliseconds
     void attack(float a)
     {
-      att = a * sr;
+      att = (a + 0.01) * sr;
     }
     
     /// set decay in milliseconds
     void decay(float d)
     {
-      dec = d * sr;
+      dec = (d + 0.01) * sr;
     }
     
     /// set sustain value, range 0 to 1

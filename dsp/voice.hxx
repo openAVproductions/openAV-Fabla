@@ -85,9 +85,7 @@ class Voice
         *bufL += tmp * panL;
         *bufR += tmp * panR;
         
-        float increment = (0.5 + sample->speed);
-        if ( increment > 1.0 )
-          increment = increment * 2;
+        float increment = 0.25 + (sample->speed * 1.5);
         
         index += increment;
         
