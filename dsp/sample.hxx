@@ -24,6 +24,7 @@ class Sample
     
     float gain;
     float speed;
+    float pan;
 };
 
 #endif // FABLA_SAMPLE_H

@@ -27,6 +27,14 @@ class Voice
     Sample* sample;
     ADSR* adsr;
     
+    void setAdsr(float a, float d, float s, float r)
+    {
+      adsr->attack ( a );
+      adsr->decay  ( d );
+      adsr->sustain( s );
+      adsr->release( r );
+    }
+    
     void play(int inNote, int vel)
     {
       // if the voice doesn't have a sample: then don't play
@@ -60,10 +68,16 @@ class Voice
     {
       if( playingBool && sample )
       {
-        float tmp = sample->data[int(index)] * sample->gain;
+        float tmp = sample->data[int(index)] * sample->gain *  adsr->process(nframes);
+        
         *bufL += tmp;
         *bufR += tmp;
-        index += 0.5 + sample->speed * 1.5;
+        
+        float increment = (0.5 + sample->speed);
+        if ( increment > 1.0 )
+          increment = increment * 2;
+        
+        index += increment;
         
         if ( index >= sample->info.frames )
         {
@@ -72,12 +86,12 @@ class Voice
         }
         
         
-        adsr->process(nframes);
+        
         
         if ( adsr->finished() )
         {
           // turn off voice if ADSR has finished
-          //playingBool = false;
+          playingBool = false;
         }
         
         //return accum * adsr->process(1);

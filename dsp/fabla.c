@@ -343,6 +343,12 @@ static void noteOn(FABLA_DSP* self, int note, int velocity)
       // set the right sample to the voice
       self->voice[i]->sample = self->samples[note];
       
+      // set the ADSR values (copied into voice)
+      self->voice[i]->setAdsr(*self->padData[note].a,
+                              *self->padData[note].d,
+                              *self->padData[note].s,
+                              *self->padData[note].r);
+      
       // play the voice
       self->voice[i]->play( note, velocity );
       //lv2_log_note(&self->logger, "Voice %i gets note ON %i\n", i, note );
@@ -573,8 +579,9 @@ run(LV2_Handle instance, uint32_t n_samples)
   {
     if ( self->samples[i] )
     {
-      self->samples[i]->gain  = *(self->padData[i].gain);
+      self->samples[i]->gain  = *(self->padData[i].gain );
       self->samples[i]->speed = *(self->padData[i].speed);
+      self->samples[i]->pan   = *(self->padData[i].pan  );
     }
   }
   
@@ -584,6 +591,7 @@ run(LV2_Handle instance, uint32_t n_samples)
   self->comp->setThreshold( *self->comp_thres  );
   self->comp->setRatio    ( *self->comp_ratio  );
   self->comp->setMakeup   ( *self->comp_makeup );
+  
   
   //printf("%f\t%f\t%f\t%f\n", *self->comp_attack, *self->comp_decay, *self->comp_thres, *self->comp_ratio );
   // makeup TODO
@@ -605,8 +613,6 @@ run(LV2_Handle instance, uint32_t n_samples)
     float* buf[2];
     buf[0] = &accumL;
     buf[1] = &accumR;
-    
-    //printf( "comp enable %f\n" , *self->comp_enable );
     
     if ( *self->comp_enable > 0.5 )
     {

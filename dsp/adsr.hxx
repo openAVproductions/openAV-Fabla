@@ -16,10 +16,10 @@ class ADSR
     {
       sr = srate;
       
-      attack  = attackMS * sr;
-      decay   = decayMS * sr;
-      sustain = sustain01;
-      rel     = releaseMS * sr;
+      att = attackMS * sr;
+      dec = decayMS * sr;
+      sus = sustain01;
+      rel = releaseMS * sr;
       
       //printf("%f, %f, %f", attack, decay, sustain);
       
@@ -30,11 +30,35 @@ class ADSR
       b = 1.0f / (1.0f - a);
       g1 = g2 = 0.f;
       
-      progress = attack + decay + rel;
+      progress = att + dec + rel;
       released = true;
       
       // by default there is no lowpass on the output to avoid sudden value jumps
       enableSmoothing = false;
+    }
+    
+    /// set attack in milliseconds
+    void attack(float a)
+    {
+      att = a * sr;
+    }
+    
+    /// set decay in milliseconds
+    void decay(float d)
+    {
+      dec = d * sr;
+    }
+    
+    /// set sustain value, range 0 to 1
+    void sustain(float s)
+    {
+      sus = s;
+    }
+    
+    /// set release in milliseconds
+    void release(float r)
+    {
+      rel = r * sr;
     }
     
     void trigger()
@@ -46,7 +70,7 @@ class ADSR
     
     void release()
     {
-      progress = attack + decay;
+      progress = att + dec;
       released = true;
     }
     
@@ -66,21 +90,21 @@ class ADSR
       
       float output = 0.f;
       
-      if ( progress < attack ) // ATTACK
+      if ( progress < att ) // ATTACK
       {
-        output = (progress / attack);
+        output = (progress / att);
       }
-      else if ( progress < attack + decay ) // DECAY
+      else if ( progress < att + dec ) // DECAY
       {
-        output = 1 - (1 - sustain) * ((progress - attack) / decay);
+        output = 1 - (1 - sus) * ((progress - att) / dec);
       }
-      else if ( released && progress > attack + decay && progress < attack + decay + rel )
+      else if ( released && progress > att + dec && progress < att + dec + rel )
       {
-        output = sustain - ((sustain) * (progress - (attack+decay)) / rel);
+        output = sus - ((sus) * (progress - (att+dec)) / rel);
       }
       else if ( !released )
       {
-        output = sustain;
+        output = sus;
       }
       else
       {
@@ -115,9 +139,9 @@ class ADSR
     bool enableSmoothing;
     float w, a, b, g1, g2;
     
-    float attack, decay, rel;
+    float att, dec, rel;
     bool released;
-    float sustain;
+    float sus;
     bool finish;
     
     float progress;
