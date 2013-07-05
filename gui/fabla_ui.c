@@ -124,13 +124,17 @@ static void port_event(LV2UI_Handle handle,
     
     switch ( port_index )
     {
-      case MASTER_VOL: ui->masterVol->value( v );         break;
+      case MASTER_VOL: ui->masterVol->value( v );     break;
       
-      case COMP_ATTACK: ui->compAttack->value(v); break;
-      case COMP_DECAY:  ui->compRelease->value(v);  break;
-      case COMP_RATIO:  ui->compRatio->value(v);  break;
-      case COMP_THRES:  ui->compThres->value(v);  break;
-      case COMP_MAKEUP: ui->compressor->makeup(v); break;
+      case COMP_ATTACK: ui->compAttack->value(v);     break;
+      case COMP_DECAY:  ui->compRelease->value(v);    break;
+      case COMP_RATIO:  ui->compRatio->value(v);
+                        ui->compressor->ratio(v);     break;
+      case COMP_THRES:  ui->compThres->value(v);
+                        ui->compressor->threshold(v); break;
+      case COMP_MAKEUP: ui->compressor->makeup(v);    break;
+      
+      
       
       
       case ATOM_OUT:
@@ -357,13 +361,57 @@ static void port_event(LV2UI_Handle handle,
           // hack the enum to access the right array slice
           //printf("Gain Pad %i, pad# %i\n", port_index, port_index - int(PAD_GAIN) );
           ui->padData[ port_index-int(PAD_GAIN) ].gain = *(float*)buffer;
+          if ( port_index - int(PAD_GAIN) == ui->selectedPad )
+            ui->gain->value( *(float*)buffer );
           break;
       case PAD_SPEED:
       case pspd2: case pspd3: case pspd4: case pspd5: case pspd6: case pspd7: case pspd8: case pspd9:
       case pspd10: case pspd11: case pspd12: case pspd13: case pspd14: case pspd15: case pspd16:
-          // hack the enum to access the right array slice
-          //printf("Gain Pad %i, pad# %i\n", port_index, port_index - int(PAD_GAIN) );
           ui->padData[ port_index-int(PAD_SPEED) ].speed = *(float*)buffer;
+          if ( port_index - int(PAD_SPEED) == ui->selectedPad )
+            ui->speed->value( *(float*)buffer );
+          break;
+      
+      
+      case PAD_PAN:
+      case pp2: case pp3: case pp4: case pp5: case pp6: case pp7: case pp8: case pp9:
+      case pp10: case pp11: case pp12: case pp13: case pp14: case pp15: case pp16:
+          ui->padData[ port_index - int(PAD_PAN) ].pan = *(float*)buffer;
+          if ( port_index - int(PAD_PAN) == ui->selectedPad )
+            ui->pan->value( *(float*)buffer );
+          break;
+      
+      // ADSR
+      case PAD_ATTACK:
+      case pa2: case pa3: case pa4: case pa5: case pa6: case pa7: case pa8: case pa9:
+      case pa10: case pa11: case pa12: case pa13: case pa14: case pa15: case pa16:
+          ui->padData[ port_index - int(PAD_ATTACK) ].a = *(float*)buffer;
+          if ( port_index - int(PAD_ATTACK) == ui->selectedPad )
+            ui->a->value( *(float*)buffer );
+          break;
+      
+      case PAD_DECAY:
+      case pd2: case pd3: case pd4: case pd5: case pd6: case pd7: case pd8: case pd9:
+      case pd10: case pd11: case pd12: case pd13: case pd14: case pd15: case pd16:
+          ui->padData[ port_index - int(PAD_DECAY) ].d = *(float*)buffer;
+          if ( port_index - int(PAD_DECAY) == ui->selectedPad )
+            ui->d->value( *(float*)buffer );
+          break;
+      
+      case PAD_SUSTAIN:
+      case ps2: case ps3: case ps4: case ps5: case ps6: case ps7: case ps8: case ps9:
+      case ps10: case ps11: case ps12: case ps13: case ps14: case ps15: case ps16:
+          ui->padData[ port_index - int(PAD_SUSTAIN) ].s = *(float*)buffer;
+          if ( port_index - int(PAD_SUSTAIN) == ui->selectedPad )
+            ui->s->value( *(float*)buffer );
+          break;
+      
+      case PAD_RELEASE:
+      case pr2: case pr3: case pr4: case pr5: case pr6: case pr7: case pr8: case pr9:
+      case pr10: case pr11: case pr12: case pr13: case pr14: case pr15: case pr16:
+          ui->padData[ port_index - int(PAD_RELEASE) ].r = *(float*)buffer;
+          if ( port_index - int(PAD_RELEASE) == ui->selectedPad )
+            ui->r->value( *(float*)buffer );
           break;
       
       default: break;
