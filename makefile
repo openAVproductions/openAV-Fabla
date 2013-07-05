@@ -1,10 +1,7 @@
 
 CC=g++
 
-INCLUDES=-I../avtk/ -I/usr/include/cairomm-1.0 -I/usr/lib/cairomm-1.0/include -I/usr/include/sigc++-2.0 -I/usr/lib/sigc++-2.0/include -I/usr/include/ntk -I/usr/include/cairo -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/libpng15
-
-#INCLUDES=-I../avtk/ -I/usr/include/cairomm-1.0 -I/usr/lib/cairomm-1.0/include -I/usr/include/cairo -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/libpng15 -I/usr/include/sigc++-2.0 -I/usr/lib/sigc++-2.0/include -I/usr/include/cairo -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/libpng15 
-#INCLUDES+=$(shell pkg-config --cflags cairomm-1.0 cairo)
+INCLUDES=-I/usr/include/cairomm-1.0 -I/usr/lib/cairomm-1.0/include -I/usr/include/sigc++-2.0 -I/usr/lib/sigc++-2.0/include -I/usr/include/ntk -I/usr/include/cairo -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/libpng15
 
 CFLAGS=-g -Wall
 LDFLAGS=-lntk -lcairomm-1.0 -lcairo -lsndfile -z nodelete
