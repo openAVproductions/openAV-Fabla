@@ -338,7 +338,8 @@ static void noteOn(FABLA_DSP* self, int note, int velocity)
   bool alloced = false;
   for(int i = 0; i < NVOICES; i++)
   {
-    if ( !self->voice[i]->playing() )
+    // check that the voice isn't playing, and there is a sample loaded
+    if ( !self->voice[i]->playing() && self->samples[note] )
     {
       // set the right sample to the voice
       self->voice[i]->sample = self->samples[note];
@@ -348,6 +349,8 @@ static void noteOn(FABLA_DSP* self, int note, int velocity)
                               *self->padData[note].d,
                               *self->padData[note].s,
                               *self->padData[note].r);
+      
+      self->voice[i]->setPan( self->samples[note]->pan );
       
       // play the voice
       self->voice[i]->play( note, velocity );

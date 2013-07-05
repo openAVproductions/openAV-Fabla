@@ -21,6 +21,9 @@ class Voice
       
       index = 0;
       
+      // center the pan. 0 = left, 1 = right
+      pan = 0.5;
+      
       adsr = new ADSR( sr, 0.1, 0, 1.0, 0.1 );
     }
     
@@ -33,6 +36,11 @@ class Voice
       adsr->decay  ( d );
       adsr->sustain( s );
       adsr->release( r );
+    }
+    
+    void setPan( float p )
+    {
+      pan = p;
     }
     
     void play(int inNote, int vel)
@@ -70,8 +78,12 @@ class Voice
       {
         float tmp = sample->data[int(index)] * sample->gain *  adsr->process(nframes);
         
-        *bufL += tmp;
-        *bufR += tmp;
+        // sin / cos based amplitude panning
+        float panL = cos(pan * 3.14/2.f);
+        float panR = sin(pan * 3.14/2.f);
+        
+        *bufL += tmp * panL;
+        *bufR += tmp * panR;
         
         float increment = (0.5 + sample->speed);
         if ( increment > 1.0 )
@@ -84,9 +96,6 @@ class Voice
           index = 0;
           playingBool = false;
         }
-        
-        
-        
         
         if ( adsr->finished() )
         {
@@ -106,6 +115,9 @@ class Voice
     // each voice has own index, allowing for voices playing the same
     // pad, without the "speedup" effect of incrementing the same index
     float index;
+    
+    // pan per voice
+    float pan;
 };
 
 #endif // FABLA_VOICE_H
