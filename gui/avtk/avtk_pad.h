@@ -60,11 +60,13 @@ class Pad : public Fl_Box
     
     void selected(bool sb){s = sb; redraw();}
     void play    (bool pb){p = pb; redraw();}
+    void loaded  (bool ld){l = ld; redraw();}
     void ID(int i){id = i;}
     int  ID(){return id;}
     
     bool s; // selected
     bool p; // playing
+    bool l; // loaded
     int x, y, w, h;
     const char* label;
     
@@ -88,12 +90,28 @@ class Pad : public Fl_Box
         cairo_rectangle( cr, x, y, w, h);
         cairo_set_source_rgb( cr, 28 / 255.f,  28 / 255.f ,  28 / 255.f  );
         
+        
         if ( p ) // playing
         {
           cairo_fill_preserve( cr );
           cairo_set_source_rgba( cr, 0 / 255.f, 153 / 255.f , 255 / 255.f , 0.21 );
         }
         cairo_fill( cr );
+        
+        if ( !l ) // not loaded
+        {
+          // big grey X
+          cairo_set_line_width(cr, 10.0);
+          cairo_set_source_rgba(cr, 0.0,0.0,0.0, 0.2);
+          
+          cairo_move_to( cr, x + (3 * w / 4.f), y + ( h / 4.f ) );
+          cairo_line_to( cr, x + (w / 4.f), y + ( 3 *h / 4.f ) );
+          
+          cairo_move_to( cr, x + (w / 4.f), y + ( h / 4.f ) );
+          cairo_line_to( cr, x + (3 * w / 4.f), y + ( 3 *h / 4.f ) );
+          cairo_set_line_cap ( cr, CAIRO_LINE_CAP_BUTT);
+          cairo_stroke( cr );
+        }
         
         // outline
         cairo_rectangle( cr, x+2, y+2, w-4, h-4);
@@ -118,7 +136,11 @@ class Pad : public Fl_Box
         
         cairo_restore( cr );
         
-        draw_label();
+        if ( l )
+        {
+          // only draw label if a sample is loaded
+          draw_label();
+        }
       }
     }
     

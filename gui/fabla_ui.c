@@ -347,6 +347,28 @@ static void port_event(LV2UI_Handle handle,
               free(data);
               sf_close(sndfile);
               
+              // set UI pad loaded
+              switch ( pad )
+              {
+                case 0:  ui->p1->loaded(true);  break;
+                case 1:  ui->p2->loaded(true);  break;
+                case 2:  ui->p3->loaded(true);  break;
+                case 3:  ui->p4->loaded(true);  break;
+                case 4:  ui->p5->loaded(true);  break;
+                case 5:  ui->p6->loaded(true);  break;
+                case 6:  ui->p7->loaded(true);  break;
+                case 7:  ui->p8->loaded(true);  break;
+                case 8:  ui->p9->loaded(true);  break;
+                case 9:  ui->p10->loaded(true); break;
+                case 10: ui->p11->loaded(true); break;
+                case 11: ui->p12->loaded(true); break;
+                case 12: ui->p13->loaded(true); break;
+                case 13: ui->p14->loaded(true); break;
+                case 14: ui->p15->loaded(true); break;
+                case 15: ui->p16->loaded(true); break;
+                default: break;
+              }
+              
               /*
               for(int i = 0; i < 10; i++)
               {
