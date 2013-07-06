@@ -5,8 +5,6 @@ build/
 .lock*
 
 planning/*
-/gui/fabla.h
-/gui/fabla.cxx
 /fabla.lv2/fabla.so
 /fabla.lv2/fabla_ui.so
 /uiTest
