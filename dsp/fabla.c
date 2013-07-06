@@ -104,8 +104,7 @@ typedef struct {
   
   // UI related stuff
   int uiUpdateCounter;
-  DBMeter* meterL;
-  DBMeter* meterR;
+  DBMeter* meter;
   
   // if true, re-write the path names to UI
   // restore triggers this, to load UI waveforms
@@ -210,9 +209,8 @@ instantiate(const LV2_Descriptor*     descriptor,
   
   // allocate meters
   self->uiUpdateCounter = 0;
-  self->meterL = new DBMeter( rate );
-  self->meterR = new DBMeter( rate );
-  self->comp   = new Compressor( rate );
+  self->meter = new DBMeter( rate );
+  self->comp  = new Compressor( rate );
   
   // map all known URIs to ints
   map_uris( self->map, self->uris );
@@ -622,8 +620,7 @@ run(LV2_Handle instance, uint32_t n_samples)
       self->comp->process( 1, &buf[0], &buf[0] );   // stereo, in place
     }
     
-    self->meterL->process( 1, &buf[0], &buf[0] ); // left  channel, in place
-    self->meterR->process( 1, &buf[1], &buf[1] ); // right channel, in place
+    self->meter->process( 1, &buf[0], &buf[0] ); // stereo, in place
     
     outputL[pos] = accumL;
     outputR[pos] = accumR;
@@ -635,8 +632,8 @@ run(LV2_Handle instance, uint32_t n_samples)
   if ( self->uiUpdateCounter > self->sr / 15 ) //  false )// 
   {
     // send levels to UI
-    float L = self->meterL->getDB();
-    float R = self->meterR->getDB();
+    float L = self->meter->getLeftDB();
+    float R = self->meter->getRightDB();
     
     lv2_atom_forge_frame_time(&self->forge, 0);
     LV2_Atom_Forge_Frame set_frame;

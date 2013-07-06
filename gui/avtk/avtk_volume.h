@@ -134,7 +134,7 @@ class Volume : public Fl_Slider
         
         
         cairo_rectangle(cr, x+w*0.17, y+h*(1-ampL), 12.9, h - h*(1-ampL) );
-        cairo_rectangle(cr, x+w*0.56, y+h*(1-ampL), 12.9, h - h*(1-ampL) );
+        cairo_rectangle(cr, x+w*0.56, y+h*(1-ampR), 12.9, h - h*(1-ampR) );
         
         cairo_set_source_rgba( cr, 0 / 255.f, 153 / 255.f , 255 / 255.f , 0.21 );
         cairo_fill_preserve( cr );
