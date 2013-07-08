@@ -364,6 +364,7 @@ Fl_Double_Window* FablaUI::setupUI() {
       compRelease->callback((Fl_Callback*)cb_compRelease);
       compRelease->align(Fl_Align(FL_ALIGN_CENTER));
       compRelease->when(FL_WHEN_RELEASE);
+      compRelease->defaultValue(0.3);
     } // Dial* compRelease
     { Background* o = new Background(9, 41, 330, 132, "Waveform");
       o->box(FL_UP_BOX);
@@ -630,6 +631,7 @@ Fl_Double_Window* FablaUI::setupUI() {
       compAttack->callback((Fl_Callback*)cb_compAttack);
       compAttack->align(Fl_Align(FL_ALIGN_CENTER));
       compAttack->when(FL_WHEN_RELEASE);
+      compAttack->defaultValue(0.1);
     } // Dial* compAttack
     { compThres = new Dial(406, 395, 30, 30, "Thres");
       compThres->box(FL_UP_BOX);
@@ -642,6 +644,7 @@ Fl_Double_Window* FablaUI::setupUI() {
       compThres->callback((Fl_Callback*)cb_compThres);
       compThres->align(Fl_Align(FL_ALIGN_CENTER));
       compThres->when(FL_WHEN_RELEASE);
+      compThres->defaultValue(0.7);
     } // Dial* compThres
     { compRatio = new Dial(365, 395, 30, 30, "Ratio");
       compRatio->box(FL_UP_BOX);
@@ -654,6 +657,7 @@ Fl_Double_Window* FablaUI::setupUI() {
       compRatio->callback((Fl_Callback*)cb_compRatio);
       compRatio->align(Fl_Align(FL_ALIGN_CENTER));
       compRatio->when(FL_WHEN_RELEASE);
+      compRatio->defaultValue(0.3);
     } // Dial* compRatio
     { gain = new Dial(357, 210, 38, 38, "VOL");
       gain->box(FL_UP_BOX);
@@ -668,6 +672,7 @@ Fl_Double_Window* FablaUI::setupUI() {
       gain->when(FL_WHEN_RELEASE);
       gain->drawLabel(true);
       gain->value( 0.5 );
+      gain->defaultValue(0.5);
     } // Dial* gain
     { d = new Dial(393, 170, 30, 30, "D");
       d->box(FL_UP_BOX);
@@ -680,6 +685,7 @@ Fl_Double_Window* FablaUI::setupUI() {
       d->callback((Fl_Callback*)cb_d);
       d->align(Fl_Align(FL_ALIGN_CENTER));
       d->when(FL_WHEN_RELEASE);
+      d->defaultValue(0.5);
     } // Dial* d
     { speed = new Dial(408, 210, 38, 38, "SPD");
       speed->box(FL_UP_BOX);
@@ -694,6 +700,7 @@ Fl_Double_Window* FablaUI::setupUI() {
       speed->when(FL_WHEN_RELEASE);
       speed->drawLabel(true);
       speed->value( 0.5 );
+      speed->defaultValue(0.5);
     } // Dial* speed
     { a = new Dial(358, 170, 30, 30, "A");
       a->box(FL_UP_BOX);
@@ -706,6 +713,7 @@ Fl_Double_Window* FablaUI::setupUI() {
       a->callback((Fl_Callback*)cb_a);
       a->align(Fl_Align(FL_ALIGN_CENTER));
       a->when(FL_WHEN_RELEASE);
+      a->defaultValue(0.0);
     } // Dial* a
     { r = new Dial(463, 170, 30, 30, "R");
       r->box(FL_UP_BOX);
@@ -718,6 +726,7 @@ Fl_Double_Window* FablaUI::setupUI() {
       r->callback((Fl_Callback*)cb_r);
       r->align(Fl_Align(FL_ALIGN_CENTER));
       r->when(FL_WHEN_RELEASE);
+      r->defaultValue(0.5);
     } // Dial* r
     { s = new Dial(428, 170, 30, 30, "S");
       s->box(FL_UP_BOX);
@@ -731,6 +740,7 @@ Fl_Double_Window* FablaUI::setupUI() {
       s->align(Fl_Align(FL_ALIGN_CENTER));
       s->when(FL_WHEN_RELEASE);
       s->value(1.0);
+      s->defaultValue(1.f);
     } // Dial* s
     { pan = new Dial(455, 210, 38, 38, "PAN");
       pan->box(FL_UP_BOX);
@@ -745,6 +755,7 @@ Fl_Double_Window* FablaUI::setupUI() {
       pan->when(FL_WHEN_RELEASE);
       pan->drawLabel(true);
       pan->value( 0.5 );
+      pan->defaultValue(0.5);
     } // Dial* pan
     w->end();
   } // Fl_Double_Window* w

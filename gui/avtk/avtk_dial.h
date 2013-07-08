@@ -53,6 +53,8 @@ class Dial : public Fl_Slider
       
       highlight = false;
       label = _label;
+      
+      defaultVal = 0.0f;
     }
     
     bool highlight;
@@ -60,6 +62,9 @@ class Dial : public Fl_Slider
     const char* label;
     bool drawLab;
     void drawLabel(bool b){drawLab = b; redraw();}
+    
+    float defaultVal;
+    void defaultValue(float df){defaultVal = df; redraw(); }
     
     float radius;
     float lineWidth;
@@ -135,6 +140,12 @@ class Dial : public Fl_Slider
       switch(event) {
         case FL_PUSH:
           highlight = 1;
+          if ( Fl::event_state(FL_BUTTON3) )
+          {
+            // reset to default value on right click
+            value(defaultVal);
+            do_callback();
+          }
           redraw();
           return 1;
         case FL_DRAG:

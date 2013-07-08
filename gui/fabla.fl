@@ -63,7 +63,7 @@ else
   float tmp = o->getMakeup();
   writeFunction(controller, COMP_MAKEUP, sizeof(float), 0, (const void*) &tmp);
   printf("makeup = %f\\n", tmp );
-}} selected
+}}
         xywh {352 290 97 84} box UP_BOX
         code0 {compressor->set_active( false );}
         class Compressor
@@ -91,6 +91,7 @@ writeFunction(controller, MASTER_VOL, sizeof(float), 0, (const void*) &tmp);}
 //compressor->release( tmp );
 writeFunction(controller, COMP_DECAY, sizeof(float), 0, (const void*) &tmp);}
         xywh {406 435 30 30} box UP_BOX color 48 labelcolor 32
+        code0 {compRelease->defaultValue(0.3);}
         class Dial
       }
       Fl_Box {} {
@@ -234,14 +235,16 @@ writeFunction(controller, COMP_DECAY, sizeof(float), 0, (const void*) &tmp);}
 //compressor->attack( tmp );
 writeFunction(controller, COMP_ATTACK, sizeof(float), 0, (const void*) &tmp);}
         xywh {365 435 30 30} box UP_BOX color 48 labelcolor 32
+        code0 {compAttack->defaultValue(0.1);}
         class Dial
       }
       Fl_Box compThres {
         label Thres
         callback {float tmp = o->value();
 compressor->threshold( tmp );
-writeFunction(controller, COMP_THRES, sizeof(float), 0, (const void*) &tmp);}
+writeFunction(controller, COMP_THRES, sizeof(float), 0, (const void*) &tmp);} selected
         xywh {406 395 30 30} box UP_BOX color 48 labelcolor 32
+        code0 {compThres->defaultValue(0.7);}
         class Dial
       }
       Fl_Box compRatio {
@@ -250,6 +253,7 @@ writeFunction(controller, COMP_THRES, sizeof(float), 0, (const void*) &tmp);}
 compressor->ratio( tmp );
 writeFunction(controller, COMP_RATIO, sizeof(float), 0, (const void*) &tmp);}
         xywh {365 395 30 30} box UP_BOX color 48 labelcolor 32
+        code0 {compRatio->defaultValue(0.3);}
         class Dial
       }
       Fl_Box gain {
@@ -262,6 +266,7 @@ writeFunction(controller, port, sizeof(float), 0, (const void*) &tmp);
         xywh {357 210 38 38} box UP_BOX color 48 labelfont 1 labelcolor 40
         code0 {gain->drawLabel(true);}
         code1 {gain->value( 0.5 );}
+        code2 {gain->defaultValue(0.5);}
         class Dial
       }
       Fl_Box d {
@@ -274,6 +279,7 @@ padData[selectedPad].d = tmp;
 writeFunction(controller, port, sizeof(float), 0, (const void*) &tmp);
 printf("decay on pad\# %i, port\# %i, value %f\\n", selectedPad, port, tmp);}
         xywh {393 170 30 30} box UP_BOX color 48 labelfont 1 labelcolor 40
+        code0 {d->defaultValue(0.5);}
         class Dial
       }
       Fl_Box speed {
@@ -286,6 +292,7 @@ printf("speed on pad\# %i, port\# %i, value %f\\n", selectedPad, port, tmp);}
         xywh {408 210 38 38} box UP_BOX color 48 labelfont 1 labelcolor 40
         code0 {speed->drawLabel(true);}
         code1 {speed->value( 0.5 );}
+        code2 {speed->defaultValue(0.5);}
         class Dial
       }
       Fl_Box a {
@@ -298,6 +305,7 @@ padData[selectedPad].a = tmp;
 writeFunction(controller, port, sizeof(float), 0, (const void*) &tmp);
 printf("attack on pad\# %i, port\# %i, value %f\\n", selectedPad, port, tmp);}
         xywh {358 170 30 30} box UP_BOX color 48 labelfont 1 labelcolor 40
+        code0 {a->defaultValue(0.0);}
         class Dial
       }
       Fl_Box r {
@@ -310,6 +318,7 @@ padData[selectedPad].r = tmp;
 writeFunction(controller, port, sizeof(float), 0, (const void*) &tmp);
 printf("release on pad\# %i, port\# %i, value %f\\n", selectedPad, port, tmp);}
         xywh {463 170 30 30} box UP_BOX color 48 labelfont 1 labelcolor 40
+        code0 {r->defaultValue(0.5);}
         class Dial
       }
       Fl_Box s {
@@ -325,6 +334,7 @@ printf("sustain on pad\# %i, port\# %i, value %f\\n", selectedPad, port, tmp);}
         code0 {extern void writeLoadSample(Fabla* self, int pad, const char* filename, size_t filename_len);}
         code1 {extern void writePadPlay(Fabla* self, int pad );}
         code2 {s->value(1.0);}
+        code3 {s->defaultValue(1.f);}
         class Dial
       }
       Fl_Box pan {
@@ -337,6 +347,7 @@ printf("pan on pad\# %i, port\# %i, value %f\\n", selectedPad, port, tmp);}
         xywh {455 210 38 38} box UP_BOX color 48 labelfont 1 labelcolor 40
         code0 {pan->drawLabel(true);}
         code1 {pan->value( 0.5 );}
+        code2 {pan->defaultValue(0.5);}
         class Dial
       }
     }
