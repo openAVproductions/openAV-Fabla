@@ -286,7 +286,6 @@ connect_port(LV2_Handle instance,
     case pp10: case pp11: case pp12: case pp13: case pp14: case pp15: case pp16:
         // hack the enum to access the right array slice
         self->padData[ port - int(PAD_PAN) ].pan = (float*)data;
-        printf("Pan: Pad %i\n", port);
         break;
     
     // ADSR
@@ -295,7 +294,6 @@ connect_port(LV2_Handle instance,
     case pa10: case pa11: case pa12: case pa13: case pa14: case pa15: case pa16:
         // hack the enum to access the right array slice
         self->padData[ port - int(PAD_ATTACK) ].a = (float*)data;
-        printf("ADSR Attack: Pad %i\n", port);
         break;
     
     case PAD_DECAY:
@@ -303,7 +301,6 @@ connect_port(LV2_Handle instance,
     case pd10: case pd11: case pd12: case pd13: case pd14: case pd15: case pd16:
         // hack the enum to access the right array slice
         self->padData[ port - int(PAD_DECAY) ].d = (float*)data;
-        printf("ADSR Decay: Pad %i\n", port);
         break;
     
     case PAD_SUSTAIN:
@@ -311,7 +308,6 @@ connect_port(LV2_Handle instance,
     case ps10: case ps11: case ps12: case ps13: case ps14: case ps15: case ps16:
         // hack the enum to access the right array slice
         self->padData[ port - int(PAD_SUSTAIN) ].s = (float*)data;
-        printf("ADSR Sustain: Pad %i\n", port);
         break;
     
     case PAD_RELEASE:
@@ -319,7 +315,6 @@ connect_port(LV2_Handle instance,
     case pr10: case pr11: case pr12: case pr13: case pr14: case pr15: case pr16:
         // hack the enum to access the right array slice
         self->padData[ port - int(PAD_RELEASE) ].r = (float*)data;
-        printf("ADSR Release: Pad %i\n", port);
         break;
     
     default:
@@ -544,22 +539,23 @@ run(LV2_Handle instance, uint32_t n_samples)
       // write path to UI so it loads the waveform
       lv2_atom_forge_frame_time(&self->forge, 0);
       LV2_Atom_Forge_Frame set_frame;
-
+      
       //LV2_Atom* set = (LV2_Atom*)
       lv2_atom_forge_blank(&self->forge, &set_frame, 1, self->uris->atom_eventTransfer);
-
+      
       lv2_atom_forge_property_head(&self->forge, self->uris->fabla_Waveform, 0);
       LV2_Atom_Forge_Frame body_frame;
       lv2_atom_forge_blank(&self->forge, &body_frame, 2, 0);
-
+      
       lv2_atom_forge_property_head(&self->forge, self->uris->fabla_pad, 0);
       lv2_atom_forge_int(&self->forge, self->updateUiPathCounter);
-
+      
+      
       lv2_atom_forge_property_head(&self->forge, self->uris->fabla_filename, 0);
       lv2_atom_forge_path(&self->forge,
                           self->samples[self->updateUiPathCounter]->path,
-                          self->samples[self->updateUiPathCounter]->path_len );
-
+                          self->samples[self->updateUiPathCounter]->path_len);
+      
       lv2_atom_forge_pop(&self->forge, &body_frame);
       lv2_atom_forge_pop(&self->forge, &set_frame);
     }
@@ -629,7 +625,7 @@ run(LV2_Handle instance, uint32_t n_samples)
   self->uiUpdateCounter += n_samples;
   
   // disable for Atom debug purposes: stops the huge stream of Atoms
-  if ( self->uiUpdateCounter > self->sr / 15 ) //  false )// 
+  if ( false )// self->uiUpdateCounter > self->sr / 15 ) //  
   {
     // send levels to UI
     float L = self->meter->getLeftDB();

@@ -98,7 +98,7 @@ static void cleanup(LV2UI_Handle ui) {
     //printf("cleanup()\n");
     Fabla *pluginGui = (Fabla *) ui;
     delete pluginGui->widget;
-    free( pluginGui);
+    free( pluginGui );
 }
 
 static void port_event(LV2UI_Handle handle,
@@ -263,7 +263,6 @@ static void port_event(LV2UI_Handle handle,
             lv2_atom_object_get(obj, self->uris->fabla_Waveform, &body, 0);
             if (body)
             {
-              //printf( "UI: recieved waveform data\n" );
               const LV2_Atom_Int* padNum = 0;
               lv2_atom_object_get( body, self->uris->fabla_pad, &padNum, 0);
               int pad = -1;
@@ -275,6 +274,11 @@ static void port_event(LV2UI_Handle handle,
               const char* f = 0;
               if ( path )
                 f = (const char*)LV2_ATOM_BODY(path);
+              
+              if ( f )
+                printf( "UI: recieved waveform, path: %s\n", f );
+              else
+                printf( "UI: recieved waveform, path: f == 0\n" );
               
               if ( pad == -1 || f == 0 )
               {
