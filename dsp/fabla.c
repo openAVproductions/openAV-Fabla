@@ -535,7 +535,7 @@ run(LV2_Handle instance, uint32_t n_samples)
   {
     if ( self->samples[self->updateUiPathCounter] )
     {
-      //lv2_log_note(&self->logger, "writing Atom %i to UI\n", self->updateUiPathCounter);
+      lv2_log_note(&self->logger, "writing Atom %i to UI: %s\n", self->updateUiPathCounter, self->samples[self->updateUiPathCounter]->path);
       // write path to UI so it loads the waveform
       lv2_atom_forge_frame_time(&self->forge, 0);
       LV2_Atom_Forge_Frame set_frame;
@@ -545,7 +545,7 @@ run(LV2_Handle instance, uint32_t n_samples)
       
       lv2_atom_forge_property_head(&self->forge, self->uris->fabla_Waveform, 0);
       LV2_Atom_Forge_Frame body_frame;
-      lv2_atom_forge_blank(&self->forge, &body_frame, 2, 0);
+      lv2_atom_forge_blank(&self->forge, &body_frame, 1, 0);
       
       lv2_atom_forge_property_head(&self->forge, self->uris->fabla_pad, 0);
       lv2_atom_forge_int(&self->forge, self->updateUiPathCounter);

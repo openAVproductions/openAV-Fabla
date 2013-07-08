@@ -277,8 +277,6 @@ static void port_event(LV2UI_Handle handle,
               
               if ( f )
                 printf( "UI: recieved waveform, path: %s\n", f );
-              else
-                printf( "UI: recieved waveform, path: f == 0\n" );
               
               if ( pad == -1 || f == 0 )
               {
@@ -295,10 +293,6 @@ static void port_event(LV2UI_Handle handle,
               {
                 printf( "UI Failed to open sample '%s'\n", f);
                 return;
-              }
-              else
-              {
-                //lv2_log_error(&self->logger, "Sample has '%i' samples\n", info.frames);
               }
               
               // Read data
@@ -372,21 +366,6 @@ static void port_event(LV2UI_Handle handle,
                 case 15: ui->p16->loaded(true); break;
                 default: break;
               }
-              
-              /*
-              for(int i = 0; i < 10; i++)
-              {
-                int pos = i + msg*10;
-                printf("waveform data [%i] = %f\n", pos, data[i] );
-                ui->padData[pad].waveform[pos] = data[i]; //sin( 3.14* float(i * 2 * pad) / UI_WAVEFORM_PIXELS );
-              }
-              
-              // sets the current waveform to the one just loaded: not always accurate
-              ui->waveform->setData( UI_WAVEFORM_PIXELS, &ui->padData[pad].waveform[0] );
-              
-              ui->padData[pad].loaded = true;
-              ui->waveform->redraw();
-              */
             }
           }
         break;
