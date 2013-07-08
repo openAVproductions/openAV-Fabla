@@ -15,7 +15,7 @@ class Voice
     Voice(int rate)
     {
       sr = rate;
-      playingBool = 0;
+      playingBool = false;
       
       sample = 0;
       
@@ -76,7 +76,16 @@ class Voice
     {
       if( playingBool && sample )
       {
-        float tmp = sample->data[int(index)] * sample->gain *  adsr->process(nframes);
+        // linearly interpolate between samples
+        float x0 = index - int(index);
+        int x1 = int(index);
+        int x2 = x1 + 1;
+        float y1 = sample->data[x1];
+        float y2 = sample->data[x2];
+        
+        float out = y1 + ( y2 - y1 ) * x0;
+        
+        float tmp = out * sample->gain *  adsr->process(nframes);
         
         // sin / cos based amplitude panning
         float panL = cos(pan * 3.14/2.f);
@@ -85,7 +94,10 @@ class Voice
         *bufL += tmp * panL;
         *bufR += tmp * panR;
         
-        float increment = 0.25 + (sample->speed * 1.5);
+        // pitch up twice the range
+        float increment = 0.5 + sample->speed;
+        if ( increment > 1.0001f )
+          increment = 1.0f + (increment-1.0f)*2;
         
         index += increment;
         
