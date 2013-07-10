@@ -322,7 +322,7 @@ connect_port(LV2_Handle instance,
   }
 }
 
-static void noteOn(FABLA_DSP* self, int note, int velocity)
+static void noteOn(FABLA_DSP* self, int note, int velocity, int frame)
 {
   // clip MIDI input, only play 16 samples
   if ( note > 15) note = 15;
@@ -346,7 +346,7 @@ static void noteOn(FABLA_DSP* self, int note, int velocity)
       self->voice[i]->setPan( self->samples[note]->pan );
       
       // play the voice
-      self->voice[i]->play( note, velocity );
+      self->voice[i]->play( note, velocity, frame );
       //lv2_log_note(&self->logger, "Voice %i gets note ON %i\n", i, note );
       alloced = true;
       break;
@@ -388,8 +388,6 @@ run(LV2_Handle instance, uint32_t n_samples)
   int evCounter = 0;
   LV2_ATOM_SEQUENCE_FOREACH(self->control_port, ev)
   {
-    //self->frame_offset = ev->time.frames;
-    
     if (ev->body.type == self->uris->midi_Event)
     {
       uint8_t* const data = (uint8_t* const)(ev + 1);
@@ -416,7 +414,7 @@ run(LV2_Handle instance, uint32_t n_samples)
         int n = int(data[1]) - 36;
         int v = int(data[2]);
         
-        noteOn( self, n, v );
+        noteOn( self, n, v, ev->time.frames );
       }
       else if ( (data[0] & 0xF0) == 0x80 )
       {
@@ -522,7 +520,7 @@ run(LV2_Handle instance, uint32_t n_samples)
         {
           int* p = (int*)LV2_ATOM_BODY(padNum);
           int pad = *p;
-          noteOn( self, pad, 120 );
+          noteOn( self, pad, 120, 0 );
         }
       }
       

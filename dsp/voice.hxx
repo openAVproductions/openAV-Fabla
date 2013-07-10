@@ -21,6 +21,9 @@ class Voice
       
       index = 0;
       
+      sampleCountdown = 0;
+      sampleCountdownQueued = false;
+      
       // center the pan. 0 = left, 1 = right
       pan = 0.5;
       
@@ -43,22 +46,34 @@ class Voice
       pan = p;
     }
     
-    void play(int inNote, int vel)
+    void play(int inNote, int vel, int sampleCD)
     {
       // if the voice doesn't have a sample: then don't play
       if ( sample )
       {
         adsr->trigger();
         
-        playingBool = true;
         note = inNote;
+        
+        // this will trigger the note on at the right nframe
+        sampleCountdown = sampleCD;
+        sampleCountdownQueued = true;
         
         index = 0;
       }
     }
     
     
-    bool playing(){return playingBool;}
+    bool playing()
+    {
+      // not currently playing, and not queued to play
+      if ( playingBool || sampleCountdownQueued )
+      {
+        return true;
+      }
+      
+      return false;
+    }
     
     void stopIfNoteEquals(int n)
     {
@@ -74,6 +89,16 @@ class Voice
     
     void process( int nframes, float* bufL, float* bufR )
     {
+      // counts down frames until note on
+      sampleCountdown--;
+      
+      if ( sampleCountdownQueued && sampleCountdown <= 0 )
+      {
+        playingBool = true;
+        // now that we're playing, disable queued flag
+        sampleCountdownQueued = false;
+      }
+      
       if( playingBool && sample )
       {
         // linearly interpolate between samples
@@ -125,6 +150,10 @@ class Voice
     // each voice has own index, allowing for voices playing the same
     // pad, without the "speedup" effect of incrementing the same index
     float index;
+    
+    // counts down frames until note on event
+    bool  sampleCountdownQueued;
+    float sampleCountdown;
     
     // pan per voice
     float pan;
