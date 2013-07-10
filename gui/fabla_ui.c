@@ -95,7 +95,7 @@ static LV2UI_Handle instantiate(const struct _LV2UI_Descriptor * descriptor,
 }
 
 static void cleanup(LV2UI_Handle ui) {
-    //printf("cleanup()\n");
+    //printf("FablaUI: cleanup()\n");
     Fabla *pluginGui = (Fabla *) ui;
     delete pluginGui->widget;
     free( pluginGui );
@@ -141,14 +141,14 @@ static void port_event(LV2UI_Handle handle,
       
       case ATOM_OUT:
           if (format != self->uris->atom_eventTransfer) {
-            printf("format != atom_eventTransfer\n");
+            printf("FablaUI: format != atom_eventTransfer\n");
             return;
           }
           
           {
             LV2_Atom* atom = (LV2_Atom*)buffer;
             if (atom->type != self->uris->atom_Blank) {
-              printf("atom->type != atom_Blank\n");
+              printf("FablaUI: atom->type != atom_Blank\n");
               return;
             }
             
@@ -276,29 +276,29 @@ static void port_event(LV2UI_Handle handle,
                 f = (const char*)LV2_ATOM_BODY(path);
               
               if ( f )
-                printf( "UI: recieved waveform, path: %s\n", f );
+                printf( "FablaUI:  recieved waveform, path: %s\n", f );
               
               if ( pad == -1 || f == 0 )
               {
-                printf( "UI: Error, waveform data message malformed\n" );
+                printf( "FablaUI:  Error, waveform data message malformed\n" );
                 return;
               }
               
-              //printf("UI recieved waveform data on pad %i, path %s\nLoading sample now...\n", pad , f);
+              //printf("FablaUI:  recieved waveform data on pad %i, path %s\nLoading sample now...\n", pad , f);
               
               SF_INFO info;
               SNDFILE* const sndfile = sf_open( f, SFM_READ, &info);
               
               if (!sndfile) // || !info.frames ) { // || (info.channels != 1)) {
               {
-                printf( "UI Failed to open sample '%s'\n", f);
+                printf( "FablaUI:  Failed to open sample '%s'\n", f);
                 return;
               }
               
               // Read data
               float* const data = (float*)malloc(sizeof(float) * info.frames);
               if (!data) {
-                printf("UI Failed to allocate memory for sample\n");
+                printf("FablaUI: Failed to allocate memory for sample\n");
                 return;
               }
               sf_seek(sndfile, 0ul, SEEK_SET);
@@ -330,7 +330,7 @@ static void port_event(LV2UI_Handle handle,
               int i = name.find_last_of('/') + 1;
               std::string sub = name.substr( i );
               ui->padData[pad].name = sub;
-              printf("name %s\ni %i\nsub %s\n", name.c_str(), i, sub.c_str() );
+              printf("FablaUI: name %s\ni %i\nsub %s\n", name.c_str(), i, sub.c_str() );
               
               ui->padData[pad].loaded = true;
               ui->padData[pad].waveformLength = info.frames;
