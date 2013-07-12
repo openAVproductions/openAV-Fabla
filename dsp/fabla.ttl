@@ -17,8 +17,8 @@
   
   lv2:binary <fabla.so> ;
   lv2:requiredFeature urid:map;
-  lv2:requiredFeature work:schedule ;
   
+  lv2:optionalFeature work:schedule ;
   lv2:optionalFeature lv2:hardRtCapable ;
   lv2:optionalFeature ui:noUserResize ;
   

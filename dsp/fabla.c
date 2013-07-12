@@ -81,6 +81,7 @@ typedef struct {
   LV2_URID_Unmap* unmap;
   
   // Worker threads
+  bool haveWorkerExtension;
   LV2_Worker_Schedule* schedule;
   
   // Lv2 Log
@@ -188,6 +189,8 @@ instantiate(const LV2_Descriptor*     descriptor,
   self->sr  = rate;
   self->bpm = 120.0f;
   
+  self->schedule = 0;
+  
   // act on host features
   for (int i = 0; features[i]; ++i) {
     if (!strcmp(features[i]->URI, LV2_URID__map)) {
@@ -199,6 +202,15 @@ instantiate(const LV2_Descriptor*     descriptor,
     } else if (!strcmp(features[i]->URI, LV2_LOG__log)) {
       self->log = (LV2_Log_Log*)features[i]->data;
     }
+  }
+  
+  if ( self->schedule == 0 && self->log )
+  {
+    lv2_log_warning(&self->logger, "Fabla: Warning, your host doesn't support the Worker extension. Loading samples may cause Xruns!");
+  }
+  else if ( self->schedule == 0 )
+  {
+    printf("Fabla: Warning, your host doesn't support the Worker extension. Loading samples may cause Xruns!");
   }
   
   // initialize master output smoothing state
@@ -397,7 +409,6 @@ run(LV2_Handle instance, uint32_t n_samples)
   lv2_atom_forge_set_buffer(&self->forge, (uint8_t*)self->notify_port, notify_capacity);
   lv2_atom_forge_sequence_head(&self->forge, &self->notify_frame, 0);
   
-  int evCounter = 0;
   LV2_ATOM_SEQUENCE_FOREACH(self->control_port, ev)
   {
     if (ev->body.type == self->uris->midi_Event)
@@ -481,17 +492,35 @@ run(LV2_Handle instance, uint32_t n_samples)
         //SampleMessage message(self->uris->fabla_Load);
         //message.pad = pad;
         
-        size_t s = sizeof(SampleMessage);
+        //size_t s = sizeof(SampleMessage);
         //lv2_log_note(&self->logger, "fabla_Load: scheduling work now, size %i\n", int(s) );
         
-        //self->schedule->schedule_work(self->schedule->handle, s, &message);
         
-        Sample* newSamp = load_sample(self, f);
+        Sample* newSamp = 0;
+        if ( self->schedule )
+        {
+          // TODO: use Worker extension
+          newSamp = load_sample(self, f);
+          //self->schedule->schedule_work(self->schedule->handle, s, &message);
+        }
+        else
+        {
+          newSamp = load_sample(self, f);
+        }
+        
         
         if( self->samples[pad] != 0 )
         {
           //lv2_log_note(&self->logger, "freeing sample with %i frames\n", int(self->samples[pad]->info.frames) );
-          free( self->samples[pad]->data );
+          if ( self->schedule )
+          {
+            // TODO: use Worker extension
+            free( self->samples[pad]->data );
+          }
+          else
+          {
+            free( self->samples[pad]->data );
+          }
         }
         
         self->samples[pad] = newSamp;
