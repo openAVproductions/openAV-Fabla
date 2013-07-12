@@ -39,25 +39,25 @@
     atom:bufferType atom:Sequence ;
     lv2:index 1 ;
     lv2:symbol "notify" ;
-    lv2:name "Notify"
+    lv2:name "Notify";
   ] , [
     a lv2:AudioPort ,
       lv2:OutputPort ;
     lv2:index 2 ;
     lv2:symbol "left" ;
-    lv2:name "Audio Output Left"
+    lv2:name "Audio Output Left";
   ] , [
     a lv2:AudioPort ,
       lv2:OutputPort ;
     lv2:index 3 ;
     lv2:symbol "right" ;
-    lv2:name "Audio Output Right"
+    lv2:name "Audio Output Right";
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
     lv2:index 4 ;
     lv2:symbol "volume" ;
-    lv2:name "Master"
+    lv2:name "Master";
     lv2:default 0.75;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -66,7 +66,7 @@
       lv2:InputPort ;
     lv2:index 5 ;
     lv2:symbol "compressor_attack" ;
-    lv2:name "Compressor Attack"
+    lv2:name "Compressor Attack";
     lv2:default 0.15 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -75,7 +75,7 @@
       lv2:InputPort ;
     lv2:index 6 ;
     lv2:symbol "compressor_decay" ;
-    lv2:name "Compressor Decay"
+    lv2:name "Compressor Decay";
     lv2:default 0.3 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -84,7 +84,7 @@
       lv2:InputPort ;
     lv2:index 7 ;
     lv2:symbol "compressor_threshold" ;
-    lv2:name "Compressor Threshold"
+    lv2:name "Compressor Threshold";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -93,7 +93,7 @@
       lv2:InputPort ;
     lv2:index 8 ;
     lv2:symbol "compressor_ratio" ;
-    lv2:name "Compressor Ratio"
+    lv2:name "Compressor Ratio";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -102,7 +102,7 @@
       lv2:InputPort ;
     lv2:index 9 ;
     lv2:symbol "compressor_makeup" ;
-    lv2:name "Compressor Makeup"
+    lv2:name "Compressor Makeup";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -111,7 +111,7 @@
       lv2:InputPort ;
     lv2:index 10 ;
     lv2:symbol "compressor_enable" ;
-    lv2:name "Compressor Enable"
+    lv2:name "Compressor Enable";
     lv2:default 0.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -125,7 +125,7 @@
       lv2:InputPort ;
     lv2:index 11;
     lv2:symbol "pad_gain_1" ;
-    lv2:name "Gain 1"
+    lv2:name "Gain 1";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -134,7 +134,7 @@
       lv2:InputPort ;
     lv2:index 12;
     lv2:symbol "pad_gain_2" ;
-    lv2:name "Gain 2"
+    lv2:name "Gain 2";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -143,7 +143,7 @@
       lv2:InputPort ;
     lv2:index 13;
     lv2:symbol "pad_gain_3" ;
-    lv2:name "Gain 3"
+    lv2:name "Gain 3";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -152,7 +152,7 @@
       lv2:InputPort ;
     lv2:index 14;
     lv2:symbol "pad_gain_4" ;
-    lv2:name "Gain 4"
+    lv2:name "Gain 4";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -161,7 +161,7 @@
       lv2:InputPort ;
     lv2:index 15;
     lv2:symbol "pad_gain_5" ;
-    lv2:name "Gain 5"
+    lv2:name "Gain 5";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -170,7 +170,7 @@
       lv2:InputPort ;
     lv2:index 16;
     lv2:symbol "pad_gain_6" ;
-    lv2:name "Gain 6"
+    lv2:name "Gain 6";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -179,7 +179,7 @@
       lv2:InputPort ;
     lv2:index 17;
     lv2:symbol "pad_gain_7" ;
-    lv2:name "Gain 7"
+    lv2:name "Gain 7";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -188,7 +188,7 @@
       lv2:InputPort ;
     lv2:index 18;
     lv2:symbol "pad_gain_8" ;
-    lv2:name "Gain 8"
+    lv2:name "Gain 8";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -197,7 +197,7 @@
       lv2:InputPort ;
     lv2:index 19;
     lv2:symbol "pad_gain_9" ;
-    lv2:name "Gain 9"
+    lv2:name "Gain 9";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -206,7 +206,7 @@
       lv2:InputPort ;
     lv2:index 20;
     lv2:symbol "pad_gain_10" ;
-    lv2:name "Gain 10"
+    lv2:name "Gain 10";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -215,7 +215,7 @@
       lv2:InputPort ;
     lv2:index 21;
     lv2:symbol "pad_gain_11" ;
-    lv2:name "Gain 11"
+    lv2:name "Gain 11";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -224,7 +224,7 @@
       lv2:InputPort ;
     lv2:index 22;
     lv2:symbol "pad_gain_12" ;
-    lv2:name "Gain 12"
+    lv2:name "Gain 12";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -233,7 +233,7 @@
       lv2:InputPort ;
     lv2:index 23;
     lv2:symbol "pad_gain_13" ;
-    lv2:name "Gain 13"
+    lv2:name "Gain 13";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -242,7 +242,7 @@
       lv2:InputPort ;
     lv2:index 24;
     lv2:symbol "pad_gain_14" ;
-    lv2:name "Gain 14"
+    lv2:name "Gain 14";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -251,7 +251,7 @@
       lv2:InputPort ;
     lv2:index 25;
     lv2:symbol "pad_gain_15" ;
-    lv2:name "Gain 15"
+    lv2:name "Gain 15";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -260,7 +260,7 @@
       lv2:InputPort ;
     lv2:index 26;
     lv2:symbol "pad_gain_16" ;
-    lv2:name "Gain 16"
+    lv2:name "Gain 16";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -273,7 +273,7 @@
       lv2:InputPort ;
     lv2:index 27;
     lv2:symbol "pad_speed_1" ;
-    lv2:name "Speed 1"
+    lv2:name "Speed 1";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -282,7 +282,7 @@
       lv2:InputPort ;
     lv2:index 28;
     lv2:symbol "pad_speed_2" ;
-    lv2:name "Speed 2"
+    lv2:name "Speed 2";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -291,7 +291,7 @@
       lv2:InputPort ;
     lv2:index 29;
     lv2:symbol "pad_speed_3" ;
-    lv2:name "Speed 3"
+    lv2:name "Speed 3";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -300,7 +300,7 @@
       lv2:InputPort ;
     lv2:index 30;
     lv2:symbol "pad_speed_4" ;
-    lv2:name "Speed 4"
+    lv2:name "Speed 4";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -309,7 +309,7 @@
       lv2:InputPort ;
     lv2:index 31;
     lv2:symbol "pad_speed_5" ;
-    lv2:name "Speed 5"
+    lv2:name "Speed 5";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -318,7 +318,7 @@
       lv2:InputPort ;
     lv2:index 32;
     lv2:symbol "pad_speed_6" ;
-    lv2:name "Speed 6"
+    lv2:name "Speed 6";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -327,7 +327,7 @@
       lv2:InputPort ;
     lv2:index 33;
     lv2:symbol "pad_speed_7" ;
-    lv2:name "Speed 7"
+    lv2:name "Speed 7";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -336,7 +336,7 @@
       lv2:InputPort ;
     lv2:index 34;
     lv2:symbol "pad_speed_8" ;
-    lv2:name "Speed 8"
+    lv2:name "Speed 8";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -345,7 +345,7 @@
       lv2:InputPort ;
     lv2:index 35;
     lv2:symbol "pad_speed_9" ;
-    lv2:name "Speed 9"
+    lv2:name "Speed 9";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -354,7 +354,7 @@
       lv2:InputPort ;
     lv2:index 36;
     lv2:symbol "pad_speed_10" ;
-    lv2:name "Speed 10"
+    lv2:name "Speed 10";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -363,7 +363,7 @@
       lv2:InputPort ;
     lv2:index 37;
     lv2:symbol "pad_speed_11" ;
-    lv2:name "Speed 11"
+    lv2:name "Speed 11";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -372,7 +372,7 @@
       lv2:InputPort ;
     lv2:index 38;
     lv2:symbol "pad_speed_12" ;
-    lv2:name "Speed 12"
+    lv2:name "Speed 12";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -381,7 +381,7 @@
       lv2:InputPort ;
     lv2:index 39;
     lv2:symbol "pad_speed_13" ;
-    lv2:name "Speed 13"
+    lv2:name "Speed 13";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -390,7 +390,7 @@
       lv2:InputPort ;
     lv2:index 40;
     lv2:symbol "pad_speed_14" ;
-    lv2:name "Speed 14"
+    lv2:name "Speed 14";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -399,7 +399,7 @@
       lv2:InputPort ;
     lv2:index 41;
     lv2:symbol "pad_speed_15" ;
-    lv2:name "Speed 15"
+    lv2:name "Speed 15";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -408,7 +408,7 @@
       lv2:InputPort ;
     lv2:index 42;
     lv2:symbol "pad_speed_16" ;
-    lv2:name "Speed 16"
+    lv2:name "Speed 16";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -421,7 +421,7 @@
       lv2:InputPort ;
     lv2:index 43;
     lv2:symbol "pad_pan_1" ;
-    lv2:name "Pan 1"
+    lv2:name "Pan 1";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -430,7 +430,7 @@
       lv2:InputPort ;
     lv2:index 44;
     lv2:symbol "pad_pan_2" ;
-    lv2:name "Pan 2"
+    lv2:name "Pan 2";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -439,7 +439,7 @@
       lv2:InputPort ;
     lv2:index 45;
     lv2:symbol "pad_pan_3" ;
-    lv2:name "Pan 3"
+    lv2:name "Pan 3";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -448,7 +448,7 @@
       lv2:InputPort ;
     lv2:index 46;
     lv2:symbol "pad_pan_4" ;
-    lv2:name "Pan 4"
+    lv2:name "Pan 4";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -457,7 +457,7 @@
       lv2:InputPort ;
     lv2:index 47;
     lv2:symbol "pad_pan_5" ;
-    lv2:name "Pan 5"
+    lv2:name "Pan 5";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -466,7 +466,7 @@
       lv2:InputPort ;
     lv2:index 48;
     lv2:symbol "pad_pan_6" ;
-    lv2:name "Pan 6"
+    lv2:name "Pan 6";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -475,7 +475,7 @@
       lv2:InputPort ;
     lv2:index 49;
     lv2:symbol "pad_pan_7" ;
-    lv2:name "Pan 7"
+    lv2:name "Pan 7";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -484,7 +484,7 @@
       lv2:InputPort ;
     lv2:index 50;
     lv2:symbol "pad_pan_8" ;
-    lv2:name "Pan 8"
+    lv2:name "Pan 8";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -493,7 +493,7 @@
       lv2:InputPort ;
     lv2:index 51;
     lv2:symbol "pad_pan_9" ;
-    lv2:name "Pan 9"
+    lv2:name "Pan 9";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -502,7 +502,7 @@
       lv2:InputPort ;
     lv2:index 52;
     lv2:symbol "pad_pan_10" ;
-    lv2:name "Pan 10"
+    lv2:name "Pan 10";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -511,7 +511,7 @@
       lv2:InputPort ;
     lv2:index 53;
     lv2:symbol "pad_pan_11" ;
-    lv2:name "Pan 11"
+    lv2:name "Pan 11";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -520,7 +520,7 @@
       lv2:InputPort ;
     lv2:index 54;
     lv2:symbol "pad_pan_12" ;
-    lv2:name "Pan 12"
+    lv2:name "Pan 12";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -529,7 +529,7 @@
       lv2:InputPort ;
     lv2:index 55;
     lv2:symbol "pad_pan_13" ;
-    lv2:name "Pan 13"
+    lv2:name "Pan 13";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -538,7 +538,7 @@
       lv2:InputPort ;
     lv2:index 56;
     lv2:symbol "pad_pan_14" ;
-    lv2:name "Pan 14"
+    lv2:name "Pan 14";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -547,7 +547,7 @@
       lv2:InputPort ;
     lv2:index 57;
     lv2:symbol "pad_pan_15" ;
-    lv2:name "Pan 15"
+    lv2:name "Pan 15";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -556,7 +556,7 @@
       lv2:InputPort ;
     lv2:index 58;
     lv2:symbol "pad_pan_16" ;
-    lv2:name "Pan 16"
+    lv2:name "Pan 16";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -569,7 +569,7 @@
       lv2:InputPort ;
     lv2:index 59;
     lv2:symbol "pad_attack_1" ;
-    lv2:name "Attack 1"
+    lv2:name "Attack 1";
     lv2:default 0.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -578,7 +578,7 @@
       lv2:InputPort ;
     lv2:index 60;
     lv2:symbol "pad_attack_2" ;
-    lv2:name "Attack 2"
+    lv2:name "Attack 2";
     lv2:default 0.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -587,7 +587,7 @@
       lv2:InputPort ;
     lv2:index 61;
     lv2:symbol "pad_attack_3" ;
-    lv2:name "Attack 3"
+    lv2:name "Attack 3";
     lv2:default 0.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -596,7 +596,7 @@
       lv2:InputPort ;
     lv2:index 62;
     lv2:symbol "pad_attack_4" ;
-    lv2:name "Attack 4"
+    lv2:name "Attack 4";
     lv2:default 0.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -605,7 +605,7 @@
       lv2:InputPort ;
     lv2:index 63;
     lv2:symbol "pad_attack_5" ;
-    lv2:name "Attack 5"
+    lv2:name "Attack 5";
     lv2:default 0.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -614,7 +614,7 @@
       lv2:InputPort ;
     lv2:index 64;
     lv2:symbol "pad_attack_6" ;
-    lv2:name "Attack 6"
+    lv2:name "Attack 6";
     lv2:default 0.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -623,7 +623,7 @@
       lv2:InputPort ;
     lv2:index 65;
     lv2:symbol "pad_attack_7" ;
-    lv2:name "Attack 7"
+    lv2:name "Attack 7";
     lv2:default 0.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -632,7 +632,7 @@
       lv2:InputPort ;
     lv2:index 66;
     lv2:symbol "pad_attack_8" ;
-    lv2:name "Attack 8"
+    lv2:name "Attack 8";
     lv2:default 0.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -641,7 +641,7 @@
       lv2:InputPort ;
     lv2:index 67;
     lv2:symbol "pad_attack_9" ;
-    lv2:name "Attack 9"
+    lv2:name "Attack 9";
     lv2:default 0.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -650,7 +650,7 @@
       lv2:InputPort ;
     lv2:index 68;
     lv2:symbol "pad_attack_10" ;
-    lv2:name "Attack 10"
+    lv2:name "Attack 10";
     lv2:default 0.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -659,7 +659,7 @@
       lv2:InputPort ;
     lv2:index 69;
     lv2:symbol "pad_attack_11" ;
-    lv2:name "Attack 11"
+    lv2:name "Attack 11";
     lv2:default 0.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -668,7 +668,7 @@
       lv2:InputPort ;
     lv2:index 70;
     lv2:symbol "pad_attack_12" ;
-    lv2:name "Attack 12"
+    lv2:name "Attack 12";
     lv2:default 0.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -677,7 +677,7 @@
       lv2:InputPort ;
     lv2:index 71;
     lv2:symbol "pad_attack_13" ;
-    lv2:name "Attack 13"
+    lv2:name "Attack 13";
     lv2:default 0.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -686,7 +686,7 @@
       lv2:InputPort ;
     lv2:index 72;
     lv2:symbol "pad_attack_14" ;
-    lv2:name "Attack 14"
+    lv2:name "Attack 14";
     lv2:default 0.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -695,7 +695,7 @@
       lv2:InputPort ;
     lv2:index 73;
     lv2:symbol "pad_attack_15" ;
-    lv2:name "Attack 15"
+    lv2:name "Attack 15";
     lv2:default 0.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -704,7 +704,7 @@
       lv2:InputPort ;
     lv2:index 74;
     lv2:symbol "pad_attack_16" ;
-    lv2:name "Attack 16"
+    lv2:name "Attack 16";
     lv2:default 0.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -717,7 +717,7 @@
       lv2:InputPort ;
     lv2:index 75;
     lv2:symbol "pad_decay_1" ;
-    lv2:name "Decay 1"
+    lv2:name "Decay 1";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -726,7 +726,7 @@
       lv2:InputPort ;
     lv2:index 76;
     lv2:symbol "pad_decay_2" ;
-    lv2:name "Decay 2"
+    lv2:name "Decay 2";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -735,7 +735,7 @@
       lv2:InputPort ;
     lv2:index 77;
     lv2:symbol "pad_decay_3" ;
-    lv2:name "Decay 3"
+    lv2:name "Decay 3";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -744,7 +744,7 @@
       lv2:InputPort ;
     lv2:index 78;
     lv2:symbol "pad_decay_4" ;
-    lv2:name "Decay 4"
+    lv2:name "Decay 4";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -753,7 +753,7 @@
       lv2:InputPort ;
     lv2:index 79;
     lv2:symbol "pad_decay_5" ;
-    lv2:name "Decay 5"
+    lv2:name "Decay 5";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -762,7 +762,7 @@
       lv2:InputPort ;
     lv2:index 80;
     lv2:symbol "pad_decay_6" ;
-    lv2:name "Decay 6"
+    lv2:name "Decay 6";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -771,7 +771,7 @@
       lv2:InputPort ;
     lv2:index 81;
     lv2:symbol "pad_decay_7" ;
-    lv2:name "Decay 7"
+    lv2:name "Decay 7";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -780,7 +780,7 @@
       lv2:InputPort ;
     lv2:index 82;
     lv2:symbol "pad_decay_8" ;
-    lv2:name "Decay 8"
+    lv2:name "Decay 8";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -789,7 +789,7 @@
       lv2:InputPort ;
     lv2:index 83;
     lv2:symbol "pad_decay_9" ;
-    lv2:name "Decay 9"
+    lv2:name "Decay 9";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -798,7 +798,7 @@
       lv2:InputPort ;
     lv2:index 84;
     lv2:symbol "pad_decay_10" ;
-    lv2:name "Decay 10"
+    lv2:name "Decay 10";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -807,7 +807,7 @@
       lv2:InputPort ;
     lv2:index 85;
     lv2:symbol "pad_decay_11" ;
-    lv2:name "Decay 11"
+    lv2:name "Decay 11";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -816,7 +816,7 @@
       lv2:InputPort ;
     lv2:index 86;
     lv2:symbol "pad_decay_12" ;
-    lv2:name "Decay 12"
+    lv2:name "Decay 12";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -825,7 +825,7 @@
       lv2:InputPort ;
     lv2:index 87;
     lv2:symbol "pad_decay_13" ;
-    lv2:name "Decay 13"
+    lv2:name "Decay 13";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -834,7 +834,7 @@
       lv2:InputPort ;
     lv2:index 88;
     lv2:symbol "pad_decay_14" ;
-    lv2:name "Decay 14"
+    lv2:name "Decay 14";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -843,7 +843,7 @@
       lv2:InputPort ;
     lv2:index 89;
     lv2:symbol "pad_decay_15" ;
-    lv2:name "Decay 15"
+    lv2:name "Decay 15";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -852,7 +852,7 @@
       lv2:InputPort ;
     lv2:index 90;
     lv2:symbol "pad_decay_16" ;
-    lv2:name "Decay 16"
+    lv2:name "Decay 16";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -865,7 +865,7 @@
       lv2:InputPort ;
     lv2:index 91;
     lv2:symbol "pad_sustain_1" ;
-    lv2:name "Sustain 1"
+    lv2:name "Sustain 1";
     lv2:default 1.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -874,7 +874,7 @@
       lv2:InputPort ;
     lv2:index 92;
     lv2:symbol "pad_sustain_2" ;
-    lv2:name "Sustain 2"
+    lv2:name "Sustain 2";
     lv2:default 1.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -883,7 +883,7 @@
       lv2:InputPort ;
     lv2:index 93;
     lv2:symbol "pad_sustain_3" ;
-    lv2:name "Sustain 3"
+    lv2:name "Sustain 3";
     lv2:default 1.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -892,7 +892,7 @@
       lv2:InputPort ;
     lv2:index 94;
     lv2:symbol "pad_sustain_4" ;
-    lv2:name "Sustain 4"
+    lv2:name "Sustain 4";
     lv2:default 1.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -901,7 +901,7 @@
       lv2:InputPort ;
     lv2:index 95;
     lv2:symbol "pad_sustain_5" ;
-    lv2:name "Sustain 5"
+    lv2:name "Sustain 5";
     lv2:default 1.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -910,7 +910,7 @@
       lv2:InputPort ;
     lv2:index 96;
     lv2:symbol "pad_sustain_6" ;
-    lv2:name "Sustain 6"
+    lv2:name "Sustain 6";
     lv2:default 1.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -919,7 +919,7 @@
       lv2:InputPort ;
     lv2:index 97;
     lv2:symbol "pad_sustain_7" ;
-    lv2:name "Sustain 7"
+    lv2:name "Sustain 7";
     lv2:default 1.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -928,7 +928,7 @@
       lv2:InputPort ;
     lv2:index 98;
     lv2:symbol "pad_sustain_8" ;
-    lv2:name "Sustain 8"
+    lv2:name "Sustain 8";
     lv2:default 1.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -937,7 +937,7 @@
       lv2:InputPort ;
     lv2:index 99;
     lv2:symbol "pad_sustain_9" ;
-    lv2:name "Sustain 9"
+    lv2:name "Sustain 9";
     lv2:default 1.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -946,7 +946,7 @@
       lv2:InputPort ;
     lv2:index 100;
     lv2:symbol "pad_sustain_10" ;
-    lv2:name "Sustain 10"
+    lv2:name "Sustain 10";
     lv2:default 1.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -955,7 +955,7 @@
       lv2:InputPort ;
     lv2:index 101;
     lv2:symbol "pad_sustain_11" ;
-    lv2:name "Sustain 11"
+    lv2:name "Sustain 11";
     lv2:default 1.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -964,7 +964,7 @@
       lv2:InputPort ;
     lv2:index 102;
     lv2:symbol "pad_sustain_12" ;
-    lv2:name "Sustain 12"
+    lv2:name "Sustain 12";
     lv2:default 1.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -973,7 +973,7 @@
       lv2:InputPort ;
     lv2:index 103;
     lv2:symbol "pad_sustain_13" ;
-    lv2:name "Sustain 13"
+    lv2:name "Sustain 13";
     lv2:default 1.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -982,7 +982,7 @@
       lv2:InputPort ;
     lv2:index 104;
     lv2:symbol "pad_sustain_14" ;
-    lv2:name "Sustain 14"
+    lv2:name "Sustain 14";
     lv2:default 1.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -991,7 +991,7 @@
       lv2:InputPort ;
     lv2:index 105;
     lv2:symbol "pad_sustain_15" ;
-    lv2:name "Sustain 15"
+    lv2:name "Sustain 15";
     lv2:default 1.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -1000,7 +1000,7 @@
       lv2:InputPort ;
     lv2:index 106;
     lv2:symbol "pad_sustain_16" ;
-    lv2:name "Sustain 16"
+    lv2:name "Sustain 16";
     lv2:default 1.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -1013,7 +1013,7 @@
       lv2:InputPort ;
     lv2:index 107;
     lv2:symbol "pad_release_1" ;
-    lv2:name "Release 1"
+    lv2:name "Release 1";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -1022,7 +1022,7 @@
       lv2:InputPort ;
     lv2:index 108;
     lv2:symbol "pad_release_2" ;
-    lv2:name "Release 2"
+    lv2:name "Release 2";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -1031,7 +1031,7 @@
       lv2:InputPort ;
     lv2:index 109;
     lv2:symbol "pad_release_3" ;
-    lv2:name "Release 3"
+    lv2:name "Release 3";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -1040,7 +1040,7 @@
       lv2:InputPort ;
     lv2:index 110;
     lv2:symbol "pad_release_4" ;
-    lv2:name "Release 4"
+    lv2:name "Release 4";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -1049,7 +1049,7 @@
       lv2:InputPort ;
     lv2:index 111;
     lv2:symbol "pad_release_5" ;
-    lv2:name "Release 5"
+    lv2:name "Release 5";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -1058,7 +1058,7 @@
       lv2:InputPort ;
     lv2:index 112;
     lv2:symbol "pad_release_6" ;
-    lv2:name "Release 6"
+    lv2:name "Release 6";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -1067,7 +1067,7 @@
       lv2:InputPort ;
     lv2:index 113;
     lv2:symbol "pad_release_7" ;
-    lv2:name "Release 7"
+    lv2:name "Release 7";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -1076,7 +1076,7 @@
       lv2:InputPort ;
     lv2:index 114;
     lv2:symbol "pad_release_8" ;
-    lv2:name "Release 8"
+    lv2:name "Release 8";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -1085,7 +1085,7 @@
       lv2:InputPort ;
     lv2:index 115;
     lv2:symbol "pad_release_9" ;
-    lv2:name "Release 9"
+    lv2:name "Release 9";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -1094,7 +1094,7 @@
       lv2:InputPort ;
     lv2:index 116;
     lv2:symbol "pad_release_10" ;
-    lv2:name "Release 10"
+    lv2:name "Release 10";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -1103,7 +1103,7 @@
       lv2:InputPort ;
     lv2:index 117;
     lv2:symbol "pad_release_11" ;
-    lv2:name "Release 11"
+    lv2:name "Release 11";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -1112,7 +1112,7 @@
       lv2:InputPort ;
     lv2:index 118;
     lv2:symbol "pad_release_12" ;
-    lv2:name "Release 12"
+    lv2:name "Release 12";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -1121,7 +1121,7 @@
       lv2:InputPort ;
     lv2:index 119;
     lv2:symbol "pad_release_13" ;
-    lv2:name "Release 13"
+    lv2:name "Release 13";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -1130,7 +1130,7 @@
       lv2:InputPort ;
     lv2:index 120;
     lv2:symbol "pad_release_14" ;
-    lv2:name "Release 14"
+    lv2:name "Release 14";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -1139,7 +1139,7 @@
       lv2:InputPort ;
     lv2:index 121;
     lv2:symbol "pad_release_15" ;
-    lv2:name "Release 15"
+    lv2:name "Release 15";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
@@ -1148,7 +1148,7 @@
       lv2:InputPort ;
     lv2:index 122;
     lv2:symbol "pad_release_16" ;
-    lv2:name "Release 16"
+    lv2:name "Release 16";
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;

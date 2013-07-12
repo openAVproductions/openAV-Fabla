@@ -1,10 +1,9 @@
 
 CC=g++
-
-INCLUDES=-I/usr/include/cairomm-1.0 -I/usr/lib/cairomm-1.0/include -I/usr/include/sigc++-2.0 -I/usr/lib/sigc++-2.0/include -I/usr/include/ntk -I/usr/include/cairo -I/usr/include/glib-2.0 -I/usr/lib/glib-2.0/include -I/usr/include/pixman-1 -I/usr/include/freetype2 -I/usr/include/libpng15
-
 CFLAGS=-g -Wall
-LDFLAGS=-lntk -lcairomm-1.0 -lcairo -lsndfile -Wl,-z,nodelete
+
+INCLUDES=$(shell pkg-config --cflags sndfile cairomm-1.0 ntk ntk_images)
+LDFLAGS=$(shell pkg-config --libs sndfile cairomm-1.0 ntk ntk_images) -fPIC -shared -Wl,-z,nodelete
 
 UISOURCES=gui/ui_helpers.cxx gui/fabla.cxx gui/fabla_ui.c
 UIOBJECTS=$(UISOURCES:.cpp=.o)
@@ -38,16 +37,16 @@ dsp: $(DSPSOURCES) $(DSP)
 sa: $(SASOURCES) $(SA)
 
 $(DSP): $(DSPOBJECTS)
-	$(CC) $(INCLUDES) $(CFLAGS) -fPIC -shared $(LDFLAGS) $(DSPOBJECTS) -o $@
+	$(CC) $(DSPOBJECTS) $(INCLUDES) $(CFLAGS) $(LDFLAGS) -o $@
 
 $(UI): $(UIOBJECTS)
-	$(CC) $(INCLUDES) $(CFLAGS) -fPIC -shared $(LDFLAGS) $(UIOBJECTS)  -o $@
+	$(CC) $(UIOBJECTS)  $(INCLUDES) $(CFLAGS) $(LDFLAGS) -o $@
 
 $(SA): $(SAOBJECTS)
-	$(CC) $(INCLUDES) $(LDFLAGS) $(SAOBJECTS) -o $@
+	$(CC) $(SAOBJECTS) $(INCLUDES) $(LDFLAGS) -o $@
 
 .cpp.o:
-	$(CC) -g $(CFLAGS) -c $< -o $@
+	$(CC) $< -g $(CFLAGS) -c -o $@
 
 
 
