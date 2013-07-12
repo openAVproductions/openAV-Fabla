@@ -12,7 +12,7 @@
 <http://www.openavproductions.com/fabla>
   a lv2:InstrumentPlugin ;
   doap:name "Fabla" ;
-  doap:description "Sample Player" ;
+  doap:description "Performance Sampler" ;
   doap:maintainer [ foaf:name "OpenAV Productions" ] ;
   
   lv2:binary <fabla.so> ;
