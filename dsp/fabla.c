@@ -62,6 +62,7 @@ typedef struct {
   
   // port values
   float* master;
+  float w, a, b, g1, g2; // smoothing variables
   
   float* output_L;
   float* output_R;
@@ -200,6 +201,13 @@ instantiate(const LV2_Descriptor*     descriptor,
     }
   }
   
+  // initialize master output smoothing state
+  self->w = 10.0f / (rate * 0.02);
+  self->a = 0.07f;
+  self->b = 1.0f / (1.0f - self->a);
+  self->g1 = self->g2 = 0.0f;
+  
+  // set UI update variables
   self->updateUiPaths = false;
   self->updateUiPathCounter = 0;
   
@@ -371,8 +379,12 @@ run(LV2_Handle instance, uint32_t n_samples)
 {
   FABLA_DSP* self = (FABLA_DSP*)instance;
   
+  // smoothing algo is a lowpass, to de-zip the master volume slider
   // x^^4 approximates exponential volume control, master vol + makeup gain here
-  const float        gain   = pow ( (*self->master)     , 4.f );
+  self->g1 += self->w * ( pow (*self->master, 4.f ) - self->g1 - self->a * self->g2 - 1e-20f);
+  self->g2 += self->w * (self->b * self->g1 - self->g2 + 1e-20f);
+  const float        gain   = self->g2;
+  
   float* const       outputL = self->output_L;
   float* const       outputR = self->output_R;
   
@@ -623,7 +635,7 @@ run(LV2_Handle instance, uint32_t n_samples)
   self->uiUpdateCounter += n_samples;
   
   // disable for Atom debug purposes: stops the huge stream of Atoms
-  if ( false )// self->uiUpdateCounter > self->sr / 15 ) //  
+  if ( self->uiUpdateCounter > self->sr / 15 ) //  false )// 
   {
     // send levels to UI
     float L = self->meter->getLeftDB();
