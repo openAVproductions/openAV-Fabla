@@ -204,13 +204,12 @@ instantiate(const LV2_Descriptor*     descriptor,
     }
   }
   
-  if ( self->schedule == 0 && self->log )
+  if ( self->schedule == 0 )
   {
-    lv2_log_warning(&self->logger, "Fabla: Warning, your host doesn't support the Worker extension. Loading samples may cause Xruns!");
-  }
-  else if ( self->schedule == 0 )
-  {
-    printf("Fabla: Warning, your host doesn't support the Worker extension. Loading samples may cause Xruns!");
+    if ( self->log )
+      lv2_log_warning(&self->logger, "Fabla: Warning, your host doesn't support the Worker extension. Loading samples may cause Xruns!");
+    else
+      printf("Fabla: Warning, your host doesn't support the Worker extension. Loading samples may cause Xruns!");
   }
   
   // initialize master output smoothing state
