@@ -105,7 +105,6 @@ class LFO : public Fl_Slider
       // LFO graph plotting
         float wavetableMod = mod;
         float lfoAmp = value();
-        float volume = value();
         
         
         // sinewave (in graph 1)
@@ -157,9 +156,6 @@ class LFO : public Fl_Slider
         
         // Waveform data: WavetableMod
         {
-          int drawX = x;
-          int drawY = y + h - 2;
-          
           cairo_set_line_width(cr, 3.3);
           cairo_rectangle( cr, x, y + h - 2, w * wavetableMod, 1);
           cairo_set_source_rgba( cr, 25 / 255.f, 255 / 255.f ,   0 / 255.f , 0.7 );
@@ -169,8 +165,6 @@ class LFO : public Fl_Slider
         {
           int drawX = x+w-3;
           int drawY = y;
-          
-          float volume = 0.7;
           cairo_set_line_width(cr, 2.4);
           cairo_rectangle( cr, drawX, drawY+ h*(1-lfoAmp), 1,  (h*lfoAmp) ); 
           cairo_set_source_rgba( cr, 255 / 255.f, 104 / 255.f ,   0 / 255.f , 1 );

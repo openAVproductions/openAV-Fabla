@@ -172,13 +172,6 @@ class Waveform : public Fl_Widget
           }
           else
           {
-            // don't draw every sample
-            int sampleCountForDrawing = -1;
-            
-            float currentTop = 0.f;
-            float previousTop = 0.f;
-            float currentSample = 0.f;
-            
             // find how many samples per pixel
             int samplesPerPix = data_size / w;
             //cout << "width = " << w << "  sampsPerPx " << samplesPerPix << endl;

@@ -1,3 +1,23 @@
+/*
+ * Author: Harry van Haaren 2013
+ *         harryhaaren@gmail.com
+ * 
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+ * MA 02110-1301, USA.
+ * 
+ */
 
 #include <string>
 #include <iostream>
@@ -378,14 +398,14 @@ static void port_event(LV2UI_Handle handle,
           // hack the enum to access the right array slice
           //printf("Gain Pad %i, pad# %i\n", port_index, port_index - int(PAD_GAIN) );
           ui->padData[ port_index-int(PAD_GAIN) ].gain = *(float*)buffer;
-          if ( port_index - int(PAD_GAIN) == ui->selectedPad )
+          if ( int(port_index - PAD_GAIN) == ui->selectedPad )
             ui->gain->value( *(float*)buffer );
           break;
       case PAD_SPEED:
       case pspd2: case pspd3: case pspd4: case pspd5: case pspd6: case pspd7: case pspd8: case pspd9:
       case pspd10: case pspd11: case pspd12: case pspd13: case pspd14: case pspd15: case pspd16:
           ui->padData[ port_index-int(PAD_SPEED) ].speed = *(float*)buffer;
-          if ( port_index - int(PAD_SPEED) == ui->selectedPad )
+          if ( int(port_index - PAD_SPEED) == int(ui->selectedPad) )
             ui->speed->value( *(float*)buffer );
           break;
       
@@ -394,7 +414,7 @@ static void port_event(LV2UI_Handle handle,
       case pp2: case pp3: case pp4: case pp5: case pp6: case pp7: case pp8: case pp9:
       case pp10: case pp11: case pp12: case pp13: case pp14: case pp15: case pp16:
           ui->padData[ port_index - int(PAD_PAN) ].pan = *(float*)buffer;
-          if ( port_index - int(PAD_PAN) == ui->selectedPad )
+          if ( int(port_index - PAD_PAN) == ui->selectedPad )
             ui->pan->value( *(float*)buffer );
           break;
       
@@ -403,7 +423,7 @@ static void port_event(LV2UI_Handle handle,
       case pa2: case pa3: case pa4: case pa5: case pa6: case pa7: case pa8: case pa9:
       case pa10: case pa11: case pa12: case pa13: case pa14: case pa15: case pa16:
           ui->padData[ port_index - int(PAD_ATTACK) ].a = *(float*)buffer;
-          if ( port_index - int(PAD_ATTACK) == ui->selectedPad )
+          if ( int(port_index - PAD_ATTACK) == ui->selectedPad )
             ui->a->value( *(float*)buffer );
           break;
       
@@ -411,7 +431,7 @@ static void port_event(LV2UI_Handle handle,
       case pd2: case pd3: case pd4: case pd5: case pd6: case pd7: case pd8: case pd9:
       case pd10: case pd11: case pd12: case pd13: case pd14: case pd15: case pd16:
           ui->padData[ port_index - int(PAD_DECAY) ].d = *(float*)buffer;
-          if ( port_index - int(PAD_DECAY) == ui->selectedPad )
+          if ( int(port_index - PAD_DECAY) == ui->selectedPad )
             ui->d->value( *(float*)buffer );
           break;
       
@@ -419,7 +439,7 @@ static void port_event(LV2UI_Handle handle,
       case ps2: case ps3: case ps4: case ps5: case ps6: case ps7: case ps8: case ps9:
       case ps10: case ps11: case ps12: case ps13: case ps14: case ps15: case ps16:
           ui->padData[ port_index - int(PAD_SUSTAIN) ].s = *(float*)buffer;
-          if ( port_index - int(PAD_SUSTAIN) == ui->selectedPad )
+          if ( int(port_index - PAD_SUSTAIN) == ui->selectedPad )
             ui->s->value( *(float*)buffer );
           break;
       
@@ -427,7 +447,7 @@ static void port_event(LV2UI_Handle handle,
       case pr2: case pr3: case pr4: case pr5: case pr6: case pr7: case pr8: case pr9:
       case pr10: case pr11: case pr12: case pr13: case pr14: case pr15: case pr16:
           ui->padData[ port_index - int(PAD_RELEASE) ].r = *(float*)buffer;
-          if ( port_index - int(PAD_RELEASE) == ui->selectedPad )
+          if ( int(port_index - PAD_RELEASE) == ui->selectedPad )
             ui->r->value( *(float*)buffer );
           break;
       
@@ -437,38 +457,6 @@ static void port_event(LV2UI_Handle handle,
     //ui->filterLowpass->value( argv[0]->f );
     Fl::unlock();
     Fl::awake();
-    
-    /*
-    if ( format == 0 )
-    {
-      float value =  *(float *)buffer;
-      switch ( port_index )
-      {
-        case asdf:
-            cout << "Refractor: Retrigger control event, value = " << value << endl;
-            //self->guiState->retrigger = value;
-            //self->widget->redraw();
-            break;
-        case asdf:
-            cout << "Refractor: Master volume event, value = " << value << endl;
-            self->guiState->masterVol = value;
-            self->widget->redraw();
-      }
-    }
-    else
-    {
-      LV2_ATOM_SEQUENCE_FOREACH( (LV2_Atom_Sequence*)buffer, ev)
-      {
-        //self->frame_offset = ev->time.frames;
-        
-        if (ev->body.type == self->guiState->uris.midiEvent)
-        {
-          cout << "GUI got MIDI event!" << endl;
-          //uint8_t* const data = (uint8_t* const)(ev + 1);
-        }
-      }
-    }
-    */
     
     return;
 }
