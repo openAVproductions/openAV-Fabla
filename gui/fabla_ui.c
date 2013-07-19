@@ -296,7 +296,7 @@ static void port_event(LV2UI_Handle handle,
                 f = (const char*)LV2_ATOM_BODY(path);
               
               if ( f )
-                printf( "FablaUI:  recieved waveform, path: %s\n", f );
+                //printf( "FablaUI:  recieved waveform, path: %s\n", f );
               
               if ( pad == -1 || f == 0 )
               {
@@ -350,7 +350,7 @@ static void port_event(LV2UI_Handle handle,
               int i = name.find_last_of('/') + 1;
               std::string sub = name.substr( i );
               ui->padData[pad].name = sub;
-              printf("FablaUI: name %s\ni %i\nsub %s\n", name.c_str(), i, sub.c_str() );
+              //printf("FablaUI: name %s\ni %i\nsub %s\n", name.c_str(), i, sub.c_str() );
               
               ui->padData[pad].loaded = true;
               ui->padData[pad].waveformLength = info.frames;

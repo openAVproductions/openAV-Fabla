@@ -9,13 +9,11 @@ void FablaUI::cb_compressor_i(Compressor* o, void*) {
   if ( o->active )
     tmp = 1.f;
   writeFunction(controller, COMP_ENABLE, sizeof(float), 0, (const void*) &tmp);
-  printf("comp enable = %f\n", tmp );
 }
 else
 {
   float tmp = o->getMakeup();
   writeFunction(controller, COMP_MAKEUP, sizeof(float), 0, (const void*) &tmp);
-  printf("makeup = %f\n", tmp );
 };
 }
 void FablaUI::cb_compressor(Compressor* o, void* v) {
@@ -377,7 +375,7 @@ Fl_Double_Window* FablaUI::setupUI() {
       o->align(Fl_Align(FL_ALIGN_CENTER));
       o->when(FL_WHEN_RELEASE);
     } // Background* o
-    { Background* o = new Background(9, 180, 330, 300, "Amp Adsr");
+    { Background* o = new Background(9, 180, 330, 300, "Pads");
       o->box(FL_UP_BOX);
       o->color(FL_BACKGROUND_COLOR);
       o->selection_color(FL_BACKGROUND_COLOR);
@@ -840,7 +838,7 @@ void FablaUI::select_pad(int p) {
 }
 
 void FablaUI::pad_click(int id, int rclick) {
-  printf("pad %i clicked, right = %i\n", id, rclick);
+  //printf("pad %i clicked, right = %i\n", id, rclick);
   
   if ( rclick )
   {

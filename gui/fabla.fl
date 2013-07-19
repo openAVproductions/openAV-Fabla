@@ -56,13 +56,11 @@ selectedPad = 0;} {}
   if ( o->active )
     tmp = 1.f;
   writeFunction(controller, COMP_ENABLE, sizeof(float), 0, (const void*) &tmp);
-  printf("comp enable = %f\\n", tmp );
 }
 else
 {
   float tmp = o->getMakeup();
   writeFunction(controller, COMP_MAKEUP, sizeof(float), 0, (const void*) &tmp);
-  printf("makeup = %f\\n", tmp );
 }}
         xywh {352 290 97 84} box UP_BOX
         code0 {compressor->set_active( false );}
@@ -100,7 +98,7 @@ writeFunction(controller, COMP_DECAY, sizeof(float), 0, (const void*) &tmp);}
         class Background
       }
       Fl_Box {} {
-        label {Amp Adsr}
+        label Pads selected
         xywh {9 180 330 300} box UP_BOX
         class Background
       }
@@ -242,7 +240,7 @@ writeFunction(controller, COMP_ATTACK, sizeof(float), 0, (const void*) &tmp);}
         label Thres
         callback {float tmp = o->value();
 compressor->threshold( tmp );
-writeFunction(controller, COMP_THRES, sizeof(float), 0, (const void*) &tmp);} selected
+writeFunction(controller, COMP_THRES, sizeof(float), 0, (const void*) &tmp);}
         xywh {406 395 30 30} box UP_BOX color 48 labelcolor 32
         code0 {compThres->defaultValue(0.7);}
         class Dial
@@ -435,7 +433,7 @@ else
   }
   Function {pad_click(int id, int rclick)} {open
   } {
-    code {printf("pad %i clicked, right = %i\\n", id, rclick);
+    code {//printf("pad %i clicked, right = %i\\n", id, rclick);
 
 if ( rclick )
 {

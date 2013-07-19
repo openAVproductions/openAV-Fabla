@@ -140,7 +140,7 @@ static Sample* load_sample(FABLA_DSP* self, const char* path)
 {
   const size_t path_len  = strlen(path);
   
-  lv2_log_note(&self->logger, "Loading sample %s\n", path);
+  //lv2_log_note(&self->logger, "Loading sample %s\n", path);
   
   Sample* sample = new Sample();
   SF_INFO* const info    = &sample->info;
@@ -172,7 +172,7 @@ static Sample* load_sample(FABLA_DSP* self, const char* path)
   sample->path     = (char*)malloc(path_len + 1);
   sample->path_len = path_len;
   memcpy(sample->path, path, path_len + 1);
-  lv2_log_error(&self->logger, "Loaded sample:\n\t %i samples\n\tPath: %s\n", int(info->frames), sample->path);
+  //lv2_log_error(&self->logger, "Loaded sample:\n\t %i samples\n\tPath: %s\n", int(info->frames), sample->path);
   
   return sample;
 }
@@ -181,7 +181,7 @@ static void
 free_sample(FABLA_DSP* self, Sample* sample)
 {
   if (sample) {
-    lv2_log_trace(&self->logger, "Freeing %s\n", sample->path);
+    //lv2_log_trace(&self->logger, "Freeing %s\n", sample->path);
     free(sample->path);
     free(sample->data);
     free(sample);
@@ -367,11 +367,17 @@ static void noteOn(FABLA_DSP* self, int note, int velocity, int frame)
   if ( note > 15) note = 15;
   if ( note <  0) note =  0;
   
+  if ( !self->samples[note] )
+  {
+    // no sample loaded
+    return;
+  }
+  
   bool alloced = false;
   for(int i = 0; i < NVOICES; i++)
   {
     // check that the voice isn't playing, and there is a sample loaded
-    if ( !self->voice[i]->playing() && self->samples[note] )
+    if ( !self->voice[i]->playing() )
     {
       // set the right sample to the voice
       self->voice[i]->sample = self->samples[note];
@@ -593,7 +599,7 @@ run(LV2_Handle instance, uint32_t n_samples)
   {
     if ( self->samples[self->updateUiPathCounter] )
     {
-      lv2_log_note(&self->logger, "writing Atom %i to UI: %s\n", self->updateUiPathCounter, self->samples[self->updateUiPathCounter]->path);
+      //lv2_log_note(&self->logger, "writing Atom %i to UI: %s\n", self->updateUiPathCounter, self->samples[self->updateUiPathCounter]->path);
       // write path to UI so it loads the waveform
       lv2_atom_forge_frame_time(&self->forge, 0);
       LV2_Atom_Forge_Frame set_frame;
@@ -931,7 +937,7 @@ restore(LV2_Handle                  instance,
         {
           self->samples[i] = newSample;
           
-          printf("Restored sample %s successfully\n", self->samples[i]->path);
+          //printf("Restored sample %s successfully\n", self->samples[i]->path);
         }
         else
         {
