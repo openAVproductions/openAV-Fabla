@@ -919,7 +919,7 @@ restore(LV2_Handle                  instance,
       const char* path = (const char*)value;
       if (path)
       {
-        printf( "Restoring pad %i, filepath: %s\n", i, path);
+        //printf( "Restoring pad %i, filepath: %s\n", i, path);
         
         if ( self->samples[i] )
         {

@@ -99,7 +99,7 @@ class Voice
     {
       if ( note == n )
       {
-        printf("releasing note %i",n);
+        //printf("releasing note %i",n);
         adsr->release();
         playingBool = false;
       }
