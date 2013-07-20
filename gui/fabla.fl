@@ -26,7 +26,7 @@ fl_open_display();
 selectedPad = 0;} {}
     Fl_Window w {
       label Fabla open
-      xywh {430 147 515 490} type Double color 56 selection_color 0 labelcolor 88
+      xywh {1680 292 515 490} type Double color 56 selection_color 0 labelcolor 88
       code0 {\#include "avtk.h"}
       code1 {using namespace Avtk;}
       code2 {\#include <FL/x.H>}
@@ -88,7 +88,7 @@ writeFunction(controller, MASTER_VOL, sizeof(float), 0, (const void*) &tmp);}
         callback {float tmp = o->value();
 //compressor->release( tmp );
 writeFunction(controller, COMP_DECAY, sizeof(float), 0, (const void*) &tmp);}
-        xywh {406 435 30 30} box UP_BOX color 48 labelcolor 32
+        xywh {406 435 30 30} box UP_BOX color 48 labelcolor 54
         code0 {compRelease->defaultValue(0.3);}
         class Dial
       }
@@ -98,7 +98,7 @@ writeFunction(controller, COMP_DECAY, sizeof(float), 0, (const void*) &tmp);}
         class Background
       }
       Fl_Box {} {
-        label Pads selected
+        label Pads
         xywh {9 180 330 300} box UP_BOX
         class Background
       }
@@ -115,50 +115,50 @@ writeFunction(controller, COMP_DECAY, sizeof(float), 0, (const void*) &tmp);}
       }
       Fl_Box p13 {
         label 13
-        callback {pad_click( o->ID(), o->mouseRightClicked );}
-        xywh {15 205 75 64} box BORDER_BOX labelcolor 52
+        callback {pad_click( o->ID(), o->mouseRightClicked );} selected
+        xywh {15 205 75 64} box BORDER_BOX labelfont 1 labelcolor 54
         code0 {p13->ID(12);}
         class Pad
       }
       Fl_Box p14 {
         label 14
-        callback {pad_click( o->ID(), o->mouseRightClicked );}
-        xywh {97 205 75 64} box BORDER_BOX labelcolor 52
+        callback {pad_click( o->ID(), o->mouseRightClicked );} selected
+        xywh {97 205 75 64} box BORDER_BOX labelfont 1 labelcolor 54
         code0 {p14->ID(13);}
         class Pad
       }
       Fl_Box p15 {
         label 15
-        callback {pad_click( o->ID(), o->mouseRightClicked );}
-        xywh {178 205 75 64} box BORDER_BOX labelcolor 52
+        callback {pad_click( o->ID(), o->mouseRightClicked );} selected
+        xywh {178 205 75 64} box BORDER_BOX labelfont 1 labelcolor 54
         code0 {p15->ID(14);}
         class Pad
       }
       Fl_Box p16 {
         label 16
-        callback {pad_click( o->ID(), o->mouseRightClicked );}
-        xywh {259 205 75 64} box BORDER_BOX labelcolor 52
+        callback {pad_click( o->ID(), o->mouseRightClicked );} selected
+        xywh {259 205 75 64} box BORDER_BOX labelfont 1 labelcolor 54
         code0 {p16->ID(15);}
         class Pad
       }
       Fl_Box p9 {
         label 9
-        callback {pad_click( o->ID(), o->mouseRightClicked );}
-        xywh {15 273 75 64} box BORDER_BOX labelcolor 52
+        callback {pad_click( o->ID(), o->mouseRightClicked );} selected
+        xywh {15 273 75 64} box BORDER_BOX labelfont 1 labelcolor 54
         code0 {p9->ID(8);}
         class Pad
       }
       Fl_Box p5 {
         label 5
-        callback {pad_click( o->ID(), o->mouseRightClicked );}
-        xywh {15 341 75 64} box BORDER_BOX labelcolor 52
+        callback {pad_click( o->ID(), o->mouseRightClicked );} selected
+        xywh {15 341 75 64} box BORDER_BOX labelfont 1 labelcolor 54
         code0 {p5->ID(4);}
         class Pad
       }
       Fl_Box p1 {
         label 1
-        callback {pad_click( o->ID(), o->mouseRightClicked );}
-        xywh {15 411 75 64} box BORDER_BOX labelcolor 52
+        callback {pad_click( o->ID(), o->mouseRightClicked );} selected
+        xywh {15 411 75 64} box BORDER_BOX labelfont 1 labelcolor 54
         code0 {p1->selected(true);}
         code1 {p1->ID(0);}
         code2 {\#include <FL/Fl_Native_File_Chooser.H>}
@@ -166,64 +166,64 @@ writeFunction(controller, COMP_DECAY, sizeof(float), 0, (const void*) &tmp);}
       }
       Fl_Box p10 {
         label 10
-        callback {pad_click( o->ID(), o->mouseRightClicked );}
-        xywh {97 273 75 64} box BORDER_BOX labelcolor 52
+        callback {pad_click( o->ID(), o->mouseRightClicked );} selected
+        xywh {97 273 75 64} box BORDER_BOX labelfont 1 labelcolor 54
         code0 {p10->ID(9);}
         class Pad
       }
       Fl_Box p6 {
         label 6
-        callback {pad_click( o->ID(), o->mouseRightClicked );}
-        xywh {97 341 75 64} box BORDER_BOX labelcolor 52
+        callback {pad_click( o->ID(), o->mouseRightClicked );} selected
+        xywh {97 341 75 64} box BORDER_BOX labelfont 1 labelcolor 54
         code0 {p6->ID(5);}
         class Pad
       }
       Fl_Box p2 {
         label 2
-        callback {pad_click( o->ID(), o->mouseRightClicked );}
-        xywh {97 411 75 64} box BORDER_BOX labelcolor 52
+        callback {pad_click( o->ID(), o->mouseRightClicked );} selected
+        xywh {97 411 75 64} box BORDER_BOX labelfont 1 labelcolor 54
         code0 {p2->ID(1);}
         class Pad
       }
       Fl_Box p11 {
         label 11
-        callback {pad_click( o->ID(), o->mouseRightClicked );}
-        xywh {178 273 75 64} box BORDER_BOX labelcolor 52
+        callback {pad_click( o->ID(), o->mouseRightClicked );} selected
+        xywh {178 273 75 64} box BORDER_BOX labelfont 1 labelcolor 54
         code0 {p11->ID(10);}
         class Pad
       }
       Fl_Box p7 {
         label 7
-        callback {pad_click( o->ID(), o->mouseRightClicked );}
-        xywh {178 341 75 64} box BORDER_BOX labelcolor 52
+        callback {pad_click( o->ID(), o->mouseRightClicked );} selected
+        xywh {178 341 75 64} box BORDER_BOX labelfont 1 labelcolor 54
         code0 {p7->ID(6);}
         class Pad
       }
       Fl_Box p3 {
         label 3
-        callback {pad_click( o->ID(), o->mouseRightClicked );}
-        xywh {178 411 75 64} box BORDER_BOX labelcolor 52
+        callback {pad_click( o->ID(), o->mouseRightClicked );} selected
+        xywh {178 411 75 64} box BORDER_BOX labelfont 1 labelcolor 54
         code0 {p3->ID(2);}
         class Pad
       }
       Fl_Box p12 {
         label 12
-        callback {pad_click( o->ID(), o->mouseRightClicked );}
-        xywh {259 273 75 64} box BORDER_BOX labelcolor 52
+        callback {pad_click( o->ID(), o->mouseRightClicked );} selected
+        xywh {259 273 75 64} box BORDER_BOX labelfont 1 labelcolor 54
         code0 {p12->ID(11);}
         class Pad
       }
       Fl_Box p8 {
         label 8
-        callback {pad_click( o->ID(), o->mouseRightClicked );}
-        xywh {259 341 75 64} box BORDER_BOX labelcolor 52
+        callback {pad_click( o->ID(), o->mouseRightClicked );} selected
+        xywh {259 341 75 64} box BORDER_BOX labelfont 1 labelcolor 54
         code0 {p8->ID(7);}
         class Pad
       }
       Fl_Box p4 {
         label 4
-        callback {pad_click( o->ID(), o->mouseRightClicked );}
-        xywh {259 411 75 64} box BORDER_BOX labelcolor 52
+        callback {pad_click( o->ID(), o->mouseRightClicked );} selected
+        xywh {259 411 75 64} box BORDER_BOX labelfont 1 labelcolor 54
         code0 {p4->ID(3);}
         class Pad
       }
@@ -232,7 +232,7 @@ writeFunction(controller, COMP_DECAY, sizeof(float), 0, (const void*) &tmp);}
         callback {float tmp = o->value();
 //compressor->attack( tmp );
 writeFunction(controller, COMP_ATTACK, sizeof(float), 0, (const void*) &tmp);}
-        xywh {365 435 30 30} box UP_BOX color 48 labelcolor 32
+        xywh {365 435 30 30} box UP_BOX color 48 labelcolor 54
         code0 {compAttack->defaultValue(0.1);}
         class Dial
       }
@@ -241,7 +241,7 @@ writeFunction(controller, COMP_ATTACK, sizeof(float), 0, (const void*) &tmp);}
         callback {float tmp = o->value();
 compressor->threshold( tmp );
 writeFunction(controller, COMP_THRES, sizeof(float), 0, (const void*) &tmp);}
-        xywh {406 395 30 30} box UP_BOX color 48 labelcolor 32
+        xywh {406 395 30 30} box UP_BOX color 48 labelcolor 54
         code0 {compThres->defaultValue(0.7);}
         class Dial
       }
@@ -250,7 +250,7 @@ writeFunction(controller, COMP_THRES, sizeof(float), 0, (const void*) &tmp);}
         callback {float tmp = o->value();
 compressor->ratio( tmp );
 writeFunction(controller, COMP_RATIO, sizeof(float), 0, (const void*) &tmp);}
-        xywh {365 395 30 30} box UP_BOX color 48 labelcolor 32
+        xywh {365 395 30 30} box UP_BOX color 48 labelcolor 54
         code0 {compRatio->defaultValue(0.3);}
         class Dial
       }
@@ -261,7 +261,7 @@ int port = int(PAD_GAIN) + selectedPad;
 padData[selectedPad].gain = tmp;
 writeFunction(controller, port, sizeof(float), 0, (const void*) &tmp);
 //printf("gain on pad\# %i, port\# %i, value %f\\n", selectedPad, port, tmp);}
-        xywh {357 210 38 38} box UP_BOX color 48 labelfont 1 labelcolor 40
+        xywh {357 210 38 38} box UP_BOX color 48 labelcolor 54
         code0 {gain->drawLabel(true);}
         code1 {gain->value( 0.5 );}
         code2 {gain->defaultValue(0.5);}
@@ -276,7 +276,7 @@ int port = int(PAD_DECAY) + selectedPad;
 padData[selectedPad].d = tmp;
 writeFunction(controller, port, sizeof(float), 0, (const void*) &tmp);
 printf("decay on pad\# %i, port\# %i, value %f\\n", selectedPad, port, tmp);}
-        xywh {393 170 30 30} box UP_BOX color 48 labelfont 1 labelcolor 40
+        xywh {393 170 30 30} box UP_BOX color 48 labelfont 1 labelcolor 54
         code0 {d->defaultValue(0.5);}
         class Dial
       }
@@ -287,7 +287,7 @@ int port = int(PAD_SPEED) + selectedPad;
 padData[selectedPad].speed = tmp;
 writeFunction(controller, port, sizeof(float), 0, (const void*) &tmp);
 printf("speed on pad\# %i, port\# %i, value %f\\n", selectedPad, port, tmp);}
-        xywh {408 210 38 38} box UP_BOX color 48 labelfont 1 labelcolor 40
+        xywh {408 210 38 38} box UP_BOX color 48 labelcolor 54
         code0 {speed->drawLabel(true);}
         code1 {speed->value( 0.5 );}
         code2 {speed->defaultValue(0.5);}
@@ -302,7 +302,7 @@ int port = int(PAD_ATTACK) + selectedPad;
 padData[selectedPad].a = tmp;
 writeFunction(controller, port, sizeof(float), 0, (const void*) &tmp);
 printf("attack on pad\# %i, port\# %i, value %f\\n", selectedPad, port, tmp);}
-        xywh {358 170 30 30} box UP_BOX color 48 labelfont 1 labelcolor 40
+        xywh {358 170 30 30} box UP_BOX color 48 labelfont 1 labelcolor 54
         code0 {a->defaultValue(0.0);}
         class Dial
       }
@@ -315,7 +315,7 @@ int port = int(PAD_RELEASE) + selectedPad;
 padData[selectedPad].r = tmp;
 writeFunction(controller, port, sizeof(float), 0, (const void*) &tmp);
 printf("release on pad\# %i, port\# %i, value %f\\n", selectedPad, port, tmp);}
-        xywh {463 170 30 30} box UP_BOX color 48 labelfont 1 labelcolor 40
+        xywh {463 170 30 30} box UP_BOX color 48 labelfont 1 labelcolor 54
         code0 {r->defaultValue(0.5);}
         class Dial
       }
@@ -328,7 +328,7 @@ int port = int(PAD_SUSTAIN) + selectedPad;
 padData[selectedPad].s = tmp;
 writeFunction(controller, port, sizeof(float), 0, (const void*) &tmp);
 printf("sustain on pad\# %i, port\# %i, value %f\\n", selectedPad, port, tmp);}
-        xywh {428 170 30 30} box UP_BOX color 48 labelfont 1 labelcolor 40
+        xywh {428 170 30 30} box UP_BOX color 48 labelfont 1 labelcolor 54
         code0 {extern void writeLoadSample(Fabla* self, int pad, const char* filename, size_t filename_len);}
         code1 {extern void writePadPlay(Fabla* self, int pad );}
         code2 {s->value(1.0);}
@@ -342,7 +342,7 @@ int port = int(PAD_PAN) + selectedPad;
 padData[selectedPad].pan = tmp;
 writeFunction(controller, port, sizeof(float), 0, (const void*) &tmp);
 printf("pan on pad\# %i, port\# %i, value %f\\n", selectedPad, port, tmp);}
-        xywh {455 210 38 38} box UP_BOX color 48 labelfont 1 labelcolor 40
+        xywh {455 210 38 38} box UP_BOX color 48 labelcolor 54
         code0 {pan->drawLabel(true);}
         code1 {pan->value( 0.5 );}
         code2 {pan->defaultValue(0.5);}
