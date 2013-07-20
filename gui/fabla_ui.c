@@ -464,6 +464,8 @@ static void port_event(LV2UI_Handle handle,
 
 static int idle(LV2UI_Handle handle)
 {
+  printf("FablaUI: idle()\n");
+  
   Fabla* self = (Fabla*)handle;
   self->widget->idle();
   
