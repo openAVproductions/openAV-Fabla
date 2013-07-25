@@ -2,6 +2,8 @@
 
 #include "fabla.h"
 
+#include <libgen.h>
+
 void FablaUI::cb_w_i(Fl_Double_Window* o, void*) {
   close_cb( o, 0 );
 }
@@ -284,6 +286,8 @@ FablaUI::FablaUI(void* xParentWindow, Fabla* f) {
 Fl_Double_Window* FablaUI::setupUI() {
   // In case FLTK hasn't set up yet
   fl_open_display();
+  
+  lastUsedPath = getenv("HOME");
   
   selectedPad = 0;
   { w = new Fl_Double_Window(515, 490, "Fabla");
@@ -884,15 +888,21 @@ void FablaUI::pad_click(int id, int rclick) {
     fnfc.title("Load Sample");
     fnfc.type(Fl_Native_File_Chooser::BROWSE_FILE);
     fnfc.filter("Wav\t*.wav");
-    fnfc.directory( getenv("HOME") );
+    fnfc.directory( lastUsedPath.c_str() );
     
     switch ( fnfc.show() )
     {
       case -1: printf("ERROR: %s\\n", fnfc.errmsg());    break;  // ERROR
       case  1: printf("CANCEL\\n");                      break;  // CANCEL
-      default: printf("Loading directory: %s\\n", fnfc.filename());    
-      
-      writeLoadSample(fabla, id, fnfc.filename(), strlen(fnfc.filename()));
+      default:
+      {
+        char* filename = strdup( fnfc.filename() );
+        //printf("Loading directory: %s, %s\n", fnfc.filename(), dirname( filename ) );    
+    
+        writeLoadSample(fabla, id, fnfc.filename(), strlen( fnfc.filename() ));
+        lastUsedPath = filename;
+        free (filename);
+      }
       break;
    }
     

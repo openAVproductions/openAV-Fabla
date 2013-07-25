@@ -15,6 +15,7 @@ using namespace Avtk;
 #include "fabla.hxx"
 #include "header.c"
 #include <FL/Fl_Native_File_Chooser.H>
+#include <string>
 extern void writeLoadSample(Fabla* self, int pad, const char* filename, size_t filename_len);
 extern void writePadPlay(Fabla* self, int pad );
 
@@ -188,5 +189,6 @@ public:
   */
   UIPadData padData[16]; 
   void close_cb(Fl_Widget* o, void*);
+  std::string lastUsedPath;
 };
 #endif
