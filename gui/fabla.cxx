@@ -2,6 +2,13 @@
 
 #include "fabla.h"
 
+void FablaUI::cb_w_i(Fl_Double_Window* o, void*) {
+  close_cb( o, 0 );
+}
+void FablaUI::cb_w(Fl_Double_Window* o, void* v) {
+  ((FablaUI*)(o->user_data()))->cb_w_i(o,v);
+}
+
 void FablaUI::cb_compressor_i(Compressor* o, void*) {
   if ( o->mouseRightClicked )
 {
@@ -268,10 +275,7 @@ FablaUI::FablaUI() {
 
 FablaUI::FablaUI(void* xParentWindow, Fabla* f) {
   setupUI();
-  
   fabla = f;
-  
-  w->callback( close_cb, 0 );
   
   // embed drawn stuff into LV2 host provided area  
   fl_embed( w, (Window)xParentWindow );
@@ -286,7 +290,7 @@ Fl_Double_Window* FablaUI::setupUI() {
     w->color(FL_BLACK);
     w->selection_color(FL_FOREGROUND_COLOR);
     w->labelcolor(FL_RED);
-    w->user_data((void*)(this));
+    w->callback((Fl_Callback*)cb_w, (void*)(this));
     { Background* o = new Background(346, 41, 159, 215, "Source");
       o->box(FL_UP_BOX);
       o->color(FL_BACKGROUND_COLOR);
@@ -901,4 +905,15 @@ void FablaUI::pad_click(int id, int rclick) {
     // update the UI showing the ADSR / waveform of this pad
     select_pad( id );
   }
+}
+
+void FablaUI::close_cb(Fl_Widget* o, void*) {
+  if ((Fl::event() == FL_KEYDOWN || Fl::event() == FL_SHORTCUT) && Fl::event_key() == FL_Escape)
+    {
+      return; // ignore ESC
+    }
+    else
+    {
+      o->hide();
+    }
 }

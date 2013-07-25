@@ -17,7 +17,6 @@ using namespace Avtk;
 #include <FL/Fl_Native_File_Chooser.H>
 extern void writeLoadSample(Fabla* self, int pad, const char* filename, size_t filename_len);
 extern void writePadPlay(Fabla* self, int pad );
-extern void close_cb(Fl_Widget* o, void*);
 
 class FablaUI {
 public:
@@ -25,6 +24,10 @@ public:
   FablaUI(void* xParentWindow, Fabla* f);
   Fl_Double_Window* setupUI();
   Fl_Double_Window *w;
+private:
+  void cb_w_i(Fl_Double_Window*, void*);
+  static void cb_w(Fl_Double_Window*, void*);
+public:
   ADSR *adsr;
   Compressor *compressor;
 private:
@@ -184,5 +187,6 @@ public:
      holds all pad individual data
   */
   UIPadData padData[16]; 
+  void close_cb(Fl_Widget* o, void*);
 };
 #endif

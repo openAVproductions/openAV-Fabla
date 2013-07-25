@@ -101,21 +101,3 @@ void writePadPlay(Fabla* self, int pad)
               self->uris->atom_eventTransfer,
               set );
 }
-
-
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-
-// Stops the UI being closed on ESC in hosts that pass key events
-void close_cb(Fl_Widget* o, void*)
-{
-  if ((Fl::event() == FL_KEYDOWN || Fl::event() == FL_SHORTCUT) && Fl::event_key() == FL_Escape)
-  {
-    return; // ignore ESC
-  }
-  else
-  {
-    o->hide();
-  }
-}
-
