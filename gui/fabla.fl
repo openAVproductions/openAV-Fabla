@@ -15,6 +15,8 @@ w->show();} {}
 
 fabla = f;
 
+w->callback( close_cb, 0 );
+
 // embed drawn stuff into LV2 host provided area  
 fl_embed( w, (Window)xParentWindow );} {}
   }
@@ -26,7 +28,7 @@ fl_open_display();
 selectedPad = 0;} {}
     Fl_Window w {
       label Fabla open
-      xywh {1680 292 515 490} type Double color 56 selection_color 0 labelcolor 88
+      xywh {1829 85 515 490} type Double color 56 selection_color 0 labelcolor 88
       code0 {\#include "avtk.h"}
       code1 {using namespace Avtk;}
       code2 {\#include <FL/x.H>}
@@ -115,49 +117,49 @@ writeFunction(controller, COMP_DECAY, sizeof(float), 0, (const void*) &tmp);}
       }
       Fl_Box p13 {
         label 13
-        callback {pad_click( o->ID(), o->mouseRightClicked );} selected
+        callback {pad_click( o->ID(), o->mouseRightClicked );}
         xywh {15 205 75 64} box BORDER_BOX labelfont 1 labelcolor 54
         code0 {p13->ID(12);}
         class Pad
       }
       Fl_Box p14 {
         label 14
-        callback {pad_click( o->ID(), o->mouseRightClicked );} selected
+        callback {pad_click( o->ID(), o->mouseRightClicked );}
         xywh {97 205 75 64} box BORDER_BOX labelfont 1 labelcolor 54
         code0 {p14->ID(13);}
         class Pad
       }
       Fl_Box p15 {
         label 15
-        callback {pad_click( o->ID(), o->mouseRightClicked );} selected
+        callback {pad_click( o->ID(), o->mouseRightClicked );}
         xywh {178 205 75 64} box BORDER_BOX labelfont 1 labelcolor 54
         code0 {p15->ID(14);}
         class Pad
       }
       Fl_Box p16 {
         label 16
-        callback {pad_click( o->ID(), o->mouseRightClicked );} selected
+        callback {pad_click( o->ID(), o->mouseRightClicked );}
         xywh {259 205 75 64} box BORDER_BOX labelfont 1 labelcolor 54
         code0 {p16->ID(15);}
         class Pad
       }
       Fl_Box p9 {
         label 9
-        callback {pad_click( o->ID(), o->mouseRightClicked );} selected
+        callback {pad_click( o->ID(), o->mouseRightClicked );}
         xywh {15 273 75 64} box BORDER_BOX labelfont 1 labelcolor 54
         code0 {p9->ID(8);}
         class Pad
       }
       Fl_Box p5 {
         label 5
-        callback {pad_click( o->ID(), o->mouseRightClicked );} selected
+        callback {pad_click( o->ID(), o->mouseRightClicked );}
         xywh {15 341 75 64} box BORDER_BOX labelfont 1 labelcolor 54
         code0 {p5->ID(4);}
         class Pad
       }
       Fl_Box p1 {
         label 1
-        callback {pad_click( o->ID(), o->mouseRightClicked );} selected
+        callback {pad_click( o->ID(), o->mouseRightClicked );}
         xywh {15 411 75 64} box BORDER_BOX labelfont 1 labelcolor 54
         code0 {p1->selected(true);}
         code1 {p1->ID(0);}
@@ -166,63 +168,63 @@ writeFunction(controller, COMP_DECAY, sizeof(float), 0, (const void*) &tmp);}
       }
       Fl_Box p10 {
         label 10
-        callback {pad_click( o->ID(), o->mouseRightClicked );} selected
+        callback {pad_click( o->ID(), o->mouseRightClicked );}
         xywh {97 273 75 64} box BORDER_BOX labelfont 1 labelcolor 54
         code0 {p10->ID(9);}
         class Pad
       }
       Fl_Box p6 {
         label 6
-        callback {pad_click( o->ID(), o->mouseRightClicked );} selected
+        callback {pad_click( o->ID(), o->mouseRightClicked );}
         xywh {97 341 75 64} box BORDER_BOX labelfont 1 labelcolor 54
         code0 {p6->ID(5);}
         class Pad
       }
       Fl_Box p2 {
         label 2
-        callback {pad_click( o->ID(), o->mouseRightClicked );} selected
+        callback {pad_click( o->ID(), o->mouseRightClicked );}
         xywh {97 411 75 64} box BORDER_BOX labelfont 1 labelcolor 54
         code0 {p2->ID(1);}
         class Pad
       }
       Fl_Box p11 {
         label 11
-        callback {pad_click( o->ID(), o->mouseRightClicked );} selected
+        callback {pad_click( o->ID(), o->mouseRightClicked );}
         xywh {178 273 75 64} box BORDER_BOX labelfont 1 labelcolor 54
         code0 {p11->ID(10);}
         class Pad
       }
       Fl_Box p7 {
         label 7
-        callback {pad_click( o->ID(), o->mouseRightClicked );} selected
+        callback {pad_click( o->ID(), o->mouseRightClicked );}
         xywh {178 341 75 64} box BORDER_BOX labelfont 1 labelcolor 54
         code0 {p7->ID(6);}
         class Pad
       }
       Fl_Box p3 {
         label 3
-        callback {pad_click( o->ID(), o->mouseRightClicked );} selected
+        callback {pad_click( o->ID(), o->mouseRightClicked );}
         xywh {178 411 75 64} box BORDER_BOX labelfont 1 labelcolor 54
         code0 {p3->ID(2);}
         class Pad
       }
       Fl_Box p12 {
         label 12
-        callback {pad_click( o->ID(), o->mouseRightClicked );} selected
+        callback {pad_click( o->ID(), o->mouseRightClicked );}
         xywh {259 273 75 64} box BORDER_BOX labelfont 1 labelcolor 54
         code0 {p12->ID(11);}
         class Pad
       }
       Fl_Box p8 {
         label 8
-        callback {pad_click( o->ID(), o->mouseRightClicked );} selected
+        callback {pad_click( o->ID(), o->mouseRightClicked );}
         xywh {259 341 75 64} box BORDER_BOX labelfont 1 labelcolor 54
         code0 {p8->ID(7);}
         class Pad
       }
       Fl_Box p4 {
         label 4
-        callback {pad_click( o->ID(), o->mouseRightClicked );} selected
+        callback {pad_click( o->ID(), o->mouseRightClicked );}
         xywh {259 411 75 64} box BORDER_BOX labelfont 1 labelcolor 54
         code0 {p4->ID(3);}
         class Pad
@@ -341,11 +343,12 @@ printf("sustain on pad\# %i, port\# %i, value %f\\n", selectedPad, port, tmp);}
 int port = int(PAD_PAN) + selectedPad;
 padData[selectedPad].pan = tmp;
 writeFunction(controller, port, sizeof(float), 0, (const void*) &tmp);
-printf("pan on pad\# %i, port\# %i, value %f\\n", selectedPad, port, tmp);}
+printf("pan on pad\# %i, port\# %i, value %f\\n", selectedPad, port, tmp);} selected
         xywh {455 210 38 38} box UP_BOX color 48 labelcolor 54
         code0 {pan->drawLabel(true);}
         code1 {pan->value( 0.5 );}
         code2 {pan->defaultValue(0.5);}
+        code3 {extern void close_cb(Fl_Widget* o, void*);}
         class Dial
       }
     }

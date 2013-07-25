@@ -23,7 +23,6 @@
 #include <string>
 #include <stdlib.h>
 
-
 #include "../dsp/ports.h"
 #include "../dsp/shared.h"
 
@@ -40,6 +39,7 @@ void initForge(Fabla* self)
   self->voidForge = malloc( sizeof(LV2_Atom_Forge) );
   lv2_atom_forge_init( (LV2_Atom_Forge*)self->voidForge, self->map);
 }
+
 
 void writeLoadSample(Fabla* self, int pad, const char* filename, size_t filename_len)
 {
@@ -101,3 +101,21 @@ void writePadPlay(Fabla* self, int pad)
               self->uris->atom_eventTransfer,
               set );
 }
+
+
+#include <FL/Fl.H>
+#include <FL/Fl_Window.H>
+
+// Stops the UI being closed on ESC in hosts that pass key events
+void close_cb(Fl_Widget* o, void*)
+{
+  if ((Fl::event() == FL_KEYDOWN || Fl::event() == FL_SHORTCUT) && Fl::event_key() == FL_Escape)
+  {
+    return; // ignore ESC
+  }
+  else
+  {
+    o->hide();
+  }
+}
+

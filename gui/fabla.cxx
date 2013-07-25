@@ -271,6 +271,8 @@ FablaUI::FablaUI(void* xParentWindow, Fabla* f) {
   
   fabla = f;
   
+  w->callback( close_cb, 0 );
+  
   // embed drawn stuff into LV2 host provided area  
   fl_embed( w, (Window)xParentWindow );
 }

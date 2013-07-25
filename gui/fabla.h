@@ -17,6 +17,7 @@ using namespace Avtk;
 #include <FL/Fl_Native_File_Chooser.H>
 extern void writeLoadSample(Fabla* self, int pad, const char* filename, size_t filename_len);
 extern void writePadPlay(Fabla* self, int pad );
+extern void close_cb(Fl_Widget* o, void*);
 
 class FablaUI {
 public:
