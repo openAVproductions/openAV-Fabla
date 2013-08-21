@@ -9,6 +9,21 @@
 @prefix work:  <http://lv2plug.in/ns/ext/worker#> .
 @prefix time: <http://lv2plug.in/ns/ext/time#> .
 
+
+<http://www.openavproductions.com/fabla/gui>
+  a ui:X11UI ;
+  lv2:requiredFeature urid:map ;
+  #lv2:optionalFeature ui:makeResident.
+  
+  lv2:optionalFeature ui:noUserResize ;
+  
+  ui:portNotification [
+    ui:plugin <http://www.openavproductions.com/fabla> ;
+    lv2:symbol "notify" ;
+    ui:notifyType atom:Blank
+  ] .
+
+
 <http://www.openavproductions.com/fabla>
   a lv2:InstrumentPlugin ;
   doap:name "Fabla" ;
@@ -20,7 +35,6 @@
   
   lv2:optionalFeature work:schedule ;
   lv2:optionalFeature lv2:hardRtCapable ;
-  lv2:optionalFeature ui:noUserResize ;
   
   ui:ui <http://www.openavproductions.com/fabla/gui> ;
 
@@ -1155,11 +1169,4 @@
     
   ] .
 
-<http://www.openavproductions.com/fabla/gui>
-  a ui:X11UI ;
-  lv2:requiredFeature urid:map ;
-  ui:portNotification [
-    ui:plugin <http://www.openavproductions.com/fabla> ;
-    lv2:symbol "notify" ;
-    ui:notifyType atom:Blank
-  ] .
+
