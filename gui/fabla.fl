@@ -15,8 +15,7 @@ w->show();} {}
 fabla = f;
 
 // embed drawn stuff into LV2 host provided area  
-fl_embed( w, (Window)xParentWindow );} {selected
-    }
+fl_embed( w, (Window)xParentWindow );} {}
   }
   Function {setupUI()} {open
   } {
@@ -26,8 +25,8 @@ fl_open_display();
 selectedPad = 0;} {}
     Fl_Window w {
       label Fabla
-      callback {close_cb( o, 0 );} open
-      xywh {1899 343 515 490} type Double color 56 selection_color 0 labelcolor 88
+      callback {close_cb( o, 0 );} open selected
+      xywh {1527 348 515 490} type Double box UP_BOX color 48 selection_color 0 labelcolor 88
       code0 {\#include "avtk.h"}
       code1 {using namespace Avtk;}
       code2 {\#include <FL/x.H>}

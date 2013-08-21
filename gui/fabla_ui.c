@@ -105,8 +105,12 @@ static LV2UI_Handle instantiate(const struct _LV2UI_Descriptor * descriptor,
     self->widget->writeFunction = write_function;
     
     if (resize) {
-      //resize->ui_resize(resize->handle, self->widget->getWidth(),self->widget->getHeight());
       resize->ui_resize(resize->handle, self->widget->w->w(),self->widget->w->h());
+    }
+    else
+    {
+      cout << "FablaUI: Warning, host doesn't support resize extension.\n\
+      Please ask the developers of the host to support this extension. "<< endl;
     }
     
     //cout << "returning..." << int(self->widget->getXID()) << endl;
