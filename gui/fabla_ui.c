@@ -77,12 +77,14 @@ static LV2UI_Handle instantiate(const struct _LV2UI_Descriptor * descriptor,
     
     
     for (int i = 0; features[i]; ++i) {
-      //cout << "feature " << features[i]->URI << endl;
+      //cout << "FablaUI got feature " << features[i]->URI << endl;
       if (!strcmp(features[i]->URI, LV2_UI__parent)) {
         parentXwindow = features[i]->data;
         //cout << "got parent UI feature: X11 id = " << (Window)parentXwindow << endl;
       } else if (!strcmp(features[i]->URI, LV2_UI__resize)) {
+      
         resize = (LV2UI_Resize*)features[i]->data;
+      
       }
       else if (!strcmp(features[i]->URI, LV2_URID__map)) {
         self->map = (LV2_URID_Map*)features[i]->data;
@@ -105,6 +107,7 @@ static LV2UI_Handle instantiate(const struct _LV2UI_Descriptor * descriptor,
     self->widget->writeFunction = write_function;
     
     if (resize) {
+      cout << "FablaUI: resizing now, resize = " << resize << "  resize->handle " << resize->handle << "  resize->ui_resize = " << resize->ui_resize << endl;
       resize->ui_resize(resize->handle, self->widget->w->w(),self->widget->w->h());
     }
     else
