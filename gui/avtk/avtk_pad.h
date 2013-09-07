@@ -54,6 +54,7 @@ class Pad : public Fl_Box
       
       s = false;
       p = false;
+      l = false;
     }
     
     
