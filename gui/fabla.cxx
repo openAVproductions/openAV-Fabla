@@ -2,8 +2,6 @@
 
 #include "fabla.h"
 
-#include <libgen.h>
-
 void FablaUI::cb_w_i(Fl_Double_Window* o, void*) {
   close_cb( o, 0 );
 }
@@ -344,9 +342,10 @@ Fl_Double_Window* FablaUI::setupUI() {
       compressor->when(FL_WHEN_RELEASE);
       compressor->set_active( false );
     } // Compressor* compressor
-    { Fl_Box* o = new Fl_Box(351, 379, 97, 97);
-      o->box(FL_BORDER_BOX);
-    } // Fl_Box* o
+    { compressorBox = new Fl_Box(351, 379, 97, 97);
+      compressorBox->box(FL_BORDER_BOX);
+      compressorBox->color( fl_rgb_color( 28,28,28 ));
+    } // Fl_Box* compressorBox
     { masterVol = new Volume(453, 290, 48, 186, "Vol");
       masterVol->box(FL_UP_BOX);
       masterVol->color(FL_BACKGROUND_COLOR);
@@ -359,9 +358,10 @@ Fl_Double_Window* FablaUI::setupUI() {
       masterVol->align(Fl_Align(FL_ALIGN_CENTER));
       masterVol->when(FL_WHEN_RELEASE);
     } // Volume* masterVol
-    { Fl_Box* o = new Fl_Box(350, 155, 150, 98);
-      o->box(FL_BORDER_BOX);
-    } // Fl_Box* o
+    { adsrBox = new Fl_Box(350, 155, 150, 98);
+      adsrBox->box(FL_BORDER_BOX);
+      adsrBox->color( fl_rgb_color( 28,28,28 ));
+    } // Fl_Box* adsrBox
     { compRelease = new Dial(406, 435, 30, 30, "Rel");
       compRelease->box(FL_UP_BOX);
       compRelease->color((Fl_Color)48);
@@ -895,14 +895,13 @@ void FablaUI::pad_click(int id, int rclick) {
     {
       case -1: printf("ERROR: %s\\n", fnfc.errmsg());    break;  // ERROR
       case  1: printf("CANCEL\\n");                      break;  // CANCEL
-      
       default:
       {
         char* filename = strdup( fnfc.filename() );
         //printf("Loading directory: %s, %s\n", fnfc.filename(), dirname( filename ) );
         
         writeLoadSample(fabla, id, fnfc.filename(), strlen( fnfc.filename() ));
-        lastUsedPath = filename;
+        lastUsedPath = dirname(filename);
         free (filename);
       }
       break;

@@ -5,6 +5,7 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Double_Window.H>
 #include "avtk.h"
+#include <libgen.h>
 using namespace Avtk;
 #include <FL/x.H>
 #include "lv2/lv2plug.in/ns/lv2core/lv2.h"
@@ -14,8 +15,8 @@ using namespace Avtk;
 #include "../dsp/shared.h"
 #include "fabla.hxx"
 #include "header.c"
-#include <FL/Fl_Native_File_Chooser.H>
 #include <string>
+#include <FL/Fl_Native_File_Chooser.H>
 extern void writeLoadSample(Fabla* self, int pad, const char* filename, size_t filename_len);
 extern void writePadPlay(Fabla* self, int pad );
 
@@ -35,11 +36,13 @@ private:
   void cb_compressor_i(Compressor*, void*);
   static void cb_compressor(Compressor*, void*);
 public:
+  Fl_Box *compressorBox;
   Volume *masterVol;
 private:
   void cb_masterVol_i(Volume*, void*);
   static void cb_masterVol(Volume*, void*);
 public:
+  Fl_Box *adsrBox;
   Dial *compRelease;
 private:
   void cb_compRelease_i(Dial*, void*);

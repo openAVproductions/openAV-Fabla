@@ -25,8 +25,8 @@ fl_open_display();
 selectedPad = 0;} {}
     Fl_Window w {
       label Fabla
-      callback {close_cb( o, 0 );} open selected
-      xywh {1527 348 515 490} type Double box UP_BOX color 48 selection_color 0 labelcolor 88
+      callback {close_cb( o, 0 );} open
+      xywh {1403 321 515 490} type Double box UP_BOX color 48 selection_color 0 labelcolor 88
       code0 {\#include "avtk.h"}
       code1 {using namespace Avtk;}
       code2 {\#include <FL/x.H>}
@@ -66,8 +66,9 @@ else
         code0 {compressor->set_active( false );}
         class Compressor
       }
-      Fl_Box {} {
+      Fl_Box compressorBox {
         xywh {351 379 97 97} box BORDER_BOX
+        code0 {compressorBox->color( fl_rgb_color( 28,28,28 ));}
       }
       Fl_Box masterVol {
         label Vol
@@ -80,8 +81,9 @@ writeFunction(controller, MASTER_VOL, sizeof(float), 0, (const void*) &tmp);}
         code3 {\#include "fabla.hxx"}
         class Volume
       }
-      Fl_Box {} {
+      Fl_Box adsrBox {selected
         xywh {350 155 150 98} box BORDER_BOX
+        code0 {adsrBox->color( fl_rgb_color( 28,28,28 ));}
       }
       Fl_Box compRelease {
         label Rel
