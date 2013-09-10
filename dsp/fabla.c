@@ -35,8 +35,6 @@
 
 #define NVOICES 64
 
-static const char* default_sample = "click.wav";
-
 class SampleMessage
 {
   public:
@@ -256,13 +254,6 @@ instantiate(const LV2_Descriptor*     descriptor,
   
   // then init the forge to write Atoms
   lv2_atom_forge_init(&self->forge, self->map);
-  
-  // Load the default sample file
-  const size_t path_len    = strlen(bundle_path);
-  const size_t file_len    = strlen(default_sample);
-  const size_t len         = path_len + file_len;
-  char*        sample_path = (char*)malloc(len + 1);
-  snprintf(sample_path, len + 1, "%s%s", bundle_path, default_sample);
   
   return (LV2_Handle)self;
 }
