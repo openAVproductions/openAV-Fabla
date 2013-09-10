@@ -102,31 +102,19 @@ void writePadPlay(Fabla* self, int pad)
               set );
 }
 
+/// Called when the UI is instantiated. DSP writes the path/filename for each
+/// pad to the UI, so it can open the file, read the waveform & display it.
 void writeUpdateUiPaths(Fabla* self)
 {
   LV2_Atom_Forge* forge = (LV2_Atom_Forge*)self->voidForge;
   
-  printf("writing UiRequestPaths\n" );
-  
-  // To write messages, we set up a buffer:
   uint8_t obj_buf[1024];
-  // Then we tell the forge to use that buffer
   lv2_atom_forge_set_buffer( forge, obj_buf, 1024);
   
   LV2_Atom_Forge_Frame set_frame;
   LV2_Atom* set = (LV2_Atom*)lv2_atom_forge_blank( forge, &set_frame, 1, self->uris->atom_eventTransfer);
 
   lv2_atom_forge_property_head( forge, self->uris->fabla_UiRequestPaths, 0);
-  /*
-  LV2_Atom_Forge_Frame body_frame;
-  
-  lv2_atom_forge_blank( forge, &body_frame, 2, 0);
-  
-  lv2_atom_forge_property_head( forge, self->uris->fabla_pad, 0);
-  lv2_atom_forge_int(forge, pad);
-  
-  lv2_atom_forge_pop(forge, &body_frame);
-  */
   lv2_atom_forge_pop(forge, &set_frame);
   
   self->write_function(self->controller, ATOM_IN, lv2_atom_total_size(set),
