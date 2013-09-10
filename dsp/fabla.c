@@ -606,7 +606,7 @@ run(LV2_Handle instance, uint32_t n_samples)
     
   } // LV2_ATOM_SEQUENCE_FOREACH
   
-  // triggered by Restore, need to write Atoms from here
+  // triggered by Restore / UI re-instantiate, need to write Atoms from here
   if ( self->updateUiPaths )
   {
     if ( self->samples[self->updateUiPathCounter] )
@@ -616,7 +616,6 @@ run(LV2_Handle instance, uint32_t n_samples)
       lv2_atom_forge_frame_time(&self->forge, 0);
       LV2_Atom_Forge_Frame set_frame;
       
-      //LV2_Atom* set = (LV2_Atom*)
       lv2_atom_forge_blank(&self->forge, &set_frame, 1, self->uris->atom_eventTransfer);
       
       lv2_atom_forge_property_head(&self->forge, self->uris->fabla_Waveform, 0);
@@ -638,7 +637,7 @@ run(LV2_Handle instance, uint32_t n_samples)
     
     self->updateUiPathCounter++;
     
-    if ( self->updateUiPathCounter >= 15 )
+    if ( self->updateUiPathCounter > 15 )
     {
       self->updateUiPaths = false;
       self->updateUiPathCounter = 0;
