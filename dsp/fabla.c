@@ -33,7 +33,7 @@
 #include "dsp_dbmeter.hxx"
 #include "dsp_compressor.hxx"
 
-#define NVOICES 16
+#define NVOICES 64
 
 static const char* default_sample = "click.wav";
 
@@ -700,7 +700,7 @@ run(LV2_Handle instance, uint32_t n_samples)
   self->uiUpdateCounter += n_samples;
   
   // disable for Atom debug purposes: stops the huge stream of Atoms
-  if ( false )// ( self->uiUpdateCounter > self->sr / 15 ) //
+  if ( self->uiUpdateCounter > self->sr / 15 ) // ( false )// 
   {
     // send levels to UI
     float L = self->meter->getLeftDB();
