@@ -70,6 +70,8 @@ typedef struct {
   LV2_URID fabla_Waveform;
   LV2_URID fabla_WaveformMsgNum;
   
+  LV2_URID fabla_UiRequestPaths;
+  
   LV2_URID fabla_pad;
   LV2_URID fabla_filename;
   
@@ -111,6 +113,8 @@ map_uris(LV2_URID_Map* map, Fabla_URIs* uris)
   uris->fabla_MeterLevels  = map->map(map->handle, FABLA_URI"#MeterLevels");
   uris->fabla_Waveform     = map->map(map->handle, FABLA_URI"#Waveform");
   uris->fabla_WaveformMsgNum=map->map(map->handle, FABLA_URI"#WaveformMsgNum");
+  
+  uris->fabla_UiRequestPaths=map->map(map->handle, FABLA_URI"#UiRequestPaths");
   
   uris->fabla_pad          = map->map(map->handle, FABLA_URI"#pad");
   uris->fabla_level_l      = map->map(map->handle, FABLA_URI"#level_r");

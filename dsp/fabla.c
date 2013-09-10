@@ -590,6 +590,18 @@ run(LV2_Handle instance, uint32_t n_samples)
         }
       }
       
+      // check if UI opened: will send a "fabla_UiRequestPaths" message
+      const LV2_Atom_Object* requestPathsBody = NULL;
+      lv2_atom_object_get(obj, self->uris->fabla_UiRequestPaths, &requestPathsBody, 0);
+      if (requestPathsBody)
+      {
+        // contains no data: the message itself notifies the UI has been opened,
+        // and needs to be told what samples are loaded where.
+        self->updateUiPaths = true;
+      }
+      
+      
+      
     } // atom Blank
     
   } // LV2_ATOM_SEQUENCE_FOREACH
@@ -689,7 +701,7 @@ run(LV2_Handle instance, uint32_t n_samples)
   self->uiUpdateCounter += n_samples;
   
   // disable for Atom debug purposes: stops the huge stream of Atoms
-  if ( self->uiUpdateCounter > self->sr / 15 ) //  false )// 
+  if ( false )// ( self->uiUpdateCounter > self->sr / 15 ) //
   {
     // send levels to UI
     float L = self->meter->getLeftDB();

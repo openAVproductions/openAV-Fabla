@@ -49,6 +49,7 @@
 using namespace std;
 
 extern void initForge(Fabla*);
+extern void writeUpdateUiPaths(Fabla*);
 extern void writeLoadSample(Fabla* self, int pad, const char* filename, size_t filename_len);
 
 static LV2UI_Handle instantiate(const struct _LV2UI_Descriptor * descriptor,
@@ -112,6 +113,9 @@ static LV2UI_Handle instantiate(const struct _LV2UI_Descriptor * descriptor,
       cout << "FablaUI: Warning, host doesn't support resize extension.\n\
       Please ask the developers of the host to support this extension. "<< endl;
     }
+    
+    // request the paths to load the waveforms from DSP
+    writeUpdateUiPaths( self );
     
     //cout << "returning..." << int(self->widget->getXID()) << endl;
     
