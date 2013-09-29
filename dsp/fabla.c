@@ -150,10 +150,8 @@ static Sample* load_sample(FABLA_DSP* self, const char* path)
     free(sample);
     return NULL;
   }
-  else
-  {
-    //lv2_log_error(&self->logger, "Sample has '%i' samples\n", info->frames);
-  }
+  
+  //lv2_log_note(&self->logger, "Sample has '%li' samples\n", info->frames);
   
   // Read data
   float* const data = (float*)malloc(sizeof(float) * info->frames);
@@ -943,13 +941,13 @@ restore(LV2_Handle                  instance,
         }
         else
         {
-          printf("Error: Sample Restore on pad %i, %s\n", i, self->samples[i]->path);
+          printf("Error: load_sample() return zero on pad %i\n", i);
         }
         
       } // path is valid
       else
       {
-        printf( "Error loading sample\n");
+        printf( "Error: path of sample not valid from Restore::retrieve()\n");
       }
     }
   }
