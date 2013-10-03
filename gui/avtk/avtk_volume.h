@@ -94,7 +94,7 @@ class Volume : public Fl_Slider
         
         // fill background
         cairo_rectangle( cr, x, y, w, h);
-        cairo_set_source_rgb( cr, 28 / 255.f,  28 / 255.f ,  28 / 255.f  );
+        cairo_set_source_rgb( cr, 20 / 255.f,  20 / 255.f ,  20 / 255.f  );
         cairo_fill( cr );
         
         

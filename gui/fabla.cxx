@@ -344,7 +344,7 @@ Fl_Double_Window* FablaUI::setupUI() {
     } // Compressor* compressor
     { compressorBox = new Fl_Box(351, 379, 97, 97);
       compressorBox->box(FL_BORDER_BOX);
-      compressorBox->color( fl_rgb_color( 28,28,28 ));
+      compressorBox->color( fl_rgb_color( 10, 10, 10 ) );
     } // Fl_Box* compressorBox
     { masterVol = new Volume(453, 290, 48, 186, "Vol");
       masterVol->box(FL_UP_BOX);
@@ -360,7 +360,7 @@ Fl_Double_Window* FablaUI::setupUI() {
     } // Volume* masterVol
     { adsrBox = new Fl_Box(350, 155, 150, 98);
       adsrBox->box(FL_BORDER_BOX);
-      adsrBox->color( fl_rgb_color( 28,28,28 ));
+      adsrBox->color( fl_rgb_color( 10, 10, 10 ) );
     } // Fl_Box* adsrBox
     { compRelease = new Dial(406, 435, 30, 30, "Rel");
       compRelease->box(FL_UP_BOX);
