@@ -290,7 +290,7 @@ Fl_Double_Window* FablaUI::setupUI() {
   selectedPad = 0;
   { w = new Fl_Double_Window(515, 490, "Fabla");
     w->box(FL_UP_BOX);
-    w->color((Fl_Color)48);
+    w->color( fl_rgb_color( 10, 10, 10 ) );
     w->selection_color(FL_FOREGROUND_COLOR);
     w->labelcolor(FL_RED);
     w->callback((Fl_Callback*)cb_w, (void*)(this));
