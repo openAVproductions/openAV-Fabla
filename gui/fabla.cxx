@@ -879,7 +879,6 @@ void FablaUI::pad_click(int id, int rclick) {
       writeLoadSample(fabla, id, filename, strlen(filename) );
       free( (void*)filename );
     }
-    
     //delete fnfc;
     */
     
@@ -888,7 +887,7 @@ void FablaUI::pad_click(int id, int rclick) {
     Fl_Native_File_Chooser fnfc;
     fnfc.title("Load Sample");
     fnfc.type(Fl_Native_File_Chooser::BROWSE_FILE);
-    fnfc.filter("Wav\t*.wav");
+    fnfc.filter("Audio\t{*.aiff,*.wav,*.flac}");
     fnfc.directory( lastUsedPath.c_str() );
     
     switch ( fnfc.show() )
