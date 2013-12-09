@@ -142,11 +142,11 @@ class Pad : public Fl_Box
         
         // draw pad name
         //x+2, y+2, w-4, h-4
-        cairo_move_to( cr, x + 7, y + h/2 + 14 );
+        cairo_move_to( cr, x + 7, y + h/2 + 17 );
         cairo_set_source_rgba( cr, 255 / 255.f,  255 / 255.f ,  255 / 255.f, 0.8  );
         //cairo_set_source_rgba( cr, 0 / 255.f, 153 / 255.f , 255 / 255.f , 1 );
         cairo_set_font_size( cr, 10 );
-        cairo_show_text( cr, name.c_str() );
+        cairo_show_text( cr, name.substr(0,12).c_str() );
         
         
         cairo_restore( cr );

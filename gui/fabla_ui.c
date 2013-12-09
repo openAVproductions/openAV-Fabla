@@ -184,15 +184,17 @@ static void port_event(LV2UI_Handle handle,
             LV2_Atom_Object* obj = (LV2_Atom_Object*)atom;
             const LV2_Atom_Object* body = NULL;
             
-            
             // NOTE ON
             lv2_atom_object_get(obj, self->uris->fabla_Play, &body, 0);
-            if (body) {
+            if (body)
+            {
               // Get int from body
               const LV2_Atom_Int* padNum = 0;
               lv2_atom_object_get( body, self->uris->fabla_pad, &padNum, 0);
               int* p = (int*)LV2_ATOM_BODY(padNum);
               int pad = *p - 36;
+              
+              //fprintf(stderr,"note on, %i\n", pad);
               
               if ( pad >= 0 && pad < 16 )
               {
@@ -219,8 +221,11 @@ static void port_event(LV2UI_Handle handle,
                 }
                 
                 // set the "selectedPad" to the played note
+                
                 ui->select_pad(pad);
+                ui->adsr->setName( ui->padData[pad].name );
               }
+              
             }
             
             // NOTE Off
@@ -232,6 +237,8 @@ static void port_event(LV2UI_Handle handle,
               lv2_atom_object_get( body, self->uris->fabla_pad, &padNum, 0);
               int* p = (int*)LV2_ATOM_BODY(padNum);
               int pad = *p - 36;
+              
+              //fprintf(stderr,"note off, %i\n", pad);
               
               if ( pad >= 0 && pad < 16 )
               {
@@ -357,7 +364,10 @@ static void port_event(LV2UI_Handle handle,
               std::string name = f;
               int i = name.find_last_of('/') + 1;
               std::string sub = name.substr( i );
-              ui->padData[pad].name = sub;
+              
+              int dot = sub.find_last_of('.');
+              std::string fin = sub.substr( 0, dot );
+              ui->padData[pad].name = fin;
               //printf("FablaUI: name %s\ni %i\nsub %s\n", name.c_str(), i, sub.c_str() );
               
               ui->padData[pad].loaded = true;
@@ -462,7 +472,6 @@ static void port_event(LV2UI_Handle handle,
       default: break;
     }
     
-    //ui->filterLowpass->value( argv[0]->f );
     Fl::unlock();
     Fl::awake();
     

@@ -25,6 +25,8 @@
 
 #include <FL/Fl_Slider.H>
 
+#include <sstream>
+
 namespace Avtk
 {
 
@@ -59,6 +61,14 @@ class ADSR : public Fl_Slider
     float d;
     float s;
     float r;
+    
+    std::string name;
+    void setName( std::string n )
+    {
+      name = n;
+      redraw();
+      printf("name = %s\n", name.c_str() );
+    }
     
     bool active;
     bool mouseOver;
@@ -126,6 +136,16 @@ class ADSR : public Fl_Slider
         cairo_set_line_join( cr, CAIRO_LINE_JOIN_ROUND);
         cairo_set_line_cap ( cr, CAIRO_LINE_CAP_ROUND);
         cairo_stroke( cr );
+        
+        
+        // draw sample name
+        cairo_move_to( cr,  8, h-10 );
+        cairo_set_source_rgb ( cr, 0.6,0.6,0.6);
+        cairo_set_font_size( cr, 10 );
+        std::stringstream s;
+        s << "Sample: " << name;
+        cairo_show_text( cr, s.str().c_str() );
+        
         
         // stroke rim
         cairo_rectangle(cr, x, y, w, h);
