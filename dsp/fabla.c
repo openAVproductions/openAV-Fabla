@@ -913,6 +913,8 @@ restore(LV2_Handle                  instance,
 {
   FABLA_DSP* self = (FABLA_DSP*)instance;
   
+  printf( "Fabla::Restore()\n");
+  
   size_t   size;
   uint32_t type;
   uint32_t valflags;
@@ -925,7 +927,7 @@ restore(LV2_Handle                  instance,
       const char* path = (const char*)value;
       if (path)
       {
-        //printf( "Restoring pad %i, filepath: %s\n", i, path);
+        printf( "Restoring pad %i, filepath: %s\n", i, path);
         
         if ( self->samples[i] )
         {
