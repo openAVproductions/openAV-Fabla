@@ -36,6 +36,8 @@
   lv2:optionalFeature work:schedule ;
   lv2:optionalFeature lv2:hardRtCapable ;
   
+  lv2:extensionData state:interface ;
+  
   ui:ui <http://www.openavproductions.com/fabla/gui> ;
 
   lv2:port [
