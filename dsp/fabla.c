@@ -379,7 +379,9 @@ static void noteOn(FABLA_DSP* self, int note, int velocity, int frame)
       
       // set voice dependant values: pan / volume
       self->voice[i]->setPan   ( self->samples[note]->pan  );
-      self->voice[i]->setVolume( self->samples[note]->gain );
+      
+      float vol = self->samples[note]->gain * (velocity / 127.);
+      self->voice[i]->setVolume( vol );
       
       // play the voice
       self->voice[i]->play( note, velocity, frame );

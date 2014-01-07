@@ -108,7 +108,7 @@ class Voice
     /// volume per voice of sample
     void setVolume( float v )
     {
-      vol = v;
+      vol = v * 2;
     }
     
     
@@ -135,7 +135,8 @@ class Voice
         
         float out = y1 + ( y2 - y1 ) * x0;
         
-        float tmp = out * sample->gain *  adsr->process(nframes);
+        // vol is sample gain * midi velocity
+        float tmp = out * vol *  adsr->process(nframes);
         
         // sin / cos based amplitude panning
         float panL = cos(pan * 3.14/2.f);
