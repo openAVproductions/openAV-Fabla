@@ -377,7 +377,9 @@ static void noteOn(FABLA_DSP* self, int note, int velocity, int frame)
                               *self->padData[note].s,
                               *self->padData[note].r * 0.5);
       
-      self->voice[i]->setPan( self->samples[note]->pan );
+      // set voice dependant values: pan / volume
+      self->voice[i]->setPan   ( self->samples[note]->pan  );
+      self->voice[i]->setVolume( self->samples[note]->gain );
       
       // play the voice
       self->voice[i]->play( note, velocity, frame );
@@ -417,6 +419,18 @@ run(LV2_Handle instance, uint32_t n_samples)
   // zero output buffer
   memset ( outputL, 0, n_samples );
   memset ( outputR, 0, n_samples );
+  
+  
+  // loop over the pads, setting control port values
+  for(int i = 0; i < 16; i++)
+  {
+    if ( self->samples[i] )
+    {
+      self->samples[i]->gain  = *(self->padData[i].gain );
+      self->samples[i]->speed = *(self->padData[i].speed);
+      self->samples[i]->pan   = *(self->padData[i].pan  );
+    }
+  }
   
   // Set up forge to write directly to notify output port
   const uint32_t notify_capacity = self->notify_port->atom.size;
@@ -631,18 +645,6 @@ run(LV2_Handle instance, uint32_t n_samples)
       self->updateUiPaths = false;
       self->updateUiPathCounter = 0;
       //lv2_log_note(&self->logger, "finished writing pads to UI\n");
-    }
-  }
-  
-  
-  // loop over the pads, setting control port values
-  for(int i = 0; i < 16; i++)
-  {
-    if ( self->samples[i] )
-    {
-      self->samples[i]->gain  = *(self->padData[i].gain );
-      self->samples[i]->speed = *(self->padData[i].speed);
-      self->samples[i]->pan   = *(self->padData[i].pan  );
     }
   }
   

@@ -105,6 +105,11 @@ class Voice
       }
     }
     
+    /// volume per voice of sample
+    void setVolume( float v )
+    {
+      vol = v;
+    }
     
     
     void process( int nframes, float* bufL, float* bufR )
@@ -175,8 +180,9 @@ class Voice
     bool  sampleCountdownQueued;
     float sampleCountdown;
     
-    // pan per voice
+    // vol & pan per voice
     float pan;
+    float vol;
 };
 
 #endif // FABLA_VOICE_H

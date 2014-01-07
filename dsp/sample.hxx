@@ -34,7 +34,6 @@ class Sample
       path_len = 0;
       
       speed = 1.0f;
-
     }
     
     SF_INFO info;      // Info about sample from sndfile
