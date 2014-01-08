@@ -11,6 +11,6 @@
   a ui:X11UI;
   ui:binary <fabla_ui.so> ;
   
-  lv2:extensionData ui:idle;
+  lv2:extensionData ui:idleInterface;
   
   rdfs:seeAlso <fabla.ttl> .
