@@ -34,7 +34,7 @@
   lv2:requiredFeature urid:map;
   
   lv2:optionalFeature work:schedule ;
-  lv2:optionalFeature lv2:hardRtCapable ;
+  lv2:optionalFeature lv2:hardRTCapable ;
   
   lv2:extensionData state:interface ;
   
