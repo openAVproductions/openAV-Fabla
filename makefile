@@ -6,8 +6,8 @@ ifeq ($(shell pkg-config --atleast-version=1.4.6 lv2 || echo no), no)
   $(error "LV2 SDK >= 1.4.6 was not found")
 endif
 
-INCLUDES=$(shell pkg-config --cflags sndfile cairomm-1.0 ntk ntk_images)
-LDFLAGS=$(shell pkg-config --libs sndfile cairomm-1.0 ntk ntk_images) -fPIC -shared -Wl,-z,nodelete
+INCLUDES=$(shell pkg-config --cflags lv2 sndfile cairomm-1.0 ntk ntk_images)
+LDFLAGS=$(shell pkg-config --libs lv2 sndfile cairomm-1.0 ntk ntk_images) -fPIC -shared -Wl,-z,nodelete
 
 UISOURCES=gui/ui_helpers.cxx gui/fabla.cxx gui/fabla_ui.c
 UIOBJECTS=$(UISOURCES:.cpp=.o)
