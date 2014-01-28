@@ -137,6 +137,11 @@ class UIPadData
   public:
     UIPadData()
     {
+      init();
+    }
+    
+    void init()
+    {
       loaded = false;
       
       gain  = 0.5;

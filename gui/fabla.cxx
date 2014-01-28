@@ -285,12 +285,10 @@ Fl_Double_Window* FablaUI::setupUI() {
   // In case FLTK hasn't set up yet
   fl_open_display();
   
-  lastUsedPath = getenv("HOME");
-  
   selectedPad = 0;
   { w = new Fl_Double_Window(515, 490, "Fabla");
     w->box(FL_UP_BOX);
-    w->color( fl_rgb_color( 10, 10, 10 ) );
+    w->color((Fl_Color)48);
     w->selection_color(FL_FOREGROUND_COLOR);
     w->labelcolor(FL_RED);
     w->callback((Fl_Callback*)cb_w, (void*)(this));
@@ -344,7 +342,7 @@ Fl_Double_Window* FablaUI::setupUI() {
     } // Compressor* compressor
     { compressorBox = new Fl_Box(351, 379, 97, 97);
       compressorBox->box(FL_BORDER_BOX);
-      compressorBox->color( fl_rgb_color( 10, 10, 10 ) );
+      compressorBox->color( fl_rgb_color( 28,28,28 ));
     } // Fl_Box* compressorBox
     { masterVol = new Volume(453, 290, 48, 186, "Vol");
       masterVol->box(FL_UP_BOX);
@@ -360,7 +358,7 @@ Fl_Double_Window* FablaUI::setupUI() {
     } // Volume* masterVol
     { adsrBox = new Fl_Box(350, 155, 150, 98);
       adsrBox->box(FL_BORDER_BOX);
-      adsrBox->color( fl_rgb_color( 10, 10, 10 ) );
+      adsrBox->color( fl_rgb_color( 28,28,28 ));
     } // Fl_Box* adsrBox
     { compRelease = new Dial(406, 435, 30, 30, "Rel");
       compRelease->box(FL_UP_BOX);
@@ -849,71 +847,18 @@ void FablaUI::select_pad(int p) {
 }
 
 void FablaUI::pad_click(int id, int rclick) {
-  //printf("pad %i clicked, right = %i\n", id, rclick);
-  
+  // forward the call to ui_helpers.cxx
   if ( rclick )
   {
-    // pop up "load sample" dialog, write Atom event to DSP
-    
-    /*
-    Fl_File_Chooser* fnfc = new Fl_File_Chooser( getenv("HOME"),
-    			"Wav\t*.wav",
-    			0, // single file select
-    			"Load Sample" );
-    
-    fnfc->show();
-    printf("shown");
-    while( fnfc->shown() )
-    {
-      printf("waiting...");
-      Fl::wait();
-      printf("waiting 2");
-    }
-    printf("done");
-    const char* filename = fnfc->value();
-    char * filename = fl_file_chooser ("Load Sample", "Wav\t*.wav", NULL, 0);
-    
-    if ( filename )
-    {
-      printf("Loading directory: %s\n", filename);    
-      writeLoadSample(fabla, id, filename, strlen(filename) );
-      free( (void*)filename );
-    }
-    //delete fnfc;
-    */
-    
-    // pop up "load sample" dialog, write Atom event to DSP
-    
-    Fl_Native_File_Chooser fnfc;
-    fnfc.title("Load Sample");
-    fnfc.type(Fl_Native_File_Chooser::BROWSE_FILE);
-    fnfc.filter("Audio\t{*.aiff,*.wav,*.flac}");
-    fnfc.directory( lastUsedPath.c_str() );
-    
-    switch ( fnfc.show() )
-    {
-      case -1: printf("ERROR: %s\\n", fnfc.errmsg());    break;  // ERROR
-      case  1: printf("CANCEL\\n");                      break;  // CANCEL
-      default:
-      {
-        char* filename = strdup( fnfc.filename() );
-        //printf("Loading directory: %s, %s\n", fnfc.filename(), dirname( filename ) );
-        
-        writeLoadSample(fabla, id, fnfc.filename(), strlen( fnfc.filename() ));
-        lastUsedPath = dirname(filename);
-        free (filename);
-      }
-      break;
-   }
-    
+      padClicked( fabla, id, rclick );
   }
   else
   {
-    // write pad play Atom to DSP
-    writePadPlay( fabla, id );
-    
-    // update the UI showing the ADSR / waveform of this pad
-    select_pad( id );
+      // write pad play Atom to DSP
+      writePadPlay( fabla, id );
+      
+      // update the UI showing the ADSR / waveform of this pad
+      select_pad( id );
   }
 }
 

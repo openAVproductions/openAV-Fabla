@@ -33,8 +33,10 @@ selectedPad = 0;} {}
       code3 {\#include "lv2/lv2plug.in/ns/lv2core/lv2.h"} visible
     } {
       Fl_Box {} {
-        label Source
+        label Source selected
         xywh {346 41 159 215} box UP_BOX
+        code0 {\#include "fabla.hxx"}
+        code1 {extern void padClicked( Fabla* self, int pad, int rclick );}
         class Background
       }
       Fl_Box adsr {
@@ -81,7 +83,7 @@ writeFunction(controller, MASTER_VOL, sizeof(float), 0, (const void*) &tmp);}
         code3 {\#include "fabla.hxx"}
         class Volume
       }
-      Fl_Box adsrBox {selected
+      Fl_Box adsrBox {
         xywh {350 155 150 98} box BORDER_BOX
         code0 {adsrBox->color( fl_rgb_color( 28,28,28 ));}
       }
@@ -435,66 +437,18 @@ else
   }
   Function {pad_click(int id, int rclick)} {open
   } {
-    code {//printf("pad %i clicked, right = %i\\n", id, rclick);
-
+    code {// forward the call to ui_helpers.cxx
 if ( rclick )
 {
-  // pop up "load sample" dialog, write Atom event to DSP
-  
-  /*
-  Fl_File_Chooser* fnfc = new Fl_File_Chooser( getenv("HOME"),
-  			"Wav\\t*.wav",
-  			0, // single file select
-  			"Load Sample" );
-  
-  fnfc->show();
-  printf("shown");
-  while( fnfc->shown() )
-  {
-    printf("waiting...");
-    Fl::wait();
-    printf("waiting 2");
-  }
-  printf("done");
-  const char* filename = fnfc->value();
-  char * filename = fl_file_chooser ("Load Sample", "Wav\\t*.wav", NULL, 0);
-  
-  if ( filename )
-  {
-    printf("Loading directory: %s\\n", filename);    
-    writeLoadSample(fabla, id, filename, strlen(filename) );
-    free( (void*)filename );
-  }
-  
-  //delete fnfc;
-  */
-  
-  // pop up "load sample" dialog, write Atom event to DSP
-  
-  Fl_Native_File_Chooser fnfc;
-  fnfc.title("Load Sample");
-  fnfc.type(Fl_Native_File_Chooser::BROWSE_FILE);
-  fnfc.filter("Wav\\t*.wav");
-  fnfc.directory( getenv("HOME") );
-  
-  switch ( fnfc.show() )
-  {
-    case -1: printf("ERROR: %s\\\\n", fnfc.errmsg());    break;  // ERROR
-    case  1: printf("CANCEL\\\\n");                      break;  // CANCEL
-    default: printf("Loading directory: %s\\\\n", fnfc.filename());    
-    
-    writeLoadSample(fabla, id, fnfc.filename(), strlen(fnfc.filename()));
-    break;
- }
-  
+    padClicked( fabla, id, rclick );
 }
 else
 {
-  // write pad play Atom to DSP
-  writePadPlay( fabla, id );
-  
-  // update the UI showing the ADSR / waveform of this pad
-  select_pad( id );
+    // write pad play Atom to DSP
+    writePadPlay( fabla, id );
+    
+    // update the UI showing the ADSR / waveform of this pad
+    select_pad( id );
 }} {}
   }
   decl {LV2UI_Controller controller;} {public local

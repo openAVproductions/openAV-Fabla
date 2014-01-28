@@ -5,17 +5,16 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Double_Window.H>
 #include "avtk.h"
-#include <libgen.h>
 using namespace Avtk;
 #include <FL/x.H>
 #include "lv2/lv2plug.in/ns/lv2core/lv2.h"
+#include "fabla.hxx"
+extern void padClicked( Fabla* self, int pad, int rclick );
 #include <FL/Fl_Box.H>
 #include "../dsp/ports.h"
 #include "lv2/lv2plug.in/ns/extensions/ui/ui.h"
 #include "../dsp/shared.h"
-#include "fabla.hxx"
 #include "header.c"
-#include <string>
 #include <FL/Fl_Native_File_Chooser.H>
 extern void writeLoadSample(Fabla* self, int pad, const char* filename, size_t filename_len);
 extern void writePadPlay(Fabla* self, int pad );
@@ -192,6 +191,5 @@ public:
   */
   UIPadData padData[16]; 
   void close_cb(Fl_Widget* o, void*);
-  std::string lastUsedPath;
 };
 #endif

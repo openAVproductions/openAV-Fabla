@@ -200,6 +200,8 @@ free_sample(FABLA_DSP* self, Sample* sample)
     free(sample->path);
     free(sample->data);
     free(sample);
+    
+    sample = 0;
   }
 }
 
@@ -614,6 +616,25 @@ run(LV2_Handle instance, uint32_t n_samples)
         }
       }
       
+      const LV2_Atom_Object* unload = NULL;
+      lv2_atom_object_get(obj, self->uris->fabla_Unload, &unload, 0);
+      if ( unload )
+      {
+        printf("Unload recieved\n" );
+        // extract note from Atom, and play
+        //lv2_log_note(&self->logger, "playbody pad \n");
+        const LV2_Atom_Int* padNum = 0;
+        lv2_atom_object_get( unload, self->uris->fabla_pad, &padNum, 0);
+        if ( padNum )
+        {
+          int* p = (int*)LV2_ATOM_BODY(padNum);
+          int pad = *p;
+          //noteOn( self, pad, 120, 0 );
+          printf("Unload recieved on pad %i\n", pad );
+          free_sample( self, self->samples[pad] );
+        }
+      }
+      
       // check if UI opened: will send a "fabla_UiRequestPaths" message
       const LV2_Atom_Object* requestPathsBody = NULL;
       lv2_atom_object_get(obj, self->uris->fabla_UiRequestPaths, &requestPathsBody, 0);
@@ -712,7 +733,7 @@ run(LV2_Handle instance, uint32_t n_samples)
   self->uiUpdateCounter += n_samples;
   
   // disable for Atom debug purposes: stops the huge stream of Atoms
-  if ( self->uiUpdateCounter > self->sr / 15 ) // ( false )// 
+  if ( false )// ( self->uiUpdateCounter > self->sr / 15 ) // 
   {
     // send levels to UI
     float L = self->meter->getLeftDB();
