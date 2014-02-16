@@ -154,14 +154,33 @@ static Sample* load_sample(FABLA_DSP* self, const char* path)
   //lv2_log_note(&self->logger, "Sample has '%li' samples\n", info->frames);
   
   // Read data
-  float* const data = (float*)malloc(sizeof(float) * info->frames);
+  float* data = (float*)malloc(sizeof(float) * info->frames * info->channels );
   if (!data) {
     lv2_log_error(&self->logger, "Failed to allocate memory for sample\n");
     return NULL;
   }
+  
   sf_seek(sndfile, 0ul, SEEK_SET);
-  sf_read_float(sndfile, data, info->frames);
+  sf_read_float(sndfile, data, info->frames * info->channels);
   sf_close(sndfile);
+  
+  int chnls = info->channels;
+  if ( chnls > 1 )
+  {
+    lv2_log_note(&self->logger, "Sample '%s' has %i channels: using channel 1\n", path, chnls);
+    // we're gonna kick all samples that are *not* channel 1
+    float* tmp = (float*)malloc( sizeof(float) * info->frames );
+    
+    printf("Non mono file: %i chnls found, old size %li, new size %li \n", chnls,info->channels * info->frames, info->frames );
+    for(unsigned int i = 0; i < info->frames; i++ )
+    {
+      tmp[i] = data[ i * chnls ];
+    }
+    
+    // swap buffer, freeing used "multi-channel" buffer
+    free( data );
+    data = tmp;
+  }
   
   // Fill sample struct and return it
   sample->data     = data;
