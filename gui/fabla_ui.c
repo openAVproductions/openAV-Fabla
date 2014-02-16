@@ -331,13 +331,32 @@ static void port_event(LV2UI_Handle handle,
               }
               
               // Read data
-              float* const data = (float*)malloc(sizeof(float) * info.frames);
+              float* data = (float*)malloc(sizeof(float) * info.frames  * info.channels);
               if (!data) {
                 printf("FablaUI: Failed to allocate memory for sample\n");
                 return;
               }
               sf_seek(sndfile, 0ul, SEEK_SET);
-              sf_read_float(sndfile, data, info.frames);
+              sf_read_float(sndfile, data, info.frames * info.channels);
+              
+              
+              int chnls = info.channels;
+              if ( chnls > 1 )
+              {
+                //printf("Sample '%s' has %i channels: using channel 1\n", path, chnls);
+                // we're gonna kick all samples that are *not* channel 1
+                float* tmp = (float*)malloc( sizeof(float) * info.frames );
+                
+                //printf("Non mono file: %i chnls found, old size %li, new size %li \n", chnls,info.channels * info.frames, info.frames );
+                for(unsigned int i = 0; i < info.frames; i++ )
+                {
+                  tmp[i] = data[ i * chnls ];
+                }
+                
+                // swap buffer, freeing used "multi-channel" buffer
+                free( data );
+                data = tmp;
+              }
               
               
               // find how many samples per pixel
