@@ -195,13 +195,28 @@ static Sample* load_sample(FABLA_DSP* self, const char* path)
 static void
 free_sample(FABLA_DSP* self, Sample* sample)
 {
-  if (sample) {
-    //lv2_log_trace(&self->logger, "Freeing %s\n", sample->path);
-    free(sample->path);
-    free(sample->data);
-    free(sample);
+  lv2_log_trace(&self->logger, "free_sample()\n");
+  
+  if ( sample )
+  {
+  
+    if ( sample->path )
+    {
+      lv2_log_trace(&self->logger, "Freeing %s\n", sample->path);
+      free(sample->path);
+    }
     
+    if ( sample->data)
+      free(sample->data);
+    else
+      lv2_log_trace(&self->logger, "Error: free_sample() Sample->data == 0\n");
+    
+    free(sample);
     sample = 0;
+  }
+  else
+  {
+    lv2_log_trace(&self->logger, "free_sample() called on pad with no sample loaded.\n");
   }
 }
 
@@ -622,7 +637,6 @@ run(LV2_Handle instance, uint32_t n_samples)
       {
         printf("Unload recieved\n" );
         // extract note from Atom, and play
-        //lv2_log_note(&self->logger, "playbody pad \n");
         const LV2_Atom_Int* padNum = 0;
         lv2_atom_object_get( unload, self->uris->fabla_pad, &padNum, 0);
         if ( padNum )
