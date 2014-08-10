@@ -31,6 +31,7 @@ folder:
 	
 
 install:
+	mkdir -p ~/.lv2
 	cp dsp/fabla.ttl fabla.lv2/
 	cp -r fabla.lv2 ~/.lv2/
 	cp -r presets/*.lv2 ~/.lv2/
