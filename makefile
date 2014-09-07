@@ -2,12 +2,12 @@
 CC=g++
 CFLAGS=-g -Wall
 
-ifeq ($(shell pkg-config --atleast-version=1.4.6 lv2 || echo no), no)
-  $(error "LV2 SDK >= 1.4.6 was not found")
+ifeq ($(shell pkg-config --atleast-version=1.8.0 lv2 || echo no), no)
+  $(error "LV2 >= 1.8.0 was not found, please update the lv2 package")
 endif
 
-INCLUDES=$(shell pkg-config --cflags lv2 sndfile cairomm-1.0 ntk ntk_images)
-LDFLAGS=$(shell pkg-config --libs lv2 sndfile cairomm-1.0 ntk ntk_images) -fPIC -shared -Wl,-z,nodelete
+INCLUDES=$(shell pkg-config --cflags ntk lv2 cairomm-1.0 sndfile ntk_images)
+LDFLAGS=$(shell pkg-config --libs ntk lv2 cairomm-1.0 sndfile ntk_images) -fPIC -shared -Wl,-z,nodelete
 
 UISOURCES=gui/ui_helpers.cxx gui/fabla.cxx gui/fabla_ui.c
 UIOBJECTS=$(UISOURCES:.cpp=.o)
@@ -46,7 +46,7 @@ $(DSP): $(DSPOBJECTS)
 	$(CC) $(DSPOBJECTS) $(INCLUDES) $(CFLAGS) $(LDFLAGS) -o $@
 
 $(UI): $(UIOBJECTS)
-	$(CC) $(UIOBJECTS)  $(INCLUDES) $(CFLAGS) $(LDFLAGS) -o $@
+	$(CC)  $(CFLAGS)  $(INCLUDES) $(UIOBJECTS) $(LDFLAGS) -o $@
 
 $(SA): $(SAOBJECTS)
 	$(CC) $(SAOBJECTS) $(INCLUDES) $(LDFLAGS) -o $@
