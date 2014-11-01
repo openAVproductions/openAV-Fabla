@@ -27,12 +27,10 @@
 #include <vector>
 #include <string>
 #include <sstream>
-#include <cairomm/context.h>
 #include <iostream>
 #include <stdlib.h>
 
 using namespace std;
-using namespace Cairo;
 
 namespace Avtk
 {

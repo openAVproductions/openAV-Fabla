@@ -9,8 +9,6 @@
 
 <http://www.openavproductions.com/fabla/gui>
   a ui:X11UI;
-  ui:binary <fabla_ui.so> ;
-  
+  ui:binary <fabla.so> ;
   lv2:extensionData ui:idleInterface;
-  
   rdfs:seeAlso <fabla.ttl> .
