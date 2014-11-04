@@ -75,3 +75,11 @@ install (TARGETS fabla DESTINATION lib/lv2/fabla.lv2/)
 # install .ttl files
 install(FILES "dsp/fabla.ttl"     DESTINATION lib/lv2/fabla.lv2/)
 install(FILES "dsp/manifest.ttl"  DESTINATION lib/lv2/fabla.lv2/)
+
+install( DIRECTORY "presets/fabla808.lv2"           DESTINATION lib/lv2 )
+install( DIRECTORY "presets/fablaHardElectro.lv2"   DESTINATION lib/lv2 )
+install( DIRECTORY "presets/fablaSavageDrums.lv2"   DESTINATION lib/lv2 )
+install( DIRECTORY "presets/fablaEasternHop.lv2"    DESTINATION lib/lv2 )
+
+# install presets
+#install(COPY "presets/fabla808.lv2"  DESTINATION lib/lv2/ )
