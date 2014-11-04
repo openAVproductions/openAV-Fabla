@@ -20,8 +20,11 @@ lv2
 Install
 -------
 Once deps are satisfied, building and installing into ~/.lv2/ is easy,
-just run make as usual:
+just run CMake as usual:
 ```
+mkdir build
+cd build
+cmake ..
 make
 make install
 ```

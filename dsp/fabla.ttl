@@ -13,9 +13,9 @@
 <http://www.openavproductions.com/fabla/gui>
   a ui:X11UI ;
   lv2:requiredFeature urid:map ;
-  #lv2:optionalFeature ui:makeResident.
-  
   lv2:optionalFeature ui:noUserResize ;
+  lv2:extensionData ui:showInterface,
+                    ui:idleInterface ;
   
   ui:portNotification [
     ui:plugin <http://www.openavproductions.com/fabla> ;

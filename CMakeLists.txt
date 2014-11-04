@@ -73,5 +73,5 @@ set_target_properties(fabla PROPERTIES PREFIX "")
 install (TARGETS fabla DESTINATION lib/lv2/fabla.lv2/)
 
 # install .ttl files
-install(FILES "fabla.lv2/fabla.ttl"     DESTINATION lib/lv2/fabla.lv2/)
-install(FILES "fabla.lv2/manifest.ttl"  DESTINATION lib/lv2/fabla.lv2/)
+install(FILES "dsp/fabla.ttl"     DESTINATION lib/lv2/fabla.lv2/)
+install(FILES "dsp/manifest.ttl"  DESTINATION lib/lv2/fabla.lv2/)
