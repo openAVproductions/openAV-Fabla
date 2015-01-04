@@ -112,7 +112,7 @@ class Voice
     }
     
     
-    void process( int nframes, float* bufL, float* bufR )
+    void process( int nframes, float* bufL, float* bufR, bool nosum = false )
     {
       // counts down frames until note on
       sampleCountdown--;
@@ -142,8 +142,16 @@ class Voice
         float panL = cos(pan * 3.14/2.f);
         float panR = sin(pan * 3.14/2.f);
         
-        *bufL += tmp * panL;
-        *bufR += tmp * panR;
+        if(nosum)
+        {
+            *bufL = tmp * panL;
+            *bufR = tmp * panR;
+        }
+        else
+        {
+            *bufL += tmp * panL;
+            *bufR += tmp * panR;
+        }
         
         // pitch up twice the range
         float increment = 0.5 + sample->speed;
@@ -184,6 +192,9 @@ class Voice
     // vol & pan per voice
     float pan;
     float vol;
+  public:
+    int getNote() { return note; }
+    bool getIsPlaying() { return playingBool; }
 };
 
 #endif // FABLA_VOICE_H

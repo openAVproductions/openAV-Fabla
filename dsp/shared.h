@@ -120,7 +120,8 @@ map_uris(LV2_URID_Map* map, Fabla_URIs* uris)
   uris->fabla_level_l      = map->map(map->handle, FABLA_URI"#level_r");
   uris->fabla_level_r      = map->map(map->handle, FABLA_URI"#level_l");
   uris->fabla_filename     = map->map(map->handle, FABLA_URI"#filename");
-  uris->fabla_waveformData = map->map(map->handle, FABLA_URI"#waveformData");
+  uris->fabla_waveformData = map->map
+(map->handle, FABLA_URI"#waveformData");
   
   // Sample restore URI's  per pad
   for ( int i = 0; i < 16; i++ )
