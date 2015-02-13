@@ -415,6 +415,14 @@ static void noteOn(FABLA_DSP* self, int note, int velocity, int frame)
   //lv2_log_note(&self->logger, "noteOn done\n" );
 }
 
+static void noteOff(FABLA_DSP* self, int note, int frame)
+{
+  // release ADSR of note
+  for(int i = 0; i < NVOICES; i++)
+  {
+    self->voice[i]->stopIfNoteEquals( note );
+  }
+}
 
 static void
 activate(LV2_Handle instance)
@@ -510,13 +518,7 @@ run(LV2_Handle instance, uint32_t n_samples)
         
         int n = int(data[1]) - 36;
 
-        // release ADSR of note
-        for(int i = 0; i < NVOICES; i++)
-        {
-          self->voice[i]->stopIfNoteEquals( n );
-        }
-        
-        
+        noteOff( self, n, ev->time.frames );
       }
     } // MIDI event
     
