@@ -60,7 +60,7 @@ class ADSR
     /// set attack in milliseconds
     void attack(float a)
     {
-      att = (a + 0.01) * sr;
+      att = (a + 0.002) * sr;
     }
     
     /// set decay in milliseconds
