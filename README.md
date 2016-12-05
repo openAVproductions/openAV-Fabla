@@ -5,7 +5,7 @@ Official page: http://openavproductions.com/fabla
 
 This is the repository of a sampler LV2 plugin called Fabla.
 
-![screenshot](https://raw.github.com/harryhaaren/openAV-Fabla/master/gui/fabla.png "Fabla 1.3 Screenshot")
+![screenshot](https://raw.githubusercontent.com/openAVproductions/openAV-Fabla/master/gui/fabla.png "Fabla 1.3 Screenshot")
 
 Dependencies
 ------------
