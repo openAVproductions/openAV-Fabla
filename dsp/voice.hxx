@@ -38,8 +38,8 @@ class Voice
       playingBool = false;
       
       sample = 0;
-      
       index = 0;
+      banished = 0;
       
       sampleCountdown = 0;
       sampleCountdownQueued = false;
@@ -52,6 +52,7 @@ class Voice
     
     Sample* sample;
     ADSR* adsr;
+    int banished;
     
     void setAdsr(float a, float d, float s, float r)
     {
@@ -68,6 +69,7 @@ class Voice
     
     void play(int inNote, int vel, int sampleCD)
     {
+      banished = 0;
       // if the voice doesn't have a sample: then don't play
       if ( sample )
       {
@@ -94,6 +96,13 @@ class Voice
       
       return false;
     }
+
+    void banishIfPlaying(int n)
+    {
+      if ( note == n ) {
+		banished = 1;
+      }
+    }
     
     void stopIfNoteEquals(int n)
     {
@@ -114,6 +123,8 @@ class Voice
     
     void process( int nframes, float* bufL, float* bufR )
     {
+	if(banished)
+		return;
       // counts down frames until note on
       sampleCountdown--;
       

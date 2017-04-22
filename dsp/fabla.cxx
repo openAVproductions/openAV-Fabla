@@ -557,7 +557,10 @@ run(LV2_Handle instance, uint32_t n_samples)
           newSamp = load_sample(self, f);
         }
         
-        
+	for(int i = 0; i < NVOICES; i++ ) {
+		self->voice[i]->banishIfPlaying(pad);
+	}
+
         if( self->samples[pad] != 0 )
         {
           //lv2_log_note(&self->logger, "freeing sample with %i frames\n", int(self->samples[pad]->info.frames) );
