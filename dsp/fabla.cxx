@@ -84,6 +84,9 @@ typedef struct {
   
   float* output_L;
   float* output_R;
+
+  float** track_L;
+  float** track_R;
   
   float* comp_attack;
   float* comp_decay;
@@ -187,7 +190,7 @@ static Sample* load_sample(FABLA_DSP* self, const char* path)
   sample->path     = (char*)malloc(path_len + 1);
   sample->path_len = path_len;
   memcpy(sample->path, path, path_len + 1);
-  //lv2_log_error(&self->logger, "Loaded sample:\n\t %i samples\n\tPath: %s\n", int(info->frames), sample->path);
+  lv2_log_error(&self->logger, "Loaded sample:\n\t %i samples\n\tPath: %s\n", int(info->frames), sample->path);
   
   return sample;
 }
@@ -216,7 +219,7 @@ instantiate(const LV2_Descriptor*     descriptor,
   memset(self, 0, sizeof(FABLA_DSP));
   
   self->uris  = (Fabla_URIs*)malloc(sizeof(Fabla_URIs));
-  memset(self, 0, sizeof(Fabla_URIs));
+  memset(self->uris, 0, sizeof(Fabla_URIs));
   
   for(int i = 0; i < 16; i++ )
     self->samples[i] = 0;
@@ -271,6 +274,12 @@ instantiate(const LV2_Descriptor*     descriptor,
   
   // then init the forge to write Atoms
   lv2_atom_forge_init(&self->forge, self->map);
+
+  self->track_L = new float *[16];
+  self->track_R = new float *[16];
+
+  memset(self->track_L, 0, 16 * sizeof(float *));
+  memset(self->track_R, 0, 16 * sizeof(float *));
   
   return (LV2_Handle)self;
 }
@@ -365,7 +374,16 @@ connect_port(LV2_Handle instance,
         break;
     
     default:
-      printf("Error: Attempted connect of non-existing port with ID %u \n", port); break;
+     if((PortIndex)port >= TRACKSTART && (PortIndex)port < (TRACKSTART + 32))
+     {
+        int p = port - TRACKSTART;
+        if(p % 2 == 0)
+           self->track_L [p >> 1] = (float *)data;
+        else
+           self->track_R [(p - 1) >> 1] = (float *)data;
+     }
+     else
+        printf("Error: Attempted connect of non-existing port with ID %u \n", port); break;
   }
 }
 
@@ -436,10 +454,21 @@ run(LV2_Handle instance, uint32_t n_samples)
   
   float* const       outputL = self->output_L;
   float* const       outputR = self->output_R;
+
+  float** trackL = self->track_L;
+  float** trackR = self->track_R;
   
   // zero output buffer
   memset ( outputL, 0, n_samples );
   memset ( outputR, 0, n_samples );
+
+  for(int i = 0; i < 16; ++i)
+  {
+     if(trackL [i])
+        memset ( trackL [i], 0, n_samples );
+     if(trackR [i])
+        memset ( trackR [i], 0, n_samples );
+  }
   
   
   // loop over the pads, setting control port values
@@ -691,7 +720,22 @@ run(LV2_Handle instance, uint32_t n_samples)
     
     for(int i = 0; i < NVOICES; i++ )
     {
-      self->voice[i]->process( 1, &accumL, &accumR );
+       float tmpL = 0.f;
+       float tmpR = 0.f;
+
+       self->voice[i]->process( 1, &tmpL, &tmpR, true );
+
+       int note = self->voice[i]->getNote();
+
+       if(self->voice[i]->getIsPlaying() && note >= 0 && note < 16)
+       {
+          if(trackL [note])
+             trackL [note] [pos] += tmpL;
+          if(trackR [note])
+             trackR [note] [pos] += tmpR;
+       }
+       accumL += tmpL;
+       accumR += tmpR;
     }
     
     accumL = accumL * gain;
@@ -713,6 +757,9 @@ run(LV2_Handle instance, uint32_t n_samples)
   }
   
   self->uiUpdateCounter += n_samples;
+
+  if(n_samples < 256)
+      printf("fabla nsamples = %d\n", n_samples);
   
   // disable for Atom debug purposes: stops the huge stream of Atoms
   if ( self->uiUpdateCounter > self->sr / 15 ) // ( false )// 
@@ -873,6 +920,8 @@ deactivate(LV2_Handle instance)
 static void
 cleanup(LV2_Handle instance)
 {
+  delete [] ((FABLA_DSP *)instance)->track_L;
+  delete [] ((FABLA_DSP *)instance)->track_R;
   free(instance);
 }
 
