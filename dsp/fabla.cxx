@@ -35,6 +35,8 @@
 
 #define NVOICES 64
 
+const uint8_t midi_channel = 0x09; //midi channel 10, standard for drums
+
 class SampleMessage
 {
   public:
@@ -471,7 +473,7 @@ run(LV2_Handle instance, uint32_t n_samples)
     if (ev->body.type == self->uris->midi_Event)
     {
       uint8_t* const data = (uint8_t* const)(ev + 1);
-      if ( (data[0] & 0xF0) == 0x90 ) // event & channel
+      if ( data[0] == (0x90 | midi_channel) ) // event & channel
       {
         //lv2_log_note(&self->logger, "Note on : %d, frame %i, event# this nframes %i\n", data[1], int(ev->time.frames), evCounter++ );
         lv2_atom_forge_frame_time(&self->forge, 0);
@@ -496,7 +498,7 @@ run(LV2_Handle instance, uint32_t n_samples)
         
         noteOn( self, n, v, ev->time.frames );
       }
-      else if ( (data[0] & 0xF0) == 0x80 )
+      else if ( data[0] == (0x80 | midi_channel) )
       {
         //lv2_log_note(&self->logger, "Note off: %d\n", data[1] );
         lv2_atom_forge_frame_time(&self->forge, 0);
