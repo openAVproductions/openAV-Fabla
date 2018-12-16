@@ -42,7 +42,7 @@ $ ./run.sh
 
 Midi Mapping
 ------
-Fabla responds to midi notes on channel **10**.
+Fabla responds to midi notes on all midi channels.
 The pads **1-16** map to midi notes **36-52**, anything outside that range 
 is clamped to the closest value, *midi note 0-36 triggers pad 1*, *midi note 52-127 triggers pad 16*.
 
