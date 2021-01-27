@@ -52,7 +52,7 @@ extern void initForge(Fabla*);
 extern void writeUpdateUiPaths(Fabla*);
 extern void writeLoadSample(Fabla* self, int pad, const char* filename, size_t filename_len);
 
-static LV2UI_Handle instantiate(const struct _LV2UI_Descriptor * descriptor,
+static LV2UI_Handle instantiate(const struct LV2UI_Descriptor * descriptor,
                 const char * plugin_uri,
                 const char * bundle_path,
                 LV2UI_Write_Function write_function,
