@@ -29,7 +29,7 @@
   doap:description "Performance Sampler" ;
   doap:maintainer [ foaf:name "OpenAV Productions" ] ;
   lv2:microVersion 2 ;
-	lv2:minorVersion 3 ;
+  lv2:minorVersion 3 ;
   
   lv2:binary <fabla.so> ;
   lv2:requiredFeature urid:map;
