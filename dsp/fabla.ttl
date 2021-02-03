@@ -12,10 +12,9 @@
 
 <http://www.openavproductions.com/fabla/gui>
   a ui:X11UI ;
-  lv2:requiredFeature urid:map ;
+  lv2:requiredFeature urid:map , ui:idleInterface ;
   lv2:optionalFeature ui:noUserResize ;
-  lv2:extensionData ui:showInterface,
-                    ui:idleInterface ;
+  lv2:extensionData ui:idleInterface ;
   
   ui:portNotification [
     ui:plugin <http://www.openavproductions.com/fabla> ;
@@ -29,6 +28,8 @@
   doap:name "Fabla" ;
   doap:description "Performance Sampler" ;
   doap:maintainer [ foaf:name "OpenAV Productions" ] ;
+  lv2:microVersion 2 ;
+	lv2:minorVersion 3 ;
   
   lv2:binary <fabla.so> ;
   lv2:requiredFeature urid:map;
