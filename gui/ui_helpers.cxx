@@ -115,6 +115,7 @@ void writeUpdateUiPaths(Fabla* self)
   LV2_Atom* set = (LV2_Atom*)lv2_atom_forge_blank( forge, &set_frame, 1, self->uris->atom_eventTransfer);
 
   lv2_atom_forge_property_head( forge, self->uris->fabla_UiRequestPaths, 0);
+  lv2_atom_forge_bool( forge, true);
   lv2_atom_forge_pop(forge, &set_frame);
   
   self->write_function(self->controller, ATOM_IN, lv2_atom_total_size(set),
