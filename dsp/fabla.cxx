@@ -147,7 +147,7 @@ static Sample* load_sample(FABLA_DSP* self, const char* path)
   if (!sndfile) // || !info->frames ) { // || (info->channels != 1)) {
   {
     lv2_log_error(&self->logger, "Failed to open sample '%s'\n", path);
-    free(sample);
+    delete(sample);
     return NULL;
   }
   
