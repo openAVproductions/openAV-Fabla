@@ -10,6 +10,13 @@
 @prefix time: <http://lv2plug.in/ns/ext/time#> .
 
 
+<http://openavproductions.com/about>
+  a foaf:Person ;
+  foaf:name "Harry van Haaren" ;
+  foaf:mbox <mailto:harryhaaren@gmail.com> ;
+  foaf:homepage <http://openavproductions.com> .
+
+
 <http://www.openavproductions.com/fabla/gui>
   a ui:X11UI ;
   lv2:requiredFeature urid:map , ui:idleInterface ;
@@ -26,8 +33,10 @@
 <http://www.openavproductions.com/fabla>
   a lv2:InstrumentPlugin ;
   doap:name "Fabla" ;
+  doap:license <https://spdx.org/licenses/GPL-2.0.html>;
   doap:description "Performance Sampler" ;
-  doap:maintainer [ foaf:name "OpenAV Productions" ] ;
+  doap:maintainer <http://openavproductions.com/about>;
+
   lv2:microVersion 2 ;
   lv2:minorVersion 3 ;
   
