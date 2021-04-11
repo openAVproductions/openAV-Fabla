@@ -11,6 +11,7 @@ Dependencies
 ------------
 ```
 ntk  (git clone git://git.tuxfamily.org/gitroot/non/fltk.git ntk)
+ or  (git clone https://git.kx.studio/non/ntk ntk)
 cairo
 cairomm-1.0
 sndfile
