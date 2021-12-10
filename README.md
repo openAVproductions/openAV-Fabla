@@ -3,6 +3,8 @@ Fabla - OpenAV Productions
 
 Official page: http://openavproductions.com/fabla
 
+Documentation: http://openavproductions.com/doc/fabla.html
+
 This is the repository of a sampler LV2 plugin called Fabla.
 
 ![screenshot](https://raw.githubusercontent.com/openAVproductions/openAV-Fabla/master/gui/fabla.png "Fabla 1.3 Screenshot")
@@ -44,7 +46,7 @@ $ ./run.sh
 Midi Mapping
 ------
 Fabla responds to midi notes on all midi channels.
-The pads **1-16** map to midi notes **36-52**, anything outside that range 
+The pads **1-16** map to midi notes **36-52**, anything outside that range
 is clamped to the closest value, *midi note 0-36 triggers pad 1*, *midi note 52-127 triggers pad 16*.
 
 Contact
