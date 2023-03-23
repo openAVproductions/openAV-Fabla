@@ -4,8 +4,8 @@ cmake_minimum_required (VERSION 2.6)
 project (fabla)
 
 set(FABLA_VERSION_MAJOR "1")
-set(FABLA_VERSION_MINOR "3")
-set(FABLA_VERSION_PATCH "2")
+set(FABLA_VERSION_MINOR "4")
+set(FABLA_VERSION_PATCH "0")
 
 option(BUILD_SSE "Build with SSE flags" ON)
 

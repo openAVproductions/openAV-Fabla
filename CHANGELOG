@@ -1,4 +1,29 @@
 
+1.4 (23 March '23)
+  -Fix loading sample when voice playing
+  -MIDI note off events trigger note-off event
+  -Document MIDI note mappings
+  -Fix LV2UI_Descriptor warnings on LV2 versions >=1.18
+  -Fix bug in lv2 atom for UI requesting sample
+  -Fix mismatched free/delete
+  -Fix LV2 TTL failures )
+  -Rework CMake to respect CFLAGS/etc
+  -Enable -O3 in release builds for optimizations
+  -Add link to Fable documentation
+  -Improve memory handling in DSP instantiate
+  -Add some compiler warning ignore flags for awkward-to-fix issues
+
+  Thanks to the following contributors for patches & PRs:
+  - Alexandros Theodotou
+  - Guido Aulisi
+  - sjaehn
+  - David Runge
+  - Alex Norman
+  - Arnout Engelen
+  - Olivier Humbert
+  - Bruno Duyé
+
+
 1.3.2 Bugfix / Improvements (12-16)
   -CMake default build system
   -Documented CMake usage in README
