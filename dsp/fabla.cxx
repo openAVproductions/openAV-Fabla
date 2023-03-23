@@ -211,12 +211,9 @@ instantiate(const LV2_Descriptor*     descriptor,
 {
   AVOIDDENORMALS();
   
-  // Initialize self
-  FABLA_DSP* self = (FABLA_DSP*)malloc(sizeof(FABLA_DSP));
-  memset(self, 0, sizeof(FABLA_DSP));
-  
-  self->uris  = (Fabla_URIs*)malloc(sizeof(Fabla_URIs));
-  memset(self, 0, sizeof(Fabla_URIs));
+  // Initialize self with calloc() for zero-initialized memory
+  FABLA_DSP* self = (FABLA_DSP*)calloc(1, sizeof(FABLA_DSP));
+  self->uris  = (Fabla_URIs*)calloc(1, sizeof(Fabla_URIs));
   
   for(int i = 0; i < 16; i++ )
     self->samples[i] = 0;
