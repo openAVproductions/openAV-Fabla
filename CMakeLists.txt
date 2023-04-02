@@ -30,13 +30,6 @@ SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} -fPIC -shared -Wl,-z
 SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -Wall -O3 -Wno-unused-variable -Wno-trigraphs")
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g -Wall -O3 -Wno-unused-variable -fvisibility=hidden -ftree-vectorize -Wno-deprecated-declarations")
 
-IF(BUILD_SSE)
-  IF(NOT ${CMAKE_SYSTEM_PROCESSOR} MATCHES "arm")
-    SET(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} -msse2 -mfpmath=sse -ffast-math")
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse2 -mfpmath=sse -ffast-math -Wno-trigraphs")
-  ENDIF()
-ENDIF()
-
 # print config
 string( ASCII 27 _esc)
 
