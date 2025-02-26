@@ -36,7 +36,7 @@ class Voice
     {
       sr = rate;
       playingBool = false;
-      
+
       sample = 0;
       index = 0;
       banished = 0;
@@ -99,18 +99,18 @@ class Voice
 
     void banishIfPlaying(int n)
     {
-      if ( note == n ) {
+      if (playingBool && note == n ) {
 		banished = 1;
       }
     }
     
     void stopIfNoteEquals(int n)
     {
-      if ( note == n )
+      if (playingBool && !adsr->is_released() && note == n )
       {
-        //printf("releasing note %i",n);
+        //printf("releasing note %i\n",n);
         adsr->release();
-        playingBool = false;
+        //playingBool = false;
       }
     }
     
