@@ -93,7 +93,12 @@ class ADSR
       progress = att + dec;
       released = true;
     }
-    
+
+    bool is_released()
+    {
+      return released;
+    }
+
     bool finished()
     {
       return finish;
@@ -121,6 +126,7 @@ class ADSR
       else if ( released && progress > att + dec && progress < att + dec + rel )
       {
         output = sus - ((sus) * (progress - (att+dec)) / rel);
+        //printf("release %f [%f] => %f\n", rel, progress, output);
       }
       else if ( !released )
       {
@@ -129,6 +135,7 @@ class ADSR
       else
       {
         finish = true; // note end of sound: so can stop voice
+        //printf("END OF NOTE\n");
       }
       
       
