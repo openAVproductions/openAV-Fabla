@@ -176,7 +176,7 @@ static void port_event(LV2UI_Handle handle,
           {
             LV2_Atom* atom = (LV2_Atom*)buffer;
             if (atom->type != self->uris->atom_Blank) {
-              printf("FablaUI: atom->type != atom_Blank\n");
+              //printf("FablaUI: atom->type != atom_Blank\n");
               return;
             }
             
