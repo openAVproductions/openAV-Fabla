@@ -34,6 +34,7 @@
 #include "dsp_compressor.hxx"
 
 #define NVOICES 64
+#define MAX_FILE_NAME 1024
 
 class SampleMessage
 {
@@ -360,7 +361,7 @@ connect_port(LV2_Handle instance,
         // hack the enum to access the right array slice
         self->padData[ port - int(PAD_RELEASE) ].r = (float*)data;
         break;
-    
+
     default:
       printf("Error: Attempted connect of non-existing port with ID %u \n", port); break;
   }
@@ -419,6 +420,83 @@ static void noteOff(FABLA_DSP* self, int note, int frame)
   {
     self->voice[i]->stopIfNoteEquals( note );
   }
+}
+
+static void load_pad_sample(FABLA_DSP* self, int pad, const char* f)
+{
+  // schedule work
+  //SampleMessage message(self->uris->fabla_Load);
+  //message.pad = pad;
+
+  //size_t s = sizeof(SampleMessage);
+  //lv2_log_note(&self->logger, "fabla_Load: scheduling work now, size %i\n", int(s) );
+
+  Sample* newSamp = 0;
+  if ( self->schedule )
+  {
+     // TODO: use Worker extension
+     newSamp = load_sample(self, f);
+	  //self->schedule->schedule_work(self->schedule->handle, s, &message);
+  }
+  else
+  {
+    newSamp = load_sample(self, f);
+  }
+
+  for(int i = 0; i < NVOICES; i++ ) {
+    self->voice[i]->banishIfPlaying(pad);
+  }
+
+  if( self->samples[pad] != 0 )
+  {
+    //lv2_log_note(&self->logger, "freeing sample with %i frames\n", int(self->samples[pad]->info.frames) );
+    if ( self->schedule )
+    {
+      // TODO: use Worker extension
+      free( self->samples[pad]->data );
+    }
+    else
+    {
+      free( self->samples[pad]->data );
+    }
+  }
+
+  self->samples[pad] = newSamp;
+  //lv2_log_note(&self->logger, "finished loading new sample, writing waveform path to UI!\n" );
+
+  // send the filename to the UI, it will load the waveform itself
+  lv2_atom_forge_frame_time(&self->forge, 0);
+  LV2_Atom_Forge_Frame set_frame;
+
+  //LV2_Atom* set = (LV2_Atom*)
+  lv2_atom_forge_blank(&self->forge, &set_frame, 1, self->uris->atom_eventTransfer);
+
+  lv2_atom_forge_property_head(&self->forge, self->uris->fabla_Waveform, 0);
+  LV2_Atom_Forge_Frame body_frame;
+  lv2_atom_forge_blank(&self->forge, &body_frame, 2, 0);
+
+  lv2_atom_forge_property_head(&self->forge, self->uris->fabla_pad, 0);
+  lv2_atom_forge_int(&self->forge, pad);
+
+  lv2_atom_forge_property_head(&self->forge, self->uris->fabla_filename, 0);
+  lv2_atom_forge_path(&self->forge, f, strlen(f) );
+
+  lv2_atom_forge_pop(&self->forge, &body_frame);
+  lv2_atom_forge_pop(&self->forge, &set_frame);
+}
+
+static void write_pad_fpath(FABLA_DSP* self, int pad) {
+  LV2_Atom_Forge_Frame frame;
+
+  lv2_atom_forge_frame_time(&self->forge, 0);
+  lv2_atom_forge_object(&self->forge, &frame, 0, self->uris->patch_Set);
+
+  lv2_atom_forge_key(&self->forge, self->uris->patch_property);
+  lv2_atom_forge_urid(&self->forge, self->uris->padFpath[pad]);
+  lv2_atom_forge_key(&self->forge, self->uris->patch_value);
+  lv2_atom_forge_path(&self->forge, self->samples[pad]->path, self->samples[pad]->path_len + 1);
+
+  lv2_atom_forge_pop(&self->forge, &frame);
 }
 
 static void
@@ -537,69 +615,9 @@ run(LV2_Handle instance, uint32_t n_samples)
         lv2_atom_object_get( body, self->uris->fabla_filename, &path, 0);
         const char* f = (const char*)LV2_ATOM_BODY(path);
         //lv2_log_note(&self->logger, "fabla_Load recieved %s on pad %i\n", f, pad );
-        
-        // schedule work
-        //SampleMessage message(self->uris->fabla_Load);
-        //message.pad = pad;
-        
-        //size_t s = sizeof(SampleMessage);
-        //lv2_log_note(&self->logger, "fabla_Load: scheduling work now, size %i\n", int(s) );
-        
-        
-        Sample* newSamp = 0;
-        if ( self->schedule )
-        {
-          // TODO: use Worker extension
-          newSamp = load_sample(self, f);
-          //self->schedule->schedule_work(self->schedule->handle, s, &message);
-        }
-        else
-        {
-          newSamp = load_sample(self, f);
-        }
-        
-	for(int i = 0; i < NVOICES; i++ ) {
-		self->voice[i]->banishIfPlaying(pad);
-	}
 
-        if( self->samples[pad] != 0 )
-        {
-          //lv2_log_note(&self->logger, "freeing sample with %i frames\n", int(self->samples[pad]->info.frames) );
-          if ( self->schedule )
-          {
-            // TODO: use Worker extension
-            free( self->samples[pad]->data );
-          }
-          else
-          {
-            free( self->samples[pad]->data );
-          }
-        }
-        
-        self->samples[pad] = newSamp;
-        //lv2_log_note(&self->logger, "finished loading new sample, writing waveform path to UI!\n" );
-        
-        
-        // send the filename to the UI, it will load the waveform itself
-        lv2_atom_forge_frame_time(&self->forge, 0);
-        LV2_Atom_Forge_Frame set_frame;
-        
-        //LV2_Atom* set = (LV2_Atom*)
-        lv2_atom_forge_blank(&self->forge, &set_frame, 1, self->uris->atom_eventTransfer);
-        
-        lv2_atom_forge_property_head(&self->forge, self->uris->fabla_Waveform, 0);
-        LV2_Atom_Forge_Frame body_frame;
-        lv2_atom_forge_blank(&self->forge, &body_frame, 2, 0);
-        
-        lv2_atom_forge_property_head(&self->forge, self->uris->fabla_pad, 0);
-        lv2_atom_forge_int(&self->forge, pad);
-        
-        lv2_atom_forge_property_head(&self->forge, self->uris->fabla_filename, 0);
-        lv2_atom_forge_path(&self->forge, f, strlen(f) );
-        
-        lv2_atom_forge_pop(&self->forge, &body_frame);
-        lv2_atom_forge_pop(&self->forge, &set_frame);
-        
+		load_pad_sample(self, pad, f);
+		write_pad_fpath(self, pad);
       }
       
       const LV2_Atom_Object* playBody = NULL;
@@ -627,11 +645,55 @@ run(LV2_Handle instance, uint32_t n_samples)
         // and needs to be told what samples are loaded where.
         self->updateUiPaths = true;
       }
-      
-      
-      
+
     } // atom Blank
-    
+
+	// atom Object
+	if (ev->body.type == self->uris->atom_Object)
+	{
+	  //printf("RECEIVED ATOM OBJECT !!\n");
+	  const auto obj = reinterpret_cast<LV2_Atom_Object*>(&ev->body);
+	  if (obj->body.otype == self->uris->patch_Get)
+	  {
+	  	//printf("RECEIVED PATCH GET !!\n");
+        const LV2_Atom* property = NULL;
+        const LV2_Atom* pbody = NULL;
+        lv2_atom_object_get(obj, self->uris->patch_property, &property,  self->uris->patch_body, &pbody, 0);
+        if (property && property->type == self->uris->atom_URID )
+        {
+          // Get pad number
+          int pad = 0;
+          for (;pad < 16; pad++) {
+            if (((const LV2_Atom_URID*)property)->body == self->uris->padFpath[pad]) break;
+          }
+          if (pad < 16)  write_pad_fpath(self, pad);
+        }
+      }
+      else if (obj->body.otype == self->uris->patch_Set)
+      {
+      	//printf("RECEIVED PATCH SET !!\n");
+        const LV2_Atom* property = NULL;
+        const LV2_Atom* file_path = NULL;
+        lv2_atom_object_get(obj, self->uris->patch_property, &property, self->uris->patch_value, &file_path, 0);
+        if (property && property->type == self->uris->atom_URID &&
+            file_path && file_path->type == self->uris->atom_Path &&
+            file_path->size > 0 && file_path->size < MAX_FILE_NAME)
+        {
+          // Get pad number
+          int pad = 0;
+          for (;pad < 16; pad++) {
+            if (((const LV2_Atom_URID*)property)->body == self->uris->padFpath[pad]) break;
+          }
+          if (pad < 16)
+          {
+            const char *f = (const char *) (file_path + 1);
+            //printf("RECEIVED filepath for PAD %d => %s", pad, f);
+            load_pad_sample(self, pad, f);
+          }
+        }
+      }
+    } // atom Object
+
   } // LV2_ATOM_SEQUENCE_FOREACH
   
   // triggered by Restore / UI re-instantiate, need to write Atoms from here
@@ -661,6 +723,8 @@ run(LV2_Handle instance, uint32_t n_samples)
       
       lv2_atom_forge_pop(&self->forge, &body_frame);
       lv2_atom_forge_pop(&self->forge, &set_frame);
+
+      write_pad_fpath(self, self->updateUiPathCounter);
     }
     
     self->updateUiPathCounter++;
@@ -836,7 +900,9 @@ work_response(LV2_Handle  instance,
     
     // point to the new sample
     self->samples[sampleNum] = message->sample;
-    
+
+    write_pad_fpath(self, sampleNum);
+
     /*
     // Send a notification that we're using a new sample
     lv2_atom_forge_frame_time(&self->forge, self->frame_offset);
@@ -965,6 +1031,7 @@ restore(LV2_Handle                  instance,
           self->samples[i] = newSample;
           
           //printf("Restored sample %s successfully\n", self->samples[i]->path);
+          write_pad_fpath(self, i);
         }
         else
         {

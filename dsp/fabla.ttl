@@ -7,7 +7,16 @@
 @prefix ui:    <http://lv2plug.in/ns/extensions/ui#> .
 @prefix urid:  <http://lv2plug.in/ns/ext/urid#> .
 @prefix work:  <http://lv2plug.in/ns/ext/worker#> .
-@prefix time: <http://lv2plug.in/ns/ext/time#> .
+@prefix time:  <http://lv2plug.in/ns/ext/time#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rsz:   <http://lv2plug.in/ns/ext/resize-port#> .
+@prefix midi:  <http://lv2plug.in/ns/ext/midi#> .
+@prefix patch: <http://lv2plug.in/ns/ext/patch#> .
+@prefix param: <http://lv2plug.in/ns/ext/parameters#> .
+@prefix mod:   <http://moddevices.com/ns/mod#> .
+@prefix pg:    <http://lv2plug.in/ns/ext/port-groups#> .
+@prefix plug:  <http://www.openavproductions.com/fabla#> .
 
 
 <http://openavproductions.com/about>
@@ -28,6 +37,373 @@
     lv2:symbol "notify" ;
     ui:notifyType atom:Blank
   ] .
+
+plug:GROUP_MASTER
+	a pg:InputGroup;
+	lv2:index 1 ;
+    lv2:displayPriority 100 ;
+	lv2:name "Master" ;
+	lv2:symbol "group_master" .
+
+plug:GROUP_COMPRESSOR
+	a pg:InputGroup;
+	lv2:index 2 ;
+    lv2:displayPriority 99 ;
+	lv2:name "Compressor" ;
+	lv2:symbol "group_compressor" .
+
+plug:GROUP_PAD1_MAIN
+	a pg:InputGroup;
+	lv2:index 3 ;
+    lv2:displayPriority 80 ;
+	lv2:name "Pad 1 - Main" ;
+	lv2:symbol "group_pad1_main" .
+
+plug:GROUP_PAD1_ADSR
+	a pg:InputGroup;
+	lv2:index 4 ;
+    lv2:displayPriority 79 ;
+	lv2:name "Pad 1 - ADSR" ;
+	lv2:symbol "group_pad1_adsr" .
+
+plug:GROUP_PAD2_MAIN
+	a pg:InputGroup;
+	lv2:index 5 ;
+    lv2:displayPriority 78 ;
+	lv2:name "Pad 2 - Main" ;
+	lv2:symbol "group_pad2_main" .
+
+plug:GROUP_PAD2_ADSR
+	a pg:InputGroup;
+	lv2:index 6 ;
+    lv2:displayPriority 77 ;
+	lv2:name "Pad 2 - ADSR" ;
+	lv2:symbol "group_pad2_adsr" .
+
+plug:GROUP_PAD3_MAIN
+	a pg:InputGroup;
+	lv2:index 7 ;
+    lv2:displayPriority 76 ;
+	lv2:name "Pad 3 - Main" ;
+	lv2:symbol "group_pad3_main" .
+
+plug:GROUP_PAD3_ADSR
+	a pg:InputGroup;
+	lv2:index 8 ;
+    lv2:displayPriority 75 ;
+	lv2:name "Pad 3 - ADSR" ;
+	lv2:symbol "group_pad3_adsr" .
+
+plug:GROUP_PAD4_MAIN
+	a pg:InputGroup;
+	lv2:index 9 ;
+    lv2:displayPriority 74 ;
+	lv2:name "Pad 4 - Main" ;
+	lv2:symbol "group_pad4_main" .
+
+plug:GROUP_PAD4_ADSR
+	a pg:InputGroup;
+	lv2:index 10 ;
+    lv2:displayPriority 73 ;
+	lv2:name "Pad 4 - ADSR" ;
+	lv2:symbol "group_pad4_adsr" .
+
+plug:GROUP_PAD5_MAIN
+	a pg:InputGroup;
+	lv2:index 11 ;
+    lv2:displayPriority 72 ;
+	lv2:name "Pad 5 - Main" ;
+	lv2:symbol "group_pad5_main" .
+
+plug:GROUP_PAD5_ADSR
+	a pg:InputGroup;
+	lv2:index 12 ;
+    lv2:displayPriority 71 ;
+	lv2:name "Pad 5 - ADSR" ;
+	lv2:symbol "group_pad5_adsr" .
+
+plug:GROUP_PAD6_MAIN
+	a pg:InputGroup;
+	lv2:index 13 ;
+    lv2:displayPriority 70 ;
+	lv2:name "Pad 6 - Main" ;
+	lv2:symbol "group_pad6_main" .
+
+plug:GROUP_PAD6_ADSR
+	a pg:InputGroup;
+	lv2:index 14 ;
+    lv2:displayPriority 69 ;
+	lv2:name "Pad 6 - ADSR" ;
+	lv2:symbol "group_pad6_adsr" .
+
+plug:GROUP_PAD7_MAIN
+	a pg:InputGroup;
+	lv2:index 15 ;
+    lv2:displayPriority 68 ;
+	lv2:name "Pad 7 - Main" ;
+	lv2:symbol "group_pad7_main" .
+
+plug:GROUP_PAD7_ADSR
+	a pg:InputGroup;
+	lv2:index 16 ;
+    lv2:displayPriority 67 ;
+	lv2:name "Pad 7 - ADSR" ;
+	lv2:symbol "group_pad7_adsr" .
+
+plug:GROUP_PAD8_MAIN
+	a pg:InputGroup;
+	lv2:index 17 ;
+    lv2:displayPriority 66 ;
+	lv2:name "Pad 8 - Main" ;
+	lv2:symbol "group_pad8_main" .
+
+plug:GROUP_PAD8_ADSR
+	a pg:InputGroup;
+	lv2:index 18 ;
+    lv2:displayPriority 65 ;
+	lv2:name "Pad 8 - ADSR" ;
+	lv2:symbol "group_pad8_adsr" .
+
+plug:GROUP_PAD9_MAIN
+	a pg:InputGroup;
+	lv2:index 19 ;
+    lv2:displayPriority 64 ;
+	lv2:name "Pad 9 - Main" ;
+	lv2:symbol "group_pad9_main" .
+
+plug:GROUP_PAD9_ADSR
+	a pg:InputGroup;
+	lv2:index 20 ;
+    lv2:displayPriority 63 ;
+	lv2:name "Pad 9 - ADSR" ;
+	lv2:symbol "group_pad9_adsr" .
+
+plug:GROUP_PAD10_MAIN
+	a pg:InputGroup;
+	lv2:index 21 ;
+    lv2:displayPriority 62 ;
+	lv2:name "Pad 10 - Main" ;
+	lv2:symbol "group_pad10_main" .
+
+plug:GROUP_PAD10_ADSR
+	a pg:InputGroup;
+	lv2:index 22 ;
+    lv2:displayPriority 61 ;
+	lv2:name "Pad 10 - ADSR" ;
+	lv2:symbol "group_pad10_adsr" .
+
+plug:GROUP_PAD11_MAIN
+	a pg:InputGroup;
+	lv2:index 23 ;
+    lv2:displayPriority 60 ;
+	lv2:name "Pad 11 - Main" ;
+	lv2:symbol "group_pad11_main" .
+
+plug:GROUP_PAD11_ADSR
+	a pg:InputGroup;
+	lv2:index 24 ;
+    lv2:displayPriority 59 ;
+	lv2:name "Pad 11 - ADSR" ;
+	lv2:symbol "group_pad11_adsr" .
+
+plug:GROUP_PAD12_MAIN
+	a pg:InputGroup;
+	lv2:index 25 ;
+    lv2:displayPriority 58 ;
+	lv2:name "Pad 12 - Main" ;
+	lv2:symbol "group_pad12_main" .
+
+plug:GROUP_PAD12_ADSR
+	a pg:InputGroup;
+	lv2:index 26 ;
+    lv2:displayPriority 57 ;
+	lv2:name "Pad 12 - ADSR" ;
+	lv2:symbol "group_pad12_adsr" .
+
+plug:GROUP_PAD13_MAIN
+	a pg:InputGroup;
+	lv2:index 27 ;
+    lv2:displayPriority 56 ;
+	lv2:name "Pad 13 - Main" ;
+	lv2:symbol "group_pad13_main" .
+
+plug:GROUP_PAD13_ADSR
+	a pg:InputGroup;
+	lv2:index 28 ;
+    lv2:displayPriority 55 ;
+	lv2:name "Pad 13 - ADSR" ;
+	lv2:symbol "group_pad13_adsr" .
+
+plug:GROUP_PAD14_MAIN
+	a pg:InputGroup;
+	lv2:index 29 ;
+    lv2:displayPriority 54 ;
+	lv2:name "Pad 14 - Main" ;
+	lv2:symbol "group_pad14_main" .
+
+plug:GROUP_PAD14_ADSR
+	a pg:InputGroup;
+	lv2:index 30 ;
+    lv2:displayPriority 53 ;
+	lv2:name "Pad 14 - ADSR" ;
+	lv2:symbol "group_pad14_adsr" .
+
+plug:GROUP_PAD15_MAIN
+	a pg:InputGroup;
+	lv2:index 31 ;
+    lv2:displayPriority 52 ;
+	lv2:name "Pad 15 - Main" ;
+	lv2:symbol "group_pad15_main" .
+
+plug:GROUP_PAD15_ADSR
+	a pg:InputGroup;
+	lv2:index 32 ;
+    lv2:displayPriority 51 ;
+	lv2:name "Pad 15 - ADSR" ;
+	lv2:symbol "group_pad15_adsr" .
+
+plug:GROUP_PAD16_MAIN
+	a pg:InputGroup;
+	lv2:index 33 ;
+    lv2:displayPriority 50 ;
+	lv2:name "Pad 16 - Main" ;
+	lv2:symbol "group_pad16_main" .
+
+plug:GROUP_PAD16_ADSR
+	a pg:InputGroup;
+	lv2:index 34 ;
+    lv2:displayPriority 49 ;
+	lv2:name "Pad 16 - ADSR" ;
+	lv2:symbol "group_pad16_adsr" .
+
+
+plug:pad_fpath_1
+	a lv2:Parameter;
+   	lv2:displayPriority 4 ;
+	pg:group plug:GROUP_PAD1_MAIN ;
+	mod:fileTypes "wav,aiff,flac";
+	rdfs:label "Sample 1";
+	rdfs:range atom:Path.
+
+plug:pad_fpath_2
+	a lv2:Parameter;
+   	lv2:displayPriority 4 ;
+	pg:group plug:GROUP_PAD2_MAIN ;
+	mod:fileTypes "wav,aiff,flac";
+	rdfs:label "Sample 2";
+	rdfs:range atom:Path.
+
+plug:pad_fpath_3
+	a lv2:Parameter;
+   	lv2:displayPriority 4 ;
+	pg:group plug:GROUP_PAD3_MAIN ;
+	mod:fileTypes "wav,aiff,flac";
+	rdfs:label "Sample 3";
+	rdfs:range atom:Path.
+
+plug:pad_fpath_4
+	a lv2:Parameter;
+   	lv2:displayPriority 4 ;
+	pg:group plug:GROUP_PAD4_MAIN ;
+	mod:fileTypes "wav,aiff,flac";
+	rdfs:label "Sample 4";
+	rdfs:range atom:Path.
+
+plug:pad_fpath_5
+	a lv2:Parameter;
+   	lv2:displayPriority 4 ;
+	pg:group plug:GROUP_PAD5_MAIN ;
+	mod:fileTypes "wav,aiff,flac";
+	rdfs:label "Sample 5";
+	rdfs:range atom:Path.
+
+plug:pad_fpath_6
+	a lv2:Parameter;
+   	lv2:displayPriority 4 ;
+	pg:group plug:GROUP_PAD6_MAIN ;
+	mod:fileTypes "wav,aiff,flac";
+	rdfs:label "Sample 6";
+	rdfs:range atom:Path.
+
+plug:pad_fpath_7
+	a lv2:Parameter;
+   	lv2:displayPriority 4 ;
+	pg:group plug:GROUP_PAD7_MAIN ;
+	mod:fileTypes "wav,aiff,flac";
+	rdfs:label "Sample 7";
+	rdfs:range atom:Path.
+
+plug:pad_fpath_8
+	a lv2:Parameter;
+   	lv2:displayPriority 4 ;
+	pg:group plug:GROUP_PAD8_MAIN ;
+	mod:fileTypes "wav,aiff,flac";
+	rdfs:label "Sample 8";
+	rdfs:range atom:Path.
+
+plug:pad_fpath_9
+	a lv2:Parameter;
+   	lv2:displayPriority 4 ;
+	pg:group plug:GROUP_PAD9_MAIN ;
+	mod:fileTypes "wav,aiff,flac";
+	rdfs:label "Sample 9";
+	rdfs:range atom:Path.
+
+plug:pad_fpath_10
+	a lv2:Parameter;
+   	lv2:displayPriority 4 ;
+	pg:group plug:GROUP_PAD10_MAIN ;
+	mod:fileTypes "wav,aiff,flac";
+	rdfs:label "Sample 10";
+	rdfs:range atom:Path.
+
+plug:pad_fpath_11
+	a lv2:Parameter;
+   	lv2:displayPriority 4 ;
+	pg:group plug:GROUP_PAD11_MAIN ;
+	mod:fileTypes "wav,aiff,flac";
+	rdfs:label "Sample 11";
+	rdfs:range atom:Path.
+
+plug:pad_fpath_12
+	a lv2:Parameter;
+   	lv2:displayPriority 4 ;
+	pg:group plug:GROUP_PAD12_MAIN ;
+	mod:fileTypes "wav,aiff,flac";
+	rdfs:label "Sample 12";
+	rdfs:range atom:Path.
+
+plug:pad_fpath_13
+	a lv2:Parameter;
+   	lv2:displayPriority 4 ;
+	pg:group plug:GROUP_PAD13_MAIN ;
+	mod:fileTypes "wav,aiff,flac";
+	rdfs:label "Sample 13";
+	rdfs:range atom:Path.
+
+plug:pad_fpath_14
+	a lv2:Parameter;
+   	lv2:displayPriority 4 ;
+	pg:group plug:GROUP_PAD14_MAIN ;
+	mod:fileTypes "wav,aiff,flac";
+	rdfs:label "Sample 14";
+	rdfs:range atom:Path.
+
+plug:pad_fpath_15
+	a lv2:Parameter;
+   	lv2:displayPriority 4 ;
+	pg:group plug:GROUP_PAD15_MAIN ;
+	mod:fileTypes "wav,aiff,flac";
+	rdfs:label "Sample 15";
+	rdfs:range atom:Path.
+
+plug:pad_fpath_16
+	a lv2:Parameter;
+   	lv2:displayPriority 4 ;
+	pg:group plug:GROUP_PAD16_MAIN ;
+	mod:fileTypes "wav,aiff,flac";
+	rdfs:label "Sample 16";
+	rdfs:range atom:Path.
 
 
 <http://www.openavproductions.com/fabla>
@@ -50,19 +426,41 @@
   
   ui:ui <http://www.openavproductions.com/fabla/gui> ;
 
+  patch:writable
+    plug:pad_fpath_1,
+    plug:pad_fpath_2,
+    plug:pad_fpath_3,
+    plug:pad_fpath_4,
+    plug:pad_fpath_5,
+    plug:pad_fpath_6,
+    plug:pad_fpath_7,
+    plug:pad_fpath_8,
+    plug:pad_fpath_9,
+    plug:pad_fpath_10,
+    plug:pad_fpath_11,
+    plug:pad_fpath_12,
+    plug:pad_fpath_13,
+    plug:pad_fpath_14,
+    plug:pad_fpath_15,
+    plug:pad_fpath_16;
+
   lv2:port [
     a lv2:InputPort ,
       atom:AtomPort ;
+	rsz:minimumSize 13448 ;
     atom:bufferType atom:Sequence ;
     atom:supports time:Position ;
-    atom:supports <http://lv2plug.in/ns/ext/midi#MidiEvent> ;
+    atom:supports midi:MidiEvent,
+				  patch:Message;
     lv2:index 0 ;
+	lv2:designation lv2:control ;
     lv2:symbol "control" ;
     lv2:name "Control"
   ] , [
     a lv2:OutputPort ,
       atom:AtomPort ;
     atom:bufferType atom:Sequence ;
+    atom:supports patch:Message;
     lv2:index 1 ;
     lv2:symbol "notify" ;
     lv2:name "Notify";
@@ -87,6 +485,9 @@
     lv2:default 0.75;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 4 ;
+	pg:group plug:GROUP_MASTER ;
+
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -96,6 +497,8 @@
     lv2:default 0.15 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+    lv2:displayPriority 2 ;
+	pg:group plug:GROUP_COMPRESSOR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -105,6 +508,8 @@
     lv2:default 0.3 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+    lv2:displayPriority 1 ;
+	pg:group plug:GROUP_COMPRESSOR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -114,6 +519,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+    lv2:displayPriority 3 ;
+	pg:group plug:GROUP_COMPRESSOR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -123,6 +530,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+    lv2:displayPriority 4 ;
+	pg:group plug:GROUP_COMPRESSOR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -132,6 +541,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 3 ;
+	pg:group plug:GROUP_MASTER ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -141,11 +552,21 @@
     lv2:default 0.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
-    # add toggled
+    lv2:scalePoint [
+        rdf:value 0.0 ;
+        rdfs:label "OFF" ;
+        rdfs:comment "OFF" ;
+    ], [
+        rdf:value 1.0 ;
+        rdfs:label "ON" ;
+        rdfs:comment "ON" ;
+    ];
+   	lv2:displayPriority 2 ;
+	pg:group plug:GROUP_MASTER ;
   ]
-  
+
   ,
-  
+
   [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -155,6 +576,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 3 ;
+	pg:group plug:GROUP_PAD1_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -164,6 +587,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 3 ;
+	pg:group plug:GROUP_PAD2_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -173,6 +598,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 3 ;
+	pg:group plug:GROUP_PAD3_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -182,6 +609,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 3 ;
+	pg:group plug:GROUP_PAD4_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -191,6 +620,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 3 ;
+	pg:group plug:GROUP_PAD5_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -200,6 +631,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 3 ;
+	pg:group plug:GROUP_PAD6_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -209,6 +642,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 3 ;
+	pg:group plug:GROUP_PAD7_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -218,6 +653,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 3 ;
+	pg:group plug:GROUP_PAD8_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -227,6 +664,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 3 ;
+	pg:group plug:GROUP_PAD9_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -236,6 +675,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 3 ;
+	pg:group plug:GROUP_PAD10_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -245,6 +686,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 3 ;
+	pg:group plug:GROUP_PAD11_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -254,6 +697,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 3 ;
+	pg:group plug:GROUP_PAD12_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -263,6 +708,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 3 ;
+	pg:group plug:GROUP_PAD13_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -272,6 +719,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 3 ;
+	pg:group plug:GROUP_PAD14_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -281,6 +730,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 3 ;
+	pg:group plug:GROUP_PAD15_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -290,6 +741,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 3 ;
+	pg:group plug:GROUP_PAD16_MAIN ;
   ]
   
   ,
@@ -303,6 +756,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 1 ;
+	pg:group plug:GROUP_PAD1_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -312,6 +767,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 1 ;
+	pg:group plug:GROUP_PAD2_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -321,6 +778,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 1 ;
+	pg:group plug:GROUP_PAD3_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -330,6 +789,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 1 ;
+	pg:group plug:GROUP_PAD4_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -339,6 +800,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 1 ;
+	pg:group plug:GROUP_PAD5_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -348,6 +811,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 1 ;
+	pg:group plug:GROUP_PAD6_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -357,6 +822,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 1 ;
+	pg:group plug:GROUP_PAD7_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -366,6 +833,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 1 ;
+	pg:group plug:GROUP_PAD8_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -375,6 +844,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 1 ;
+	pg:group plug:GROUP_PAD9_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -384,6 +855,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 1 ;
+	pg:group plug:GROUP_PAD10_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -393,6 +866,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 1 ;
+	pg:group plug:GROUP_PAD11_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -402,6 +877,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 1 ;
+	pg:group plug:GROUP_PAD12_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -411,6 +888,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 1 ;
+	pg:group plug:GROUP_PAD13_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -420,6 +899,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 1 ;
+	pg:group plug:GROUP_PAD14_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -429,6 +910,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 1 ;
+	pg:group plug:GROUP_PAD15_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -438,6 +921,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 1 ;
+	pg:group plug:GROUP_PAD16_MAIN ;
   ]
   
   ,
@@ -451,6 +936,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 2 ;
+	pg:group plug:GROUP_PAD1_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -460,6 +947,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 2 ;
+	pg:group plug:GROUP_PAD2_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -469,6 +958,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 2 ;
+	pg:group plug:GROUP_PAD3_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -478,6 +969,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 2 ;
+	pg:group plug:GROUP_PAD4_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -487,6 +980,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 2 ;
+	pg:group plug:GROUP_PAD5_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -496,6 +991,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 2 ;
+	pg:group plug:GROUP_PAD6_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -505,6 +1002,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 2 ;
+	pg:group plug:GROUP_PAD7_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -514,6 +1013,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 2 ;
+	pg:group plug:GROUP_PAD8_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -523,6 +1024,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 2 ;
+	pg:group plug:GROUP_PAD9_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -532,6 +1035,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 2 ;
+	pg:group plug:GROUP_PAD10_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -541,6 +1046,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 2 ;
+	pg:group plug:GROUP_PAD11_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -550,6 +1057,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 2 ;
+	pg:group plug:GROUP_PAD12_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -559,6 +1068,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 2 ;
+	pg:group plug:GROUP_PAD13_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -568,6 +1079,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 2 ;
+	pg:group plug:GROUP_PAD14_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -577,6 +1090,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 2 ;
+	pg:group plug:GROUP_PAD15_MAIN ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -586,6 +1101,8 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+   	lv2:displayPriority 2 ;
+	pg:group plug:GROUP_PAD16_MAIN ;
   ]
   
   ,
@@ -599,6 +1116,9 @@
     lv2:default 0.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:attack ;
+    lv2:displayPriority 4 ;
+	pg:group plug:GROUP_PAD1_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -608,6 +1128,9 @@
     lv2:default 0.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:attack ;
+    lv2:displayPriority 4 ;
+	pg:group plug:GROUP_PAD2_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -617,6 +1140,9 @@
     lv2:default 0.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:attack ;
+    lv2:displayPriority 4 ;
+	pg:group plug:GROUP_PAD3_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -626,6 +1152,9 @@
     lv2:default 0.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:attack ;
+    lv2:displayPriority 4 ;
+	pg:group plug:GROUP_PAD4_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -635,6 +1164,9 @@
     lv2:default 0.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:attack ;
+    lv2:displayPriority 4 ;
+	pg:group plug:GROUP_PAD5_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -644,6 +1176,9 @@
     lv2:default 0.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:attack ;
+    lv2:displayPriority 4 ;
+	pg:group plug:GROUP_PAD6_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -653,6 +1188,9 @@
     lv2:default 0.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:attack ;
+    lv2:displayPriority 4 ;
+	pg:group plug:GROUP_PAD7_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -662,6 +1200,9 @@
     lv2:default 0.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:attack ;
+    lv2:displayPriority 4 ;
+	pg:group plug:GROUP_PAD8_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -671,6 +1212,9 @@
     lv2:default 0.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:attack ;
+    lv2:displayPriority 4 ;
+	pg:group plug:GROUP_PAD9_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -680,6 +1224,9 @@
     lv2:default 0.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:attack ;
+    lv2:displayPriority 4 ;
+	pg:group plug:GROUP_PAD10_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -689,6 +1236,9 @@
     lv2:default 0.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:attack ;
+    lv2:displayPriority 4 ;
+	pg:group plug:GROUP_PAD11_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -698,6 +1248,9 @@
     lv2:default 0.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:attack ;
+    lv2:displayPriority 4 ;
+	pg:group plug:GROUP_PAD12_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -707,6 +1260,9 @@
     lv2:default 0.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:attack ;
+    lv2:displayPriority 4 ;
+	pg:group plug:GROUP_PAD13_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -716,6 +1272,9 @@
     lv2:default 0.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:attack ;
+    lv2:displayPriority 4 ;
+	pg:group plug:GROUP_PAD14_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -725,6 +1284,9 @@
     lv2:default 0.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:attack ;
+    lv2:displayPriority 4 ;
+	pg:group plug:GROUP_PAD15_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -734,6 +1296,9 @@
     lv2:default 0.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:attack ;
+    lv2:displayPriority 4 ;
+	pg:group plug:GROUP_PAD16_ADSR ;
   ]
   
   ,
@@ -747,6 +1312,9 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:decay ;
+    lv2:displayPriority 3 ;
+	pg:group plug:GROUP_PAD1_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -756,6 +1324,9 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:decay ;
+    lv2:displayPriority 3 ;
+	pg:group plug:GROUP_PAD2_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -765,6 +1336,9 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:decay ;
+    lv2:displayPriority 3 ;
+	pg:group plug:GROUP_PAD3_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -774,6 +1348,9 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:decay ;
+    lv2:displayPriority 3 ;
+	pg:group plug:GROUP_PAD4_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -783,6 +1360,9 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:decay ;
+    lv2:displayPriority 3 ;
+	pg:group plug:GROUP_PAD5_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -792,6 +1372,9 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:decay ;
+    lv2:displayPriority 3 ;
+	pg:group plug:GROUP_PAD6_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -801,6 +1384,9 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:decay ;
+    lv2:displayPriority 3 ;
+	pg:group plug:GROUP_PAD7_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -810,6 +1396,9 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:decay ;
+    lv2:displayPriority 3 ;
+	pg:group plug:GROUP_PAD8_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -819,6 +1408,9 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:decay ;
+    lv2:displayPriority 3 ;
+	pg:group plug:GROUP_PAD9_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -828,6 +1420,9 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:decay ;
+    lv2:displayPriority 3 ;
+	pg:group plug:GROUP_PAD10_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -837,6 +1432,9 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:decay ;
+    lv2:displayPriority 3 ;
+	pg:group plug:GROUP_PAD11_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -846,6 +1444,9 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:decay ;
+    lv2:displayPriority 3 ;
+	pg:group plug:GROUP_PAD12_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -855,6 +1456,9 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:decay ;
+    lv2:displayPriority 3 ;
+	pg:group plug:GROUP_PAD13_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -864,6 +1468,9 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:decay ;
+    lv2:displayPriority 3 ;
+	pg:group plug:GROUP_PAD14_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -873,6 +1480,9 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:decay ;
+    lv2:displayPriority 3 ;
+	pg:group plug:GROUP_PAD15_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -882,6 +1492,9 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:decay ;
+    lv2:displayPriority 3 ;
+	pg:group plug:GROUP_PAD16_ADSR ;
   ]
   
   ,
@@ -895,6 +1508,9 @@
     lv2:default 1.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:sustain ;
+    lv2:displayPriority 2 ;
+	pg:group plug:GROUP_PAD1_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -904,6 +1520,9 @@
     lv2:default 1.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:sustain ;
+    lv2:displayPriority 2 ;
+	pg:group plug:GROUP_PAD2_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -913,6 +1532,9 @@
     lv2:default 1.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:sustain ;
+    lv2:displayPriority 2 ;
+	pg:group plug:GROUP_PAD3_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -922,6 +1544,9 @@
     lv2:default 1.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:sustain ;
+    lv2:displayPriority 2 ;
+	pg:group plug:GROUP_PAD4_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -931,6 +1556,9 @@
     lv2:default 1.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:sustain ;
+    lv2:displayPriority 2 ;
+	pg:group plug:GROUP_PAD5_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -940,6 +1568,9 @@
     lv2:default 1.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:sustain ;
+    lv2:displayPriority 2 ;
+	pg:group plug:GROUP_PAD6_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -949,6 +1580,9 @@
     lv2:default 1.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:sustain ;
+    lv2:displayPriority 2 ;
+	pg:group plug:GROUP_PAD7_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -958,6 +1592,9 @@
     lv2:default 1.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:sustain ;
+    lv2:displayPriority 2 ;
+	pg:group plug:GROUP_PAD8_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -967,6 +1604,9 @@
     lv2:default 1.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:sustain ;
+    lv2:displayPriority 2 ;
+	pg:group plug:GROUP_PAD9_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -976,6 +1616,9 @@
     lv2:default 1.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:sustain ;
+    lv2:displayPriority 2 ;
+	pg:group plug:GROUP_PAD10_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -985,6 +1628,9 @@
     lv2:default 1.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:sustain ;
+    lv2:displayPriority 2 ;
+	pg:group plug:GROUP_PAD11_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -994,6 +1640,9 @@
     lv2:default 1.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:sustain ;
+    lv2:displayPriority 2 ;
+	pg:group plug:GROUP_PAD12_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -1003,6 +1652,9 @@
     lv2:default 1.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:sustain ;
+    lv2:displayPriority 2 ;
+	pg:group plug:GROUP_PAD13_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -1012,6 +1664,9 @@
     lv2:default 1.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:sustain ;
+    lv2:displayPriority 2 ;
+	pg:group plug:GROUP_PAD14_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -1021,6 +1676,9 @@
     lv2:default 1.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:sustain ;
+    lv2:displayPriority 2 ;
+	pg:group plug:GROUP_PAD15_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -1030,6 +1688,9 @@
     lv2:default 1.0 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:sustain ;
+    lv2:displayPriority 2 ;
+	pg:group plug:GROUP_PAD16_ADSR ;
   ]
   
   ,
@@ -1043,6 +1704,9 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:release ;
+    lv2:displayPriority 1 ;
+	pg:group plug:GROUP_PAD1_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -1052,6 +1716,9 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:release ;
+    lv2:displayPriority 1 ;
+	pg:group plug:GROUP_PAD2_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -1061,6 +1728,9 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:release ;
+    lv2:displayPriority 1 ;
+	pg:group plug:GROUP_PAD3_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -1070,6 +1740,9 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:release ;
+    lv2:displayPriority 1 ;
+	pg:group plug:GROUP_PAD4_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -1079,6 +1752,9 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:release ;
+    lv2:displayPriority 1 ;
+	pg:group plug:GROUP_PAD5_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -1088,6 +1764,9 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:release ;
+    lv2:displayPriority 1 ;
+	pg:group plug:GROUP_PAD6_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -1097,6 +1776,9 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:release ;
+    lv2:displayPriority 1 ;
+	pg:group plug:GROUP_PAD7_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -1106,6 +1788,9 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:release ;
+    lv2:displayPriority 1 ;
+	pg:group plug:GROUP_PAD8_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -1115,6 +1800,9 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:release ;
+    lv2:displayPriority 1 ;
+	pg:group plug:GROUP_PAD9_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -1124,6 +1812,9 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:release ;
+    lv2:displayPriority 1 ;
+	pg:group plug:GROUP_PAD10_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -1133,6 +1824,9 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:release ;
+    lv2:displayPriority 1 ;
+	pg:group plug:GROUP_PAD11_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -1142,6 +1836,9 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:release ;
+    lv2:displayPriority 1 ;
+	pg:group plug:GROUP_PAD12_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -1151,6 +1848,9 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:release ;
+    lv2:displayPriority 1 ;
+	pg:group plug:GROUP_PAD13_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -1160,6 +1860,9 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:release ;
+    lv2:displayPriority 1 ;
+	pg:group plug:GROUP_PAD14_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -1169,6 +1872,9 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
+	lv2:designation param:release ;
+    lv2:displayPriority 1 ;
+	pg:group plug:GROUP_PAD15_ADSR ;
   ] , [
     a lv2:ControlPort ,
       lv2:InputPort ;
@@ -1178,7 +1884,9 @@
     lv2:default 0.5 ;
     lv2:minimum 0.0 ;
     lv2:maximum 1.0 ;
-    
+	lv2:designation param:release ;
+    lv2:displayPriority 1 ;
+	pg:group plug:GROUP_PAD16_ADSR ;
   ] .
 
 
