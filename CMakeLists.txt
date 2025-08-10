@@ -18,7 +18,7 @@ find_package(PkgConfig)
 pkg_check_modules(LV2 lv2 REQUIRED)
 include_directories( ${LV2_INCLUDE_DIRS}  )
 
-pkg_check_modules(NTK ntk REQUIRED)
+pkg_check_modules(NTK ntk-static REQUIRED)
 include_directories( ${NTK_INCLUDE_DIRS}  )
 link_directories   ( ${NTK_LIBRARY_DIRS}  )
 

@@ -51,6 +51,7 @@ class ADSR
       g1 = g2 = 0.f;
       
       progress = att + dec + rel;
+      release_level = -1.0f;
       released = true;
       
       // by default there is no lowpass on the output to avoid sudden value jumps
@@ -84,6 +85,7 @@ class ADSR
     void trigger()
     {
       progress = 0;
+      release_level = -1.0f;
       released = false;
       finish = false;
     }
@@ -118,19 +120,23 @@ class ADSR
       if ( progress < att ) // ATTACK
       {
         output = (progress / att);
+        release_level = output;
       }
       else if ( progress < att + dec ) // DECAY
       {
         output = 1 - (1 - sus) * ((progress - att) / dec);
+        release_level = output;
       }
       else if ( released && progress > att + dec && progress < att + dec + rel )
       {
-        output = sus - ((sus) * (progress - (att+dec)) / rel);
+        //output = sus - ((sus) * (progress - (att+dec)) / rel);
+        output =  release_level *  (1.0 - (progress - (att+dec)) / rel);
         //printf("release %f [%f] => %f\n", rel, progress, output);
       }
       else if ( !released )
       {
         output = sus;
+        release_level = output;
       }
       else
       {
@@ -172,6 +178,7 @@ class ADSR
     bool finish;
     
     float progress;
+    float release_level;
 };
 
 #endif // OPENAV_DSP_ADSR_H
