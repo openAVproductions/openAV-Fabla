@@ -12,9 +12,7 @@ This is the repository of a sampler LV2 plugin called Fabla.
 Dependencies
 ------------
 ```
-ntk  (git clone git://git.tuxfamily.org/gitroot/non/fltk.git ntk)
- or  (git clone https://git.kx.studio/non/ntk ntk)
- or  (git clone https://github.com/linuxaudio/ntk)
+ntk  (git clone https://github.com/linuxaudio/ntk)
 cairo
 cairomm-1.0
 sndfile
@@ -28,9 +26,16 @@ just run CMake as usual:
 ```
 mkdir build
 cd build
-cmake ..
+
+# here we set the pkg-config path to the repo, to pick up `ntk-static`.
+# Statically linking NTK makes it simpler to distribute Fabla.
+PKG_CONFIG_PATH=../ cmake ..
+
 make
 make install
+
+# Verify that the Fabla LV2 plugin is identified by lv2 tooling
+lv2ls | grep Fabla
 ```
 
 Running

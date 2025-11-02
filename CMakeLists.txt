@@ -1,10 +1,12 @@
 
-cmake_minimum_required (VERSION 2.6)
+# Change this as needed - modern CMake's complain that they won't work before 3.5.
+# This is a very primitive CMake file, and works with almost all versions from 2.x onwards.
+cmake_minimum_required (VERSION 3.5)
 
 project (fabla)
 
 set(FABLA_VERSION_MAJOR "1")
-set(FABLA_VERSION_MINOR "4")
+set(FABLA_VERSION_MINOR "5")
 set(FABLA_VERSION_PATCH "0")
 
 option(BUILD_SSE "Build with SSE flags" ON)
